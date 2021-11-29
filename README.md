@@ -1,4 +1,4 @@
-This is NOT our official project repo
+This is our official project repo
 
 
 Only for practicing our version control
