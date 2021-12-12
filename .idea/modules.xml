@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/practice-environment.iml" filepath="$PROJECT_DIR$/.idea/practice-environment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/stocsus.iml" filepath="$PROJECT_DIR$/.idea/stocsus.iml" />
     </modules>
   </component>
 </project>
