@@ -1,0 +1,17 @@
+
+
+
+Flask
+Jinja2
+MarkupSafe
+pip
+setuptools
+Werkzeug
+Flask-SQLAlchemy
+Flask-Login
+Flask-Talisman
+pycryptodome==3.10.1
+SQLAlchemy
+WTForms
+Flask-WTF
+email-validator==1.1.3
