@@ -8,6 +8,8 @@ from werkzeug.security import generate_password_hash
 # role defines which parts of the application the user has access to
 # banned is False by default which is stored as 0 in the database, False = 0 / True = 1
 class Users(db.Model, UserMixin):
+    __table_name__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(200), nullable=False)
@@ -48,7 +50,7 @@ db.create_all()
 def init_db():
     db.drop_all()
     db.create_all()
-    test = Users(email="test", password="test123", role="admin", banned=False)
+    test = Users(email="test@email.com", password="@test123", role="admin", banned=False)
     fav = Favourite(supplier_name="my-favourite")
     black = Blacklist(supplier_name="the-worst")
     db.session.add(test)
