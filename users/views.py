@@ -10,7 +10,6 @@ from app import db
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
-
 # VIEWS
 # view registration
 @users_blueprint.route('/register', methods=['GET', 'POST'])
@@ -24,7 +23,7 @@ def register():
         # database. Hence the user will be redirected to the signup page
         # with an error message, so the use can try again.
         if user:
-            flash('Emai; address already exists')
+            flash('Email address already exists')
             return render_template('register.html', form=form)
 
         # create a new user with the form data

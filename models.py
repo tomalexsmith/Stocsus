@@ -25,6 +25,8 @@ class Users(db.Model, UserMixin):
 
 # Database table containing name of suppliers that have been blacklisted by users
 class Blacklist(db.Model):
+    __table_name__ = 'blacklist'
+
     id = db.Column(db.Integer, primary_key=True)
     supplier_name = db.Column(db.String(64), nullable=False)
 
@@ -34,6 +36,8 @@ class Blacklist(db.Model):
 
 # Database table containing the name of suppliers that have been favourited by users
 class Favourite(db.Model):
+    __table_name__ = 'favourites'
+
     id = db.Column(db.Integer, primary_key=True)
     supplier_name = db.Column(db.String(64), nullable=False)
 
@@ -41,11 +45,8 @@ class Favourite(db.Model):
         self.supplier_name = supplier_name
 
 
-db.create_all()
-
-
 # initialises database tables and adds sample data
-# Python Console --> from model import init_db
+# Python Console --> from models import init_db
 #                --> init_db()
 def init_db():
     db.drop_all()
