@@ -95,3 +95,10 @@ def favourites(supplier_name):
     db.session.add(supplier_name)
     db.session.commit()
 
+def blacklist(supplier_name):
+    query = "INSERT INTO blacklist(supplier_name)"
+    args = supplier_name
+
+    db.session.add(supplier_name)
+    db.session.commit()
+    
