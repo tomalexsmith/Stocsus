@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 # Use your own database for testing
 # Connecting to team database will be done towards the end on campus/VM
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://DB_USER:DB_PASS@localhost:3306/test'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:admin123@stocsus.cs4jpvtwcnto.eu-west-2.rds.amazonaws.com:3306/stocsus'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)

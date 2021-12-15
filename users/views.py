@@ -10,6 +10,7 @@ from app import db
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
 
+
 # VIEWS
 # view registration
 @users_blueprint.route('/register', methods=['GET', 'POST'])
@@ -55,13 +56,16 @@ def login():
         session['logins'] += 1
         user = Users.query.filter_by(email=form.email.data).first()
 
-        if not user or not check_password_hash(user.password, form.password.data):
+        if not user or not check_password_hash(user.password,
+                                               form.password.data):
             if session['logins'] == 3:
                 flash('Number of incorrect logins exceeded')
             elif session['logins'] == 2:
-                flash('Please check your login details and try again. 1 login attempt remaining')
+                flash(
+                    'Please check your login details and try again. 1 login attempt remaining')
             else:
-                flash('Please check your login details and try again. 2 login attempts remaining')
+                flash(
+                    'Please check your login details and try again. 2 login attempts remaining')
             return render_template('login.html', form=form)
 
         if current_user.role == 'admin':
@@ -83,3 +87,11 @@ def profile():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+def favourites(supplier_name):
+    query = "INSERT INTO favourite(supplier_name)"
+    args = supplier_name
+
+    db.session.add(supplier_name)
+    db.session.commit()
+
