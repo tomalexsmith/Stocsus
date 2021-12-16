@@ -122,3 +122,5 @@ def favourites(supplier_name):
 
     db.session.add(supplier_name)
     db.session.commit()
+
+# Test comment
