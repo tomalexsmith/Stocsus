@@ -101,4 +101,3 @@ def blacklist(supplier_name):
 
     db.session.add(supplier_name)
     db.session.commit()
-    
