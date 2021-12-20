@@ -19,26 +19,17 @@
         <h2></h2>
         <table>
             <tr>
-                <th>Seller name</th>
-                <th>Inventory level</th>
-                <th>Price for quantity specified</th>
-                <th>Favourite</th>
-                <th>Blacklist</th>
+                {% for header in headings %}
+                <th>{{  header }}</th>
+                {% endfor %}
             </tr>
-            {% for seller in sellers %}
+            {% for row in data %}
                 <tr>
-                    {% for seller in final_sellers %}
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    {% for cell in row %}
+                    <td>{{ cell }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
         </table>
     </div>
-
-
 {% endblock %}
