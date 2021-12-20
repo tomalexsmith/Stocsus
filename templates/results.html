@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block header %}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">#}
+{% endblock %}
+
+{% block content %}
+
+    <div class="header_container">
+        <h1>Results</h1>
+        <form class="search" method="POST">
+            {{ form.email(class="input", placeholder="Part") }}
+            {{ form.email(class="input", placeholder="Quantity") }}
+            {{ form.email(class="input", placeholder="No. of models") }}
+        </form>
+    </div>
+
+    <div class="results_container">
+        <h2></h2>
+        <table>
+            <tr>
+                <th>Seller name</th>
+                <th>Inventory level</th>
+                <th>Price for quantity specified</th>
+                <th>Favourite</th>
+                <th>Blacklist</th>
+            </tr>
+            {% for seller in sellers %}
+                <tr>
+                    {% for seller in final_sellers %}
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+{% endblock %}
