@@ -113,7 +113,7 @@ def logout():
     logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id, current_user.username, request.remote_addr)
 
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('index'))
 
 
 def favourites(supplier_name):
