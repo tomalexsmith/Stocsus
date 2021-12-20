@@ -8,15 +8,16 @@
 
     <div class="header_container">
         <h1>Results</h1>
-        <form class="search" method="POST">
-            {{ form.email(class="input", placeholder="Part") }}
-            {{ form.email(class="input", placeholder="Quantity") }}
-            {{ form.email(class="input", placeholder="No. of models") }}
+        <h2>Quantity: {{ quantity }}</h2>
+        <h2>No. of models: {{ models }}</h2>
         </form>
     </div>
 
     <div class="results_container">
-        <h2></h2>
+        <div class="part_information">
+            <h2>{{ part_number }}</h2>
+            <h3>{{ manufacturer }}</h3>
+        </div>
         <table>
             <tr>
                 <th><a href="{{ header[3] }}">{{ header[0] }}</a></th>
