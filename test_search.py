@@ -107,6 +107,10 @@ def test_search(quantity, api_response=api_response):
                 final_cost = round(quantity * prices_quantity[i][j])
                 final_cost_dictionary[i] = final_cost
 
+    for i in list(sellers_final_check):
+        if sellers_final_check[i]['offers'][0]['prices'][0]['quantity'] > quantity:
+            sellers_final_check.pop(i)
+
     # formatting final result
     final_sellers = []
     for i in sellers_final_check:
@@ -122,6 +126,6 @@ def test_search(quantity, api_response=api_response):
         print(i)
 
 
-test_search(quantity=10000)
+test_search(quantity=1000)
 
 
