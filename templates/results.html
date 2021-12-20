@@ -19,9 +19,9 @@
         <h2></h2>
         <table>
             <tr>
-                {% for header in headings %}
-                <th>{{  header }}</th>
-                {% endfor %}
+                <th><a href="{{ header[3] }}">{{ header[0] }}</a></th>
+                <th>{{ header[1] }}</th>
+                <th>{{ header[2] }}</th>
             </tr>
             {% for row in data %}
                 <tr>
