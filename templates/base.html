@@ -17,28 +17,33 @@
     <header>
         <div class="navbar_container">
             <ul class="nav_left">
-                <li class="hover"><a href="{{ url_for('users.index') }}">HOME</a></li>
-                <li class="hover"><a href="#about">ABOUT US</a></li>
-                <li class="hover"><a href="{{ url_for('users.search') }}">SEARCH</a></li>
-                <li class="hover"><a href="{{ url_for('users.faq') }}">FAQ</a></li>
+                <li class="hover"><a href="{{ url_for('users.index') }}">home</a></li>
+                <li class="hover"><a href="#about">about us</a></li>
+                {% if current_user.is_authenticated %}
+                    <li class="hover"><a href="{{ url_for('users.search') }}">search</a></li>
+                {%  endif %}
+                <li class="hover"><a href="{{ url_for('users.faq') }}">faq</a></li>
             </ul>
             <div class="logo">
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('users.search') }}">STOCSUS</a>
+                    <a href="{{ url_for('search.main_search') }}">STOCSUS</a>
                 {% else %}
-                    <a href="{{ url_for('users.index') }}">STOCSUS</a>
+                    <a href="{{ url_for('index') }}">STOCSUS</a>
                 {%  endif %}
             </div>
             <ul class="nav_right">
                 {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('users.login') }}">LOGIN</a></li>
-                    <li><a href="{{ url_for('users.register') }}">REGISTER</a></li>
+                    <li><a href="{{ url_for('users.logout') }}">logout</a></li>
+                    <li><a href="{{ url_for('users.profile') }}">
+                        <span class="material-icons">person</span>
+                    </a></li>
                 {% else %}
-                    <li><a href="{{ url_for('users.index') }}">HOME</a></li>
+                    <li><a href="{{ url_for('users.login') }}">login</a></li>
+                    <li><a href="{{ url_for('users.register') }}">register</a></li>
+                    <li><a href="{{ url_for('users.login') }}">
+                        <span class="material-icons">person</span>
+                    </a></li>
                 {% endif %}
-                <li><a href="{{ url_for('users.index') }}">
-                    <span class="material-icons">person</span>
-                </a></li>
             </ul>
         </div>
 
