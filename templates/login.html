@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block header %}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">#}
+{% endblock %}
+
+{% block content %}
+<div class="bg">
+    <div class="login_box">
+        <h1>Login</h1>
+        <form method="POST">
+            <div class="form_email">
+                <label>Email</label>
+                <span class="material-icons">person</span>
+                {{ form.email(class="email", placeholder="Type your email") }}
+            </div>
+            <div class="form_password">
+                <label>Password</label>
+                <span class="material-icons-outlined">lock</span>
+                {{ form.password(class="password", placeholder="Type your password") }}
+            </div>
+            <div class="form_submit">
+                {{ form.submit(class="submit") }}
+            </div>
+        </form>
+        <p>
+            Need an account? <a href="{{ url_for('users.register') }}">Register here</a>
+        </p>
+    </div>
+</div>
+
+{% endblock %}
