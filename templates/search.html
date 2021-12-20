@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+
+{% block header %}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">#}
+{% endblock %}
+
+
+
+{% block content %}
+    <h1>Search</h1>
+    <div class="search forms">
+        <form method="POST">
+            {{ form.email(class="input", placeholder="Part") }}
+            <div class="sub_search">
+                {{ form.email(class="input", placeholder="Quantity") }}
+                {{ form.email(class="input", placeholder="No. of models") }}
+            </div>
+        </form>
+    </div>
+    <div class="file_upload">
+        <span class="or">or</span>
+        <form method="POST">
+            {{ form.upload(class="upload") }}
+        </form>
+    </div>
+{% endblock %}
