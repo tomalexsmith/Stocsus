@@ -1,9 +1,8 @@
-# these are the forms the user will be using in the application
 # imports
 import re
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import Required, Email, ValidationError, Length, \
+from wtforms.validators import DataRequired, Email, ValidationError, Length, \
     EqualTo
 
 
@@ -33,13 +32,14 @@ class RegisterForm(FlaskForm):
                 'and 1 special character')
 
 
-class login_form(FlaskForm):
-    email = StringField(validators=[Required(), Email()])
-    password = PasswordField(validators=[Required()])
+class LoginForm(FlaskForm):
+    email = StringField(validators=[DataRequired(), Email()])
+    password = PasswordField(validators=[DataRequired()])
     submit = SubmitField()
 
-class search_form(FlaskForm):
-    part_number = StringField(validators=[Required()])
-    quantity = StringField(validators=[Required()])
-    models = StringField(validators=[Required()])
+
+class SearchForm(FlaskForm):
+    part_number = StringField(validators=[DataRequired()])
+    quantity = StringField(validators=[DataRequired()])
+    models = StringField(validators=[DataRequired()])
     submit = SubmitField()
