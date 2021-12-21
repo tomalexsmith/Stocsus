@@ -21,6 +21,6 @@ def admin():
     # returns list of all users in the database where their role is a 'user'
     # returns the security logs
     return render_template('admin.html', email=current_user.email,
-                           current_users=User.query.filter_by(
+                           current_users=Users.query.filter_by(
                                role='user').all(), logs=content)
 

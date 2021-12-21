@@ -1,7 +1,7 @@
 import requests
 import json
 from flask import render_template, Blueprint, request, redirect, url_for
-from search_form import SearchForm
+from users.forms import SearchForm
 """
 This file will not work without the API TOKEN, you need to edit the endpoint variable and add it there
 

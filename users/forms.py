@@ -15,7 +15,7 @@ def character_check(form, field):
 
 
 class RegisterForm(FlaskForm):
-    email = StringField(validators=[DataRequired(), Email])
+    email = StringField(validators=[DataRequired(), Email()])
     password = PasswordField(validators=[DataRequired(), Length(min=6, max=15,
                message='Password must be between 6 and 15 characters '
                        'in length')])
