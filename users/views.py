@@ -116,11 +116,16 @@ def logout():
     return redirect(url_for('index'))
 
 
-def favourites(supplier_name):
+def favourites(supplier_name): # TODO - to use in the future for when user selects a favourite
     query = "INSERT INTO favourite(supplier_name)"
     args = supplier_name
 
     db.session.add(supplier_name)
     db.session.commit()
 
-# Test comment Ketan
+def blacklist(supplier_name): # TODO - to use when adding a supplier to the blacklist
+    query = "INSERT INTO blacklist(supplier_name)"
+    args = supplier_name
+
+    db.session.add(supplier_name)
+    db.session.commit()
