@@ -7,7 +7,6 @@ from flask_login import LoginManager, current_user, login_manager
 from models import Users
 import os
 
-# CONFIG
 app = Flask(__name__)
 
 # SECRET KEYS
@@ -20,6 +19,7 @@ app.config[
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
 
 
 # LOGGING
@@ -112,7 +112,11 @@ if __name__ == '__main__':
     # importing blueprints
     from users.views import users_blueprint
     from admin.views import admin_blueprint
+    from search import search_blueprint
+
 
     # registering blueprints
     app.register_blueprint(users_blueprint)
     app.register_blueprint(admin_blueprint)
+    app.register_blueprint(search_blueprint)
+
