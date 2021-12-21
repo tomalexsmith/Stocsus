@@ -62,11 +62,19 @@ def requires_roles(*roles):
     return wrapper
 
 
+# BLUEPRINTS
+# importing blueprints
+from users.views import users_blueprint
+from admin.views import admin_blueprint
+
+# registering blueprints
+app.register_blueprint(users_blueprint)
+app.register_blueprint(admin_blueprint)
 # Home Page
 @app.route('/')
 def index():  # put application's code here
     print(request.headers)
-    return "hello world"
+    return render_template('index.html')
 
 
 # ERROR PAGE VIEWS
@@ -100,8 +108,9 @@ if __name__ == '__main__':
     app.run(debug=True)
 
     login_manager = LoginManager()
-    login_manager.login_view = 'users.login'
     login_manager.init_app(app)
+    login_manager.login_view = 'users.login'
+
 
     from models import Users
     @login_manager.user_loader
@@ -109,13 +118,6 @@ if __name__ == '__main__':
         return Users.query.get(int(id))
 
 
-    # BLUEPRINTS
-    # importing blueprints
-    from users.views import users_blueprint
-    from admin.views import admin_blueprint
 
-    # registering blueprints
-    app.register_blueprint(users_blueprint)
-    app.register_blueprint(admin_blueprint)
 
 
