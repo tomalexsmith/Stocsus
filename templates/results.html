@@ -20,15 +20,15 @@
         </div>
         <table>
             <tr>
-                <th><a href="{{ header[3] }}">{{ header[0] }}</a></th>
-                <th>{{ header[1] }}</th>
-                <th>{{ header[2] }}</th>
+                {% for i in range(2) %}
+                    <th>{{ header[i] }}</th>
+                {% endfor %}
             </tr>
             {% for row in data %}
                 <tr>
-                    {% for cell in row %}
-                    <td>{{ cell }}</td>
-                    {% endfor %}
+                    <td><a href="{{ row[3] }}">{{ row[0] }}</a></td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
                 </tr>
             {% endfor %}
         </table>
