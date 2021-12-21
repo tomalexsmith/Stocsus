@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, \
     request, session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.security import check_password_hash
-from users.forms import register_form, login_form
+from users.forms import RegisterForm, LoginForm
 from models import Users
 from app import db
 
@@ -17,7 +17,7 @@ users_blueprint = Blueprint('users', __name__, template_folder='templates')
 @users_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     # create signup form object
-    form = register_form()
+    form = RegisterForm()
 
     if form.validate_on_submit():
         user = Users.query.filter_by(email=form.email.data).first()
@@ -56,7 +56,7 @@ def login():
     elif session.get('logins') >= 3:
         flash('Number of incorrect logins exceeded')
 
-    form = login_form()
+    form = LoginForm()
 
     if form.validate_on_submit():
         # increase login attempts by 1
