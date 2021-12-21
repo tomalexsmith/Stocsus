@@ -19,6 +19,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+from search import search_blueprint
+app.register_blueprint(search_blueprint)
 
 
 # LOGGING
@@ -63,7 +65,8 @@ def requires_roles(*roles):
 # Home Page
 @app.route('/')
 def index():  # put application's code here
-    return render_template('index.html')
+    print(request.headers)
+    return "hello world"
 
 
 # ERROR PAGE VIEWS
@@ -110,11 +113,9 @@ if __name__ == '__main__':
     # importing blueprints
     from users.views import users_blueprint
     from admin.views import admin_blueprint
-    from search import search_blueprint
-
 
     # registering blueprints
     app.register_blueprint(users_blueprint)
     app.register_blueprint(admin_blueprint)
-    app.register_blueprint(search_blueprint)
+
 
