@@ -1,15 +1,11 @@
-from flask import Blueprint, render_template
 
 from api_response import api_response
 
 """
 
-Main search file will be committed when it is fully working aka user inputs into search form, and result is returned
-
-The main file has been tested and works by communicating with API and returning what you see in api_response.py
 
 Use this file to test/work on the search function so we don't waste API free tier limit.
-apiResponse is what will be returned when we communicate with the API.
+api_response in api_response.py is what will be returned when we communicate with the API.
 
 Current bugs: 
 
@@ -20,8 +16,6 @@ Everything else seems to be working fine.
 
 # print(type(apiResponse))
 # print(len(apiResponse['data']['search']['results'][0]['part']['sellers']))
-test_search_blueprint = Blueprint('test_search', __name__, template_folder='templates')
-@test_search_blueprint.route('/test_search')
 def test_search(quantity=1000, api_response=api_response):
     sellers = {}
     counter = 0  # counter to calculate number of results to be used in other functions.
@@ -125,8 +119,10 @@ def test_search(quantity=1000, api_response=api_response):
         temp_list = (name, inventory, cost, url)
         final_sellers.append(temp_list)
     final_data = tuple(final_sellers)
-    headings = ("Seller Name", "Inventory", "Calculated Cost", "URL")
-    return render_template("result.html", headings=headings, data=final_data)
+    for i in final_data:
+        print(i)
+
+
 
 
 
