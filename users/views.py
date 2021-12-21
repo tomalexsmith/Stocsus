@@ -134,8 +134,7 @@ def favourites(supplier_name):
     db.session.commit()
 
 
-def blacklist(
-        supplier_name):
+def blacklist(supplier_name):
     # TODO - to use when adding a supplier to the blacklist
     query = "INSERT INTO blacklist(supplier_name)"
     args = supplier_name
