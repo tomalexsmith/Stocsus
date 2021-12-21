@@ -12,7 +12,8 @@ class SecurityFilter(logging.Filter):
 fh = logging.FileHandler('Stocsus.log', 'w')
 fh.setLevel(logging.WARNING)
 fh.addFilter(SecurityFilter())
-formatter = logging.Formatter('%(asctime)s : %(message)s', '%m/%d/%Y %I:%M:%S %p')
+formatter = logging.Formatter('%(asctime)s : %(message)s',
+                              '%m/%d/%Y %I:%M:%S %p')
 fh.setFormatter(formatter)
 
 logger = logging.getLogger('')
@@ -30,6 +31,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
+# Home Page
 @app.route('/')
 def hello_world():  # put application's code here
     return 'Hello World!'

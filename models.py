@@ -3,17 +3,18 @@ from app import db
 from werkzeug.security import generate_password_hash
 
 
-# Database table containing user information
-# email and password are what the user enters when they register
-# role defines which parts of the application the user has access to
-# banned is False by default which is stored as 0 in the database, False = 0 / True = 1
+# Table containing user information
 class Users(db.Model, UserMixin):
     __table_name__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    # email and password are what the user enters when they register
     email = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(200), nullable=False)
+    # role defines which parts of the application the user has access to
     role = db.Column(db.String(64), nullable=False, default='user')
+    # banned is False by default which is stored as 0 in the database,
+    # False = 0 / True = 1
     banned = db.Column(db.BOOLEAN, nullable=False, default=False)
 
     def __init__(self, email, password, role, banned):
@@ -23,7 +24,7 @@ class Users(db.Model, UserMixin):
         self.banned = banned
 
 
-# Database table containing name of suppliers that have been blacklisted by users
+# Table containing name of suppliers that have been blacklisted by users
 class Blacklist(db.Model):
     __table_name__ = 'blacklist'
 
@@ -34,7 +35,8 @@ class Blacklist(db.Model):
         self.supplier_name = supplier_name
 
 
-# Database table containing the name of suppliers that have been favourited by users
+# Table containing the name of suppliers that have been
+# made a favourite by users
 class Favourite(db.Model):
     __table_name__ = 'favourites'
 
@@ -51,7 +53,8 @@ class Favourite(db.Model):
 def init_db():
     db.drop_all()
     db.create_all()
-    test = Users(email="test@email.com", password="@test123", role="admin", banned=False)
+    test = Users(email="test@email.com", password="@test123", role="admin",
+                 banned=False)
     fav = Favourite(supplier_name="my-favourite")
     black = Blacklist(supplier_name="the-worst")
     db.session.add(test)

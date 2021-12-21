@@ -1,4 +1,4 @@
-#imports
+# imports
 import re
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
@@ -14,20 +14,22 @@ def character_check(form, field):
             raise ValidationError(f"Character {char} is not allowed.")
 
 
-class register_form(FlaskForm):
-    email = StringField(validators=[Required(), Email])
-    password = PasswordField(validators=[Required(), Length(min=6, max=15,
-                                                            message='Password must be between 6 and 15 characters in length')])
-    confirm_password = PasswordField(validators=[Required(),
-                                                 EqualTo('password',
-                                                         message='Both passwords must be equal')])
+class RegisterForm(FlaskForm):
+    email = StringField(validators=[DataRequired(), Email])
+    password = PasswordField(validators=[DataRequired(), Length(min=6, max=15,
+               message='Password must be between 6 and 15 characters '
+                       'in length')])
+    confirm_password = PasswordField(validators=[DataRequired(),
+                       EqualTo('password',
+                               message='Both passwords must be equal')])
     submit = SubmitField()
 
     def validate_password(self, password):
         p = re.compile(r'(?=.*\d)(?=.*[A-Z])(?=.*[*?!\'^+%&/()=}\]\[{$#@<>])')
         if not p.match(self.password.data):
             raise ValidationError(
-                'Password must contain at least 1 digit, 1 uppercase, and 1 special character')
+                'Password must contain at least 1 digit, 1 uppercase, '
+                'and 1 special character')
 
 
 class login_form(FlaskForm):
