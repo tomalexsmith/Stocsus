@@ -4,7 +4,6 @@ from functools import wraps
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user, login_manager
-from models import Users
 import os
 
 app = Flask(__name__)
@@ -64,7 +63,6 @@ def requires_roles(*roles):
 # Home Page
 @app.route('/')
 def index():  # put application's code here
-    print(request.headers)
     return render_template('index.html')
 
 
@@ -102,7 +100,7 @@ if __name__ == '__main__':
     login_manager.login_view = 'users.login'
     login_manager.init_app(app)
 
-
+    from models import Users
     @login_manager.user_loader
     def load_user(id):
         return Users.query.get(int(id))
