@@ -1,3 +1,4 @@
+# these are the forms the user will be using in the application
 # imports
 import re
 from flask_wtf import FlaskForm
