@@ -34,3 +34,9 @@ class login_form(FlaskForm):
     email = StringField(validators=[Required(), Email()])
     password = PasswordField(validators=[Required()])
     submit = SubmitField()
+
+class search_form(FlaskForm):
+    part_number = StringField(validators=[Required()])
+    quantity = StringField(validators=[Required()])
+    models = StringField(validators=[Required()])
+    submit = SubmitField()
