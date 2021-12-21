@@ -1,3 +1,5 @@
+from flask import Blueprint, render_template
+
 from api_response import api_response
 
 """
@@ -18,7 +20,9 @@ Everything else seems to be working fine.
 
 # print(type(apiResponse))
 # print(len(apiResponse['data']['search']['results'][0]['part']['sellers']))
-def test_search(quantity, api_response=api_response):
+test_search_blueprint = Blueprint('test_search', __name__, template_folder='templates')
+@test_search_blueprint.route('/test_search')
+def test_search(quantity=1000, api_response=api_response):
     sellers = {}
     counter = 0  # counter to calculate number of results to be used in other functions.
     for i in range(len(api_response['data']['search']['results'][0]['part']['sellers'])):
@@ -122,10 +126,10 @@ def test_search(quantity, api_response=api_response):
         final_sellers.append(temp_list)
     final_data = tuple(final_sellers)
     headings = ("Seller Name", "Inventory", "Calculated Cost", "URL")
-    for i in final_data:
-        print(i)
+    return render_template("result.html", headings=headings, data=final_data)
 
 
-test_search(quantity=1000)
+
+
 
 
