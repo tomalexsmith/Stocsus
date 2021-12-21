@@ -1,6 +1,25 @@
+# IMPORTS
 import logging
-from flask import Flask
+from functools import wraps
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, current_user, login_manager
+from models import Users
+import os
+
+# CONFIG
+app = Flask(__name__)
+
+# SECRET KEYS
+app.config['SECRET_KEY'] = os.urandom(32)
+app.config['WTF_CSRF_SECRET_KEY'] = os.urandom(32)
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:admin123@stocsus' \
+                                 '.cs4jpvtwcnto.eu-west-2.rds.amazonaws.com' \
+                                 ':3306/stocsus '
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 
 
 # LOGGING
@@ -20,22 +39,80 @@ logger = logging.getLogger('')
 logger.propagate = False
 logger.addHandler(fh)
 
-# CONFIG
-app = Flask(__name__)
-# Use your own database for testing
-# Connecting to team database will be done towards the end on campus/VM
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:admin123@stocsus.cs4jpvtwcnto.eu-west-2.rds.amazonaws.com:3306/stocsus'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+# ROLES
+def requires_roles(*roles):
+    def wrapper(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            if current_user.role not in roles:
+                logging.warning(
+                    'SECURITY - Unauthorised access attempt [%s, %s, %s, %s]',
+                    current_user.id,
+                    current_user.email,
+                    current_user.role,
+                    request.remote_addr)
+                # Redirect the user to an unauthorised notice!
+                return render_template('403.html')
+            return f(*args, **kwargs)
+
+        return wrapped
+
+    return wrapper
 
 
 # Home Page
 @app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!'
+def index():  # put application's code here
+    print(request.headers)
+    return render_template('index.html')
+
+
+# ERROR PAGE VIEWS
+# TODO - Create templates for the error pages
+@app.errorhandler(400)
+def bad_request(error):
+    return render_template('400.html'), 400
+
+
+@app.errorhandler(403)
+def page_forbidden(error):
+    return render_template('403.html'), 403
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500.html'), 500
+
+
+@app.errorhandler(503)
+def service_unavailable(error):
+    return render_template('503.html'), 503
 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'users.login'
+    login_manager.init_app(app)
+
+
+    @login_manager.user_loader
+    def load_user(id):
+        return Users.query.get(int(id))
+
+
+    # BLUEPRINTS
+    # importing blueprints
+    from users.views import users_blueprint
+    from admin.views import admin_blueprint
+
+    # registering blueprints
+    app.register_blueprint(users_blueprint)
+    app.register_blueprint(admin_blueprint)
