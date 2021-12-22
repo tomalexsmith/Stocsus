@@ -1,6 +1,3 @@
-
-
-
 Flask
 Jinja2
 MarkupSafe
@@ -14,4 +11,4 @@ pycryptodome==3.10.1
 SQLAlchemy
 WTForms
 Flask-WTF
-email-validator==1.1.3
+email-validator

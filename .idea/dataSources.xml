@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="Amazon Aurora MySQL - stocsus@stocsus.cs4jpvtwcnto.eu-west-2.rds.amazonaws.com" uuid="602462dd-76b7-4f4e-848c-77fe70f6f96d">
+      <driver-ref>mysql_aurora</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://stocsus.cs4jpvtwcnto.eu-west-2.rds.amazonaws.com:3306/stocsus</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>
