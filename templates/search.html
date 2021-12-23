@@ -2,7 +2,7 @@
 
 
 {% block header %}
-{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">#}
+    {# <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}"> #}
 {% endblock %}
 
 
@@ -13,8 +13,8 @@
         <form method="POST">
             {{ form.part_number(class="input", placeholder="Part") }}
             <div class="quantity_search">
-                {{ form.quantity(class="quantity_input", placeholder="Quantity") }}
-                {{ form.models(class="quantity_input", placeholder="No. of models") }}
+                {{ form.quantity(type="number", class="quantity_input", placeholder="Quantity") }}
+                {{ form.models(type="number", class="quantity_input", placeholder="No. of models") }}
             </div>
             {{ form.submit(class="submit_button") }}
         </form>
@@ -22,7 +22,8 @@
     <div class="file_upload">
         <span class="or">or</span>
         <form method="POST">
-            {{ form.upload(class="upload") }}
+            {#{ form.upload(class="upload") }#}
+            <span>Upload Placeholder</span>
         </form>
     </div>
 {% endblock %}
