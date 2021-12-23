@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block header %}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">#}
+{% endblock %}
+
+{% block content %}
+
+    <div class="header_container">
+        <h1>Results</h1>
+        <h2>Quantity: {{ quantity }}</h2>
+        <h2>No. of models: {{ models }}</h2>
+        </form>
+    </div>
+
+    <div class="results_container">
+        <div class="part_information">
+            <h2>{{ part_number }}</h2>
+            <h3>{{ manufacturer }}</h3>
+        </div>
+        <table>
+            <tr>
+                {% for i in range(3) %}
+                    <th>{{ headings[i] }}</th>
+                {% endfor %}
+            </tr>
+            {% for row in data %}
+                <tr>
+                    <td><a href="{{ row[3] }}">{{ row[0] }}</a></td>
+                    <td>{{ row[1] }}</td>
+                    <td>£{{ row[2] }}.00</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

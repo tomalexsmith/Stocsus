@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block header %}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">#}
+{% endblock %}
+
+{% block content %}
+<div class="hero" id="hero">
+    <div class="hero_gradient">
+        <h1>Stocsus</h1>
+        <div class="cta">]
+            <div class="get_started">
+{#                {% if current_user.is_authenticated %}#}
+                    <a href="{{ url_for('search_blueprint.search') }}">Get started</a>
+{#                {% else %}#}
+{#                    <a href="{{ url_for('users.register') }}">Get started</a>#}
+{#                {%  endif %}#}
+            </div>
+            <a class="about" href="#about">About us</a>
+        </div>
+    </div>
+    <div class="credits">
+        <span>Developed for the team at <span class="tharsus">Tharsus</span></span>
+        <span>A project by team <span class="18">18</span></span>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="about" id="about">
+    <div class="about_content">
+         <div class="about_left">
+             <h2>The problem</h2>
+             <p>The global parts shortage is creating significant challenges for Tharsus as a manufacturer. Frequently
+             having to manually search websites to check for stock and pricing on components has become an issue.</p>
+             <h2>Our solution</h2>
+             <p>Our aim was to develop a stock and price checking application that allows workers at Tharsus to
+             automatically and rapidly search a range of websites for a list of parts, eliminating the current long
+             and tedious process.</p>
+         </div>
+        <div class="about_right">
+            <h1>About us</h1>
+        </div>
+    </div>
+</div>
+
+<div class="get_started" id="get_started">
+    <div class="get_started_content">
+        <div class="get_started_left">
+            <h1>How to get started</h1>
+        </div>
+        <div class="get_started_right">
+            <h2>Step <span>1</span></h2>
+            <p>Sign up with an email and password, or alternatively login to an existing account</p>
+            <h2>Step <span>2</span></h2>
+            <p>Search individual parts by part no., quantity and no. of models, or multiple parts at a time by
+            uploading an Excel spreadsheet.</p>
+            <h2>Step <span>3</span></h2>
+            <p>View suppliers which have the required quantity for each part that was searched</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
