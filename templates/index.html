@@ -10,11 +10,11 @@
         <h1>Stocsus</h1>
         <div class="cta">]
             <div class="get_started">
-                {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('users.search') }}">Get started</a>
-                {% else %}
-                    <a href="{{ url_for('users.register') }}">Get started</a>
-                {%  endif %}
+{#                {% if current_user.is_authenticated %}#}
+                    <a href="{{ url_for('search_blueprint.search') }}">Get started</a>
+{#                {% else %}#}
+{#                    <a href="{{ url_for('users.register') }}">Get started</a>#}
+{#                {%  endif %}#}
             </div>
             <a class="about" href="#about">About us</a>
         </div>
