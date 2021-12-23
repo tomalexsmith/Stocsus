@@ -19,9 +19,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-from search import search_blueprint
-app.register_blueprint(search_blueprint)
-
 
 # LOGGING
 class SecurityFilter(logging.Filter):
@@ -66,10 +63,14 @@ def requires_roles(*roles):
 # importing blueprints
 from users.views import users_blueprint
 from admin.views import admin_blueprint
+from search.views import search_blueprint
 
 # registering blueprints
 app.register_blueprint(users_blueprint)
 app.register_blueprint(admin_blueprint)
+app.register_blueprint(search_blueprint)
+
+
 # Home Page
 @app.route('/')
 def index():  # put application's code here
@@ -111,13 +112,9 @@ if __name__ == '__main__':
     login_manager.init_app(app)
     login_manager.login_view = 'users.login'
 
-
     from models import Users
+
+
     @login_manager.user_loader
     def load_user(id):
         return Users.query.get(int(id))
-
-
-
-
-

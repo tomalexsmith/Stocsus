@@ -1,25 +1,25 @@
 import requests
 import json
 from flask import render_template, Blueprint, request, redirect, url_for
-from users.forms import SearchForm
+from search.forms import SearchForm
 """
 This file will not work without the API TOKEN, you need to edit the endpoint variable and add it there
-
 query is the GraphQL query that will be used to extract data using the Octopart API
-
 example part number = CFR50J2K2
-
 """
 
 search_blueprint = Blueprint('search_blueprint', __name__, template_folder='templates')
 
-endpoint = "https://octopart.com/api/v4/endpoint?token=b02769bc-29c7-413d-9eb0-baf60f016b02"
+endpoint = "https://octopart.com/api/v4/endpoint?token=3a546d2c-f7ad-4cb5-b0a8-5f3b4dd8320a"
 
 query = """query {
   search(q: "%s") {
     results {
       part {
         mpn
+        manufacturer {
+            name
+        }
         sellers(include_brokers: false, authorized_only: true) {
           company {
             name
@@ -40,7 +40,7 @@ query = """query {
 }"""
 
 @search_blueprint.route("/search", methods=['GET', 'POST'])
-def search_form():
+def search():
     form = SearchForm()
     if request.method == 'POST':
         part_number = form.part_number.data
@@ -48,21 +48,21 @@ def search_form():
         models = form.models.data
 
 
-        return redirect(url_for('search_blueprint.search', part_number= part_number, quantity =quantity, models=models))
+        return redirect(url_for('search_blueprint.results', part_number= part_number, quantity =quantity, models=models))
 
     return render_template("search.html", form=form)
 
 
-@search_blueprint.route('/result/<part_number>/<quantity>/<models>/', methods=['GET', 'POST'])
-def search(part_number, quantity, models):
+@search_blueprint.route('/results/<part_number>/<quantity>/<models>/', methods=['GET', 'POST'])
+def results(part_number, quantity, models):
     part_number = part_number
-    r = requests.post(endpoint, json={"query": query % (part_number)})
+    r = requests.post(endpoint, json={"query": query % part_number})
     if r.status_code == 200:
         data = json.loads(json.dumps(r.json(), indent=2)) # this data is the api_response
         # return test_search(quantity, api_response=data)
 
         quantity = int(quantity) * int(models)
-
+        manufacturer = data['data']['search']['results'][0]['part']['manufacturer']['name']
         sellers = {}
 
         counter = 0  # counter to calculate number of results to be used in other functions.
@@ -167,9 +167,5 @@ def search(part_number, quantity, models):
         final_data = tuple(final_sellers)
         headings = ("Seller Name", "Inventory", "Calculated Cost", "URL")
 
-        return render_template("result.html", headings=headings, data=final_data, part_number=part_number)
-
-
-
-
+        return render_template("results.html", headings=headings, data=final_data, part_number=part_number, manufacturer=manufacturer )
 
