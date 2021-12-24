@@ -7,6 +7,7 @@ from werkzeug.security import check_password_hash
 from users.forms import RegisterForm, LoginForm
 from models import Users
 from app import db
+from admin.views import admin
 
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
@@ -19,7 +20,7 @@ def register():
     # create signup form object
     form = RegisterForm()
 
-    if form.validate_on_submit():
+    if request.method == 'POST':
         user = Users.query.filter_by(email=form.email.data).first()
         # if this returns a user, then the user already exists in the
         # database. Hence the user will be redirected to the signup page
@@ -31,7 +32,7 @@ def register():
         # create a new user with the form data
         new_user = Users(email=form.email.data,
                          password=form.password.data,
-                         role='user')
+                         role='user', banned=False)
 
         # add the new user to the database
         db.session.add(new_user)
@@ -57,54 +58,47 @@ def login():
         flash('Number of incorrect logins exceeded')
 
     form = LoginForm()
+    if request.method == 'POST':
 
-    if form.validate_on_submit():
         # increase login attempts by 1
         session['logins'] += 1
-        # when POST is received database is queried for
-        # first username that matches
+
         user = Users.query.filter_by(email=form.email.data).first()
 
-        # checks whether passwords match and if either that doesn't match
-        # or username isn't found
-        # asks user to check login details
-        if not user or not check_password_hash(user.password,
-                                               form.password.data):
-            # logging call to indicate an invalid login attempt
-            logging.warning('SECURITY - Invalid Login [%s]',
-                            request.remote_addr)
+        if not user or not check_password_hash(user.password, form.password.data):
 
-            # if no match create appropriate error message based on
-            # login attempts
+            # if no match create appropriate error message based on login attempts
             if session['logins'] == 3:
                 flash('Number of incorrect logins exceeded')
+                logging.warning('SECURITY - Invalid login attempt [%s, %s]', form.email.data, request.remote_addr)
             elif session['logins'] == 2:
-                flash(
-                    'Please check your login details and try again. 1 login '
-                    'attempt remaining')
+                flash('Please check your login details and try again. 1 login attempt remaining')
+                logging.warning('SECURITY - Invalid login attempt [%s, %s]', form.email.data, request.remote_addr)
             else:
-                flash(
-                    'Please check your login details and try again. 2 login '
-                    'attempts remaining')
+                flash('Please check your login details and try again. 2 login attempts remaining')
+                logging.warning('SECURITY - Invalid login attempt [%s, %s]', form.email.data, request.remote_addr)
+
             return render_template('login.html', form=form)
 
-        login_user(user)
+        if user and check_password_hash(user.password, form.password.data):
 
-        # datetime doesn't work so it's commented out
-        user.last_logged_in = user.current_logged_in
-        # user.current_logged_in = datetime.now()
-        db.session.add(user)
-        db.session.commit()
+            # if user is verified reset login attempts to 0
+            session['logins'] = 0
 
-        # logging call to indicate user has logged in
-        logging.warning('SECURITY - Log in [%s, %s, %s]', current_user.id,
-                        current_user.email,
-                        request.remote_addr)
+            login_user(user)
 
-        if current_user.role == 'admin':
-            return redirect(url_for('admin.admin'))
+            db.session.add(user)
+            db.session.commit()
+
+            logging.warning('SECURITY - Log in [%s, %s, %s]', current_user.id, current_user.email,
+                            request.remote_addr)
+
+            if current_user.role == 'admin':
+                return admin()
+            else:
+                return redirect(url_for('search_blueprint.search'))
         else:
-            return redirect(url_for('users.search'))
+            logging.warning('SECURITY - Invalid login attempt [%s, %s]', form.email.data, request.remote_addr)
 
     return render_template('login.html', form=form)
 

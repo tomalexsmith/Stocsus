@@ -14,7 +14,7 @@ app.config['WTF_CSRF_SECRET_KEY'] = os.urandom(32)
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:admin123@stocsus' \
                                  '.cs4jpvtwcnto.eu-west-2.rds.amazonaws.com' \
-                                 ':3306/stocsus '
+                                 ':3306/stocsus'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -104,17 +104,20 @@ def internal_error(error):
 def service_unavailable(error):
     return render_template('503.html'), 503
 
+login_manager = LoginManager()
+login_manager.login_view = 'users.login'
+login_manager.init_app(app)
+
+from models import Users
+
+
+@login_manager.user_loader
+def load_user(id):
+    return Users.query.get(int(id))
+
 
 if __name__ == '__main__':
+
+
     app.run(debug=True)
 
-    login_manager = LoginManager()
-    login_manager.init_app(app)
-    login_manager.login_view = 'users.login'
-
-    from models import Users
-
-
-    @login_manager.user_loader
-    def load_user(id):
-        return Users.query.get(int(id))
