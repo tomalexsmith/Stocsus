@@ -2,6 +2,7 @@ import requests
 import json
 from flask import render_template, Blueprint, request, redirect, url_for
 from search.forms import SearchForm
+import pandas as pd
 """
 This file will not work without the API TOKEN, you need to edit the endpoint variable and add it there
 query is the GraphQL query that will be used to extract data using the Octopart API
@@ -42,13 +43,20 @@ query = """query {
 @search_blueprint.route("/search", methods=['GET', 'POST'])
 def search():
     form = SearchForm()
-    if request.method == 'POST':
+    if form.validate_on_submit() and request.method == 'POST':
         part_number = form.part_number.data
         quantity = form.quantity.data
         models = form.models.data
-
-
         return redirect(url_for('search_blueprint.results', part_number= part_number, quantity =quantity, models=models))
+    elif request.method == 'POST':
+        f = request.files['file']
+        data = pd.read_excel(f, 'Sheet1', index_col=None)
+        data.to_csv('your_csv.csv', encoding='utf-8')
+        part_number = str(data['part_no'][0])
+        quantity = str(data['quantity'][0])
+        models = str(data['models'][0])
+        return redirect(url_for('search_blueprint.results', part_number=part_number, quantity=quantity, models=models))
+
 
     return render_template("search.html", form=form)
 
