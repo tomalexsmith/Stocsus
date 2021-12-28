@@ -11,6 +11,7 @@
     <h1>Search</h1>
     <div class="search forms">
         <form method="POST">
+             {{ form.csrf_token() }}
             {{ form.part_number(class="input", placeholder="Part") }}
             <div class="quantity_search">
                 {{ form.quantity(type="number", class="quantity_input", placeholder="Quantity") }}
@@ -21,9 +22,9 @@
     </div>
     <div class="file_upload">
         <span class="or">or</span>
-        <form method="POST">
-            {#{ form.upload(class="upload") }#}
-            <span>Upload Placeholder</span>
-        </form>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
     </div>
 {% endblock %}
