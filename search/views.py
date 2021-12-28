@@ -81,6 +81,7 @@ def search():
 def results(part_number, quantity, models):
     tables = {}
     table_part_numbers = []
+    table_manufacturers = []
 
     # convert string representation of list to an actual list
     part_number = ast.literal_eval(part_number)
@@ -106,10 +107,12 @@ def results(part_number, quantity, models):
         r = requests.post(endpoint, json={"query": query % part_number})
         if r.status_code == 200:
             data = json.loads(json.dumps(r.json(), indent=2))  # this data is the api_response
-            # return test_search(quantity, api_response=data)
+
+            manufacturer = data['data']['search']['results'][0]['part']['manufacturer']['name']
+            table_manufacturers.append(manufacturer)
+
 
             quantity = int(quantity) * int(models)
-            manufacturer = data['data']['search']['results'][0]['part']['manufacturer']['name']
             sellers = {}
 
             counter = 0  # counter to calculate number of results to be used in other functions.
@@ -216,6 +219,6 @@ def results(part_number, quantity, models):
                 print(final_data)
     headings = ("Seller Name", "Inventory", "Calculated Cost", "URL")
     print(tables)
-    return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers)
+    return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers, manufacturer=table_manufacturers)
 
 

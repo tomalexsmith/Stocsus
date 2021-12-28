@@ -7,7 +7,7 @@
     <body>
      <h1>Results</h1>
     {% for i in tables %}
-            <h2>{{ "Part number: " + part_number[i] }}</h2>
+            <h3>{{ "Part number: " + part_number[i] + " " + "Manufacturer: " + manufacturer[i] }}</h3>
         <table class="table">
             <tr class="table__header">
                 {% for header in headings %}
