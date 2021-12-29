@@ -24,3 +24,18 @@ def admin():
                            current_users=Users.query.filter_by(
                                role='user').all(), logs=content)
 
+
+@admin_blueprint.route('/view_favourites', methods=['POST'])
+@login_required
+@requires_roles('admin')
+def view_favourites():
+    query = "UPDATE favourites SET boolean = '1' WHERE id = " \
+            "user_selected_favourite "
+    return
+
+
+@admin_blueprint.route('/view_blacklist', methods=['POST'])
+@login_required
+@requires_roles('admin')
+def view_blacklist():
+    return

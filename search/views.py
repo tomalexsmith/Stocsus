@@ -5,11 +5,9 @@ from search.forms import SearchForm
 import pandas as pd
 import ast
 import openpyxl # required dependency
-"""
-This file will not work without the API TOKEN, you need to edit the endpoint variable and add it there
-query is the GraphQL query that will be used to extract data using the Octopart API
-example part number = CFR50J2K2
-"""
+"""This file will not work without the API TOKEN, you need to edit the 
+endpoint variable and add it there query is the GraphQL query that will be 
+used to extract data using the Octopart API example part number = CFR50J2K2 """
 
 search_blueprint = Blueprint('search_blueprint', __name__, template_folder='templates')
 

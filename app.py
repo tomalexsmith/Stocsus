@@ -14,10 +14,11 @@ app.config['WTF_CSRF_SECRET_KEY'] = os.urandom(32)
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:admin123@stocsus' \
                                  '.cs4jpvtwcnto.eu-west-2.rds.amazonaws.com' \
-                                 ':3306/stocsus'
+                                 ':3306/stocsus '
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
 
 
 # LOGGING
@@ -59,22 +60,9 @@ def requires_roles(*roles):
     return wrapper
 
 
-# BLUEPRINTS
-# importing blueprints
-from users.views import users_blueprint
-from admin.views import admin_blueprint
-from search.views import search_blueprint
-
-# registering blueprints
-app.register_blueprint(users_blueprint)
-app.register_blueprint(admin_blueprint)
-app.register_blueprint(search_blueprint)
-
-
 # Home Page
 @app.route('/')
 def index():  # put application's code here
-    print(request.headers)
     return render_template('index.html')
 
 
@@ -104,20 +92,29 @@ def internal_error(error):
 def service_unavailable(error):
     return render_template('503.html'), 503
 
-login_manager = LoginManager()
-login_manager.login_view = 'users.login'
-login_manager.init_app(app)
-
-from models import Users
-
-
-@login_manager.user_loader
-def load_user(id):
-    return Users.query.get(int(id))
-
 
 if __name__ == '__main__':
-
-
     app.run(debug=True)
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'users.login'
+    login_manager.init_app(app)
+
+    from models import Users
+    @login_manager.user_loader
+    def load_user(id):
+        return Users.query.get(int(id))
+
+
+    # BLUEPRINTS
+    # importing blueprints
+    from users.views import users_blueprint
+    from admin.views import admin_blueprint
+    from search import search_blueprint
+
+
+    # registering blueprints
+    app.register_blueprint(users_blueprint)
+    app.register_blueprint(admin_blueprint)
+    app.register_blueprint(search_blueprint)
 
