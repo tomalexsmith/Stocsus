@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, \
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.security import check_password_hash
 from users.forms import RegisterForm, LoginForm
-from models import Users
+from models import Users, Favourite
 from app import db
 from admin.views import admin
 
@@ -103,10 +103,21 @@ def login():
     return render_template('login.html', form=form)
 
 
-@users_blueprint.route('/profile')
+@users_blueprint.route('/dashboard')
 @login_required
-def profile():
-    return render_template('profile.html', email=current_user.email)
+def dashboard():
+    submitted_favourite = ''
+    submitted_favourite = request.form.get('favourite')
+    submitted_favourite.strip()
+
+    new_favourite = Favourite(supplier_name=submitted_favourite)
+
+    db.session.add(new_favourite)
+    db.session.commit()
+
+    flash('Favourite added.')
+    return render_template('dashboard.html', email=current_user.email,
+                           favourites=Favourite)
 
 
 @users_blueprint.route('/logout')
