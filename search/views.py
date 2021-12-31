@@ -11,6 +11,7 @@ query is the GraphQL query that will be used to extract data using the Octopart 
 example part number = CFR50J2K2
 """
 
+
 search_blueprint = Blueprint('search_blueprint', __name__, template_folder='templates')
 
 endpoint = "https://octopart.com/api/v4/endpoint?token=b02769bc-29c7-413d-9eb0-baf60f016b02"
@@ -98,8 +99,7 @@ def results(part_number, quantity, models):
     for search_no in range(len(part_numbers)):
         part_number = part_numbers[search_no]
         table_part_numbers.append(part_number)
-        quantity = quantitys[search_no]
-        models = models_final[search_no]
+        quantity = int(quantitys[search_no]) * int(models_final[search_no])
         print(part_number)
         print(quantity)
         print(models)
@@ -111,8 +111,6 @@ def results(part_number, quantity, models):
             manufacturer = data['data']['search']['results'][0]['part']['manufacturer']['name']
             table_manufacturers.append(manufacturer)
 
-
-            quantity = int(quantity) * int(models)
             sellers = {}
 
             counter = 0  # counter to calculate number of results to be used in other functions.
@@ -184,6 +182,8 @@ def results(part_number, quantity, models):
             # print(len(sellers_final_check[3]['offers'][0]['prices']))
             # print(sellers_final_check[3]['offers'][0]['prices'][0]['price'])
 
+            print(prices_quantity)
+
             # seller has no matching key pair in prices_quantity dictionary? pop it.
             for i in list(sellers_final_check.keys()):
                 if i not in list(prices_quantity.keys()):
@@ -197,6 +197,7 @@ def results(part_number, quantity, models):
                     if j <= quantity:
                         final_cost = round(quantity * prices_quantity[i][j])
                         final_cost_dictionary[i] = final_cost
+                        break
 
             # for key, value in sellers_final_check.items():
             #     print(key, ' : ', value)
@@ -217,7 +218,7 @@ def results(part_number, quantity, models):
                 final_data = tuple(final_sellers)
                 tables[search_no] = final_data
                 print(final_data)
-    headings = ("Seller Name", "Inventory", "Calculated Cost", "URL")
+    headings = ("Seller Name", "Inventory", "Calculated Cost")
     print(tables)
     return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers, manufacturer=table_manufacturers)
 
