@@ -16,13 +16,12 @@
             </tr>
             {% for row in tables[i] %}
             <tr class="table__row">
-                {% for cell in row %}
-                <td class="table__cell">{{ cell }}</td>
-                {% endfor %}
+                <td><a href="{{ row[3] }}">{{ row[0] }}</a></td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
             </tr>
             {% endfor %}
         </table>
     {% endfor %}
     </body>
 {% endblock %}
-
