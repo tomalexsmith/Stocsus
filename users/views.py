@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, \
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.security import check_password_hash
 from users.forms import RegisterForm, LoginForm
-from models import Users, Favourite
+from models import Users, Favourite, Blacklist
 from app import db
 from admin.views import admin
 
@@ -111,13 +111,21 @@ def dashboard():
     submitted_favourite.strip()
 
     new_favourite = Favourite(supplier_name=submitted_favourite)
-
     db.session.add(new_favourite)
+
+    submitted_blacklist = ''
+    submitted_blacklist = request.form.get('blacklist')
+    submitted_blacklist.strip()
+
+    new_blacklist = Blacklist(supplier_name=submitted_blacklist)
+    db.session.add(new_blacklist)
+
     db.session.commit()
 
-    flash('Favourite added.')
+    # flash('Favourite added.') # TODO - may have to put in an if statement so that there's no conflict if user adds to blacklist too
+    # flash('Added to blacklist')
     return render_template('dashboard.html', email=current_user.email,
-                           favourites=Favourite)
+                           favourites=Favourite, blacklist=Blacklist)
 
 
 @users_blueprint.route('/logout')
