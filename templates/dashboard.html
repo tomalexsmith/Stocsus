@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="notification is-danger">
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+<!--<h1>Commented out so you can test without logging in</h1>-->
+<!--<h1> Email:{{ email }}</h1>-->
+<!--<h1> Role:{{ role }}</h1>-->
+
+
+<h1>Favourite Suppliers</h1>
+  <table class="table">
+                        <tr>
+                            <th>ID</th>
+                            <th>Supplier name</th>
+                        </tr>
+                        {% for i in current_favourites %}
+                            <tr>
+                                <td>{{ i.id }}</td>
+                                <td>{{ i.supplier_name }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+          <div class="favourite form">
+        <form method="POST">
+             {{ favourite_form.csrf_token() }}
+            {{ favourite_form.favourite_supplier(class="input", placeholder="Enter favourite supplier") }}
+            {{ favourite_form.submit(class="submit_button", value="Add") }}
+        </form>
+    </div>
+
+<h1>Blacklisted Suppliers</h1>
+  <table class="table">
+                        <tr>
+                            <th>ID</th>
+                            <th>Supplier name</th>
+                        </tr>
+                        {% for i in current_blacklist %}
+                            <tr>
+                                <td>{{ i.id }}</td>
+                                <td>{{ i.supplier_name }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+        <form method="POST">
+             {{ blacklist_form.csrf_token() }}
+            {{ blacklist_form.blacklist_supplier(class="input", placeholder="Enter blacklist supplier") }}
+            {{ blacklist_form.submit(class="submit_button", value="Add") }}
+        </form>
+
+{% endblock %}
