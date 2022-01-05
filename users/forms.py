@@ -36,3 +36,12 @@ class LoginForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()])
     password = PasswordField(validators=[DataRequired()])
     submit = SubmitField()
+
+class FavouriteForm(FlaskForm):
+    favourite_supplier = StringField(validators=[DataRequired()])
+    submit = SubmitField()
+
+
+class BlacklistForm(FlaskForm):
+    blacklist_supplier = StringField(validators=[DataRequired()])
+    submit = SubmitField()
