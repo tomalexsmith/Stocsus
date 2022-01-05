@@ -29,7 +29,7 @@ class Blacklist(db.Model):
     __table_name__ = 'blacklist'
 
     id = db.Column(db.Integer, primary_key=True)
-    supplier_name = db.Column(db.String(64), nullable=False)
+    supplier_name = db.Column(db.String(64), nullable=False, unique=True)
 
     def __init__(self, supplier_name):
         self.supplier_name = supplier_name
@@ -41,7 +41,7 @@ class Favourite(db.Model):
     __table_name__ = 'favourites'
 
     id = db.Column(db.Integer, primary_key=True)
-    supplier_name = db.Column(db.String(64), nullable=False)
+    supplier_name = db.Column(db.String(64), nullable=False, unique=True)
 
     def __init__(self, supplier_name):
         self.supplier_name = supplier_name
@@ -53,7 +53,7 @@ class Favourite(db.Model):
 def init_db():
     db.drop_all()
     db.create_all()
-    test = Users(email="test@email.com", password="@test123", role="admin",
+    test = Users(email="test@email.com", password="@Test123", role="admin",
                  banned=False)
     fav = Favourite(supplier_name="my-favourite")
     black = Blacklist(supplier_name="the-worst")
