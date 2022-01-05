@@ -34,7 +34,7 @@
             <ul class="nav_right">
                 {#% if current_user.is_authenticated %#}
                     <li><a href="{{ url_for('users.logout') }}">logout</a></li>
-                    <li><a href="{{ url_for('users.profile') }}">
+                    <li><a href="{{ url_for('users.dashboard') }}">
                         <span class="material-icons">person</span>
                     </a></li>
                 {#% else %#}
