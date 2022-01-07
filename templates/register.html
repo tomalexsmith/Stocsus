@@ -7,29 +7,33 @@
 {% block content %}
     <div class="bg">
         <div class="register_box">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="notification is-danger">
-                        {{ messages[0] }}
-                    </div>
-                {% endif %}
-            {% endwith %}
+
             <h1>Register</h1>
             <form method="POST">
+                {{ form.csrf_token() }}
                 <div class="form_email">
                     <label>Email</label>
                     <span class="material-icons">person</span>
                     {{ form.email(class="email", placeholder="Type your email") }}
+                    {% for error in form.email.errors %}
+                        {{ error }}
+                    {% endfor %}
                 </div>
                 <div class="form_password">
                     <label>Password</label>
                     <span class="material-icons-outlined">lock</span>
-                    {{ form.password(class="password", placeholder="Type your password") }}
+                    {{ form.password(class="input", placeholder="Type your password") }}
+                       {% for error in form.password.errors %}
+                        {{ error }}
+                    {% endfor %}
                 </div>
                 <div class="form_confirm_password">
                     <label>Confirm password</label>
                     <span class="material-icons-outlined">lock</span>
-                    {{ form.confirm_password(class="password", placeholder="Type your password") }}
+                    {{ form.confirm_password(class="password", placeholder="Confirm your password") }}
+                      {% for error in form.confirm_password.errors %}
+                        {{ error }}
+                    {% endfor %}
                 </div>
                 <div class="form_submit">
                     {{ form.submit(class="submit") }}

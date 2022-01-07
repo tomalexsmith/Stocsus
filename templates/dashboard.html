@@ -1,14 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="notification is-danger">
-                        {{ messages[0] }}
-                    </div>
-                {% endif %}
-            {% endwith %}
-
 <!--<h1>Commented out so you can test without logging in</h1>-->
 <!--<h1> Email:{{ email }}</h1>-->
 <!--<h1> Role:{{ role }}</h1>-->
@@ -34,6 +26,17 @@
             {{ favourite_form.favourite_supplier(class="input", placeholder="Enter favourite supplier") }}
             {{ favourite_form.submit(class="submit_button", value="Add") }}
         </form>
+                <div class="alert-message block-message error">
+                {% with errors = get_flashed_messages(category_filter=["favourite_alert"]) %}
+                {% if errors %}
+                {% for message in errors %}
+                {{ message }}
+                {% endfor %}
+                    </div>
+                    </div>
+{% endif %}
+{% endwith %}
+
     </div>
 
 <h1>Blacklisted Suppliers</h1>
@@ -55,5 +58,16 @@
             {{ blacklist_form.blacklist_supplier(class="input", placeholder="Enter blacklist supplier") }}
             {{ blacklist_form.submit(class="submit_button", value="Add") }}
         </form>
+
+        {% with errors = get_flashed_messages(category_filter=["blacklist_alert"]) %}
+        {% if errors %}
+        <div class="alert-message block-message error">
+        {%- for message in errors %}
+        {{ message }}
+        {% endfor -%}
+        </div>
+        {% endif %}
+        {% endwith %}
+
 
 {% endblock %}
