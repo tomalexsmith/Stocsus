@@ -116,7 +116,7 @@ def results(part_number, quantity, models):
 
             sellers = {}
 
-            counter = 0  # counter to calculate number of results to be used in other functions.
+            counter = 0  # counter
             for i in range(len(data['data']['search']['results'][0]['part']['sellers'])):
                 x = (data['data']['search']['results'][0]['part']['sellers'][i])
                 counter += 1
@@ -124,16 +124,59 @@ def results(part_number, quantity, models):
 
             # check inventory level of each key and make sure it is not equal to zero
             # if seller has 0 inventory level, remove them from result
+            to_continue = True
             sellers_with_stock = {}  # dictionary to store sellers that have stock
             j = 0
+            largest_quantity_available = 0
             for i in range(len(sellers)):
-                if sellers[i + 1]['offers'][0]['inventory_level'] >= quantity:  # check if inventory matches quantity
+                greatest_seller_inventory = sellers[i + 1]['offers'][0]['inventory_level']
+                if greatest_seller_inventory > largest_quantity_available:
+                    largest_quantity_available = greatest_seller_inventory
+
+            # inputs 1000,     500, 500 => 1000
+
+                if sellers[i + 1]['offers'][0]['inventory_level'] >= quantity and largest_quantity_available >= quantity:  # check if inventory matches quantity
                     j += 1
                     sellers_with_stock[j] = sellers[i + 1]
+                    to_continue = False
 
-            sellers_final_check = {}
+                # keep adding each sellers inventory to total, if the total reaches >= quantity,
+                # Continue
+
+                # then we will add all these sellers to th
+
+                # elseif  sellers[i + 1]['offers'][0]['inventory_level'] < quantity and largest_quantity_available < quantity:
+            if to_continue:
+                j = 0
+                total = 0
+                for i in range(len(sellers)):
+                    if sellers[i + 1]['offers'][0]['inventory_level'] < quantity and largest_quantity_available < quantity:
+
+                        seller_inventory = sellers[i + 1]['offers'][0]['inventory_level']
+                        total += seller_inventory
+                    for p in range(len(sellers)):
+                        if total >= quantity and sellers[p + 1]['offers'][0]['inventory_level'] > 0:
+                            j += 1
+                            sellers_with_stock[j] = sellers[p + 1]
+                        else:
+                            flash(
+                                f"Part Number: {part_number} Not enough stock / could not find valid combination of sellers",
+                                'no_stock')
+
+
+                # if we cannot reach a total that is >= quantity:
+                # else:
+                    # user dialogue box, would you like to add item to watchlist?
+                    #{ jinja }
+                    # flash("No products in stock/ could not find valid combination", "wishlist") # add item to watchlist
+                    #Would you like to add to wishlist? button to add
+                    #{ end jinja }
+
+
+
             # check each sellers' order multiple = none, if not then check if quantity is bigger than or equal to it
             # order multiple is the min order quantity set by seller
+            sellers_final_check = {}
             z = 0
             for i in range(len(sellers_with_stock)):
                 if str(sellers_with_stock[i + 1]['offers'][0]['order_multiple']) == "None" or (
@@ -221,9 +264,9 @@ def results(part_number, quantity, models):
                 final_data = tuple(final_sellers)
                 tables[search_no] = final_data
                 print(final_data)
-        if len(tables) == 0:
-            flash("No Stock Available")
-
+    if len(tables) == 0:
+        test = True
+        return render_template("results.html", no_tables="Could not find results for ALL part numbers", test=True)
     headings = ("Seller Name", "Inventory", "Calculated Cost")
     return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,
                            manufacturer=table_manufacturers)

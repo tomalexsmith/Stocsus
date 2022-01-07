@@ -5,16 +5,33 @@
 {% block content %}
 {#    <link rel="stylesheet" href="/static/styles.css" />#}
     <body>
+
     <h1>Results</h1>
-        {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="notification is-danger">
-                        {{ messages[0] }}
-                    </div>
-                {% endif %}
-            {% endwith %}
+{##}
+{#        {% with messages = get_flashed_messages() %}#}
+{#                {% if messages %}#}
+{#                    <div class="notification is-danger">#}
+{#                        {{ messages[0] }}#}
+{#                    </div>#}
+{#                {% endif %}#}
+{#            {% endwith %}#}
+
+
+
+{##}
+{#    {% if test == True %}#}
+{#    {{ no_tables }}#}
+{##}
+{#    {% endif %}#}
     {% for i in tables %}
             <h3>{{ "Part number: " + part_number[i] + " " + "Manufacturer: " + manufacturer[i] }}</h3>
+               {% with errors = get_flashed_messages(category_filter=["no_stock"]) %}
+          {% if errors %}
+        <div class="alert-message block-message error">
+            {{ errors[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
         <table class="table">
             <tr class="table__header">
                 {% for header in headings %}
