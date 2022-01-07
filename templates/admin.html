@@ -29,14 +29,13 @@
                                 <td>{{ user.email }}</td>
                                 <td>{{ user.role }}</td>
                                 <td>{{ user.banned }}</td>
+                                                  <form method="POST">
+                <td><button type="submit" name="ban" value="{{ user.email }}"
+                            formmethod="POST">Ban</button></td>
+                   </form>
                             </tr>
                         {% endfor %}
                     </table>
-                    <form method="POST">
-                    {{ ban_form.csrf_token() }}
-                    {{ ban_form.email_to_ban(class="input", placeholder="Enter user email") }}
-                    {{ ban_form.submit(class="submit_button", value="Ban") }}
-                    </form>
             {% endif %}
 
 
@@ -55,14 +54,14 @@
                                 <td>{{ user.email }}</td>
                                 <td>{{ user.role }}</td>
                                 <td>{{ user.banned }}</td>
+                                                  <form method="POST">
+                <td><button type="submit" name="unban" value="{{ user.email }}"
+                            formmethod="POST">Unban</button></td>
+                   </form>
                             </tr>
                         {% endfor %}
                     </table>
-                    <form method="POST">
-                    {{ unban_form.csrf_token() }}
-                    {{ unban_form.email_to_unban(class="input", placeholder="Enter user email") }}
-                    {{ unban_form.submit(class="submit_button", value="Unban") }}
-                    </form>
+
             {% endif %}
 
 
@@ -77,16 +76,22 @@
                             <tr>
                                 <td>{{ i.id }}</td>
                                 <td>{{ i.supplier_name }}</td>
+
+                   <form method="POST">
+                <td><button type="submit" name="remove_favourite" value="{{ i.supplier_name }}"
+                            formmethod="POST">Remove</button></td>
+                   </form>
                             </tr>
+
                         {% endfor %}
                     </table>
+    <form method="POST">
+             {{ fav_form.csrf_token() }}
+            {{ fav_form.favourite_supplier(class="input", placeholder="Enter supplier name") }}
+            {{ fav_form.submit(class="submit_button", value="Add") }}
+        </form>
 
           <div class="favourite form">
-        <form method="POST">
-             {{ remove_favourite_form.csrf_token() }}
-            {{ remove_favourite_form.favourite_supplier(class="input", placeholder="Enter favourite supplier") }}
-            {{ remove_favourite_form.submit(class="submit_button", value="Remove") }}
-        </form>
     </div>
 
 <h1>Blacklisted Suppliers</h1>
@@ -99,19 +104,18 @@
                             <tr>
                                 <td>{{ i.id }}</td>
                                 <td>{{ i.supplier_name }}</td>
+                                <form method="POST">
+                <td><button type="submit" name="remove_blacklist" value="{{ i.supplier_name }}"
+                            formmethod="POST">Remove</button></td>
+                   </form>
                             </tr>
                         {% endfor %}
                     </table>
-
         <form method="POST">
-             {{ remove_blacklist_form.csrf_token() }}
-            {{ remove_blacklist_form.blacklist_supplier(class="input", placeholder="Enter blacklist supplier") }}
-            {{ remove_blacklist_form.submit(class="submit_button", value="Remove") }}
+             {{ blacklist_form.csrf_token() }}
+            {{ blacklist_form.blacklist_supplier(class="input", placeholder="Enter supplier name") }}
+            {{ blacklist_form.submit(class="submit_button", value="Add") }}
         </form>
-
-
-
-
 
 
         <h4 class="title is-4">Security Logs</h4>
