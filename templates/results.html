@@ -31,6 +31,7 @@
             </tr>
             {% endfor %}
         </table>
+        <br>
     {% endfor %}
     <br>
     <br>
@@ -44,22 +45,33 @@
         {% endif %}
         {% endwith %}
 
-    {% for i in no_stock_numbers %}
-      <p>Stock availability for part {{ i }}  does not match the search criteria</p>
-        {% if i not in watchlist_check %}
-        <button type="submit" name="part_no" value="{{ i }}"
-                            formmethod="POST">Add to Watchlist</button>
+    
+    <form method="POST">
+    {% if no_stock_numbers %}
+    <table>
+    <p>Stock availability for the following parts does not match the search criteria</p>
+    <tr>
+        <th>
+          part_number
+        </th>
+        <th>
+          watchlist
+        </th>
+    </tr>
+        {% for i in no_stock_numbers %}
+            <tr>
+            <td>
+                {{ i }}</td>
+            {% if i not in watchlist_check %}
+        <td><button type="submit" name="part_no" value="{{ i }}"
+                            formmethod="POST">Add to Watchlist</button></td>
         {% else %}
-            <p>
-            This part number is already on the watchlist, to remove please visit <a href="{{ url_for('users.dashboard') }}">dashboard</a>
-        </p>
+            <td>Already on watchlist</td>
+                </tr>
         {% endif %}
-        <br>
-        <br>
     {% endfor %}
-      </form>
-
-
-
+    </table>
+    {% endif %}
+    </form>
     </body>
 {% endblock %}
