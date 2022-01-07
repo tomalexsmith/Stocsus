@@ -4,7 +4,6 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from sqlalchemy import exc
 
-
 import app
 import database.models as database
 from users.forms import FavouriteForm, BlacklistForm
@@ -20,25 +19,7 @@ admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 # @login_required
 # @requires_roles('admin')
 def admin():
-    # if the database is offline then to prevent the application crashing
-    # error is caught by doing a test query on the database.
-    # Predefined error message is displayed.
-    try:
-        database.Favourite.query.filter_by(
-            supplier_name=request.form.get("Test")).first()
-    except sqlalchemy.exc.OperationalError as database_error:
-        if database_error.orig.args[0] == 1045:
-            # 1045 is an access denied error
-            return render_template("database_error.html",
-                                   message="1045: Error connecting to application, please contact IT support")
-
-
-        elif database_error.orig.args[0] == 2003:
-            # 2003 is a connection error with the database
-            return render_template("database_error.html",
-                                   message="2003: Error connecting to application, please contact IT support")
-
-
+    database.database_check()
 
     favourite_form = FavouriteForm()
     blacklist_form = BlacklistForm()
@@ -125,7 +106,6 @@ def admin():
                            fav_form=favourite_form,
                            blacklist_form=blacklist_form
                            )
-
 
     # To add after testing: email=current_username.email
 

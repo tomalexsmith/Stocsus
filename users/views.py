@@ -107,23 +107,7 @@ def login():
 
 @users_blueprint.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-    # if the database is offline then to prevent the application crashing
-    # error is caught by doing a test query on the database.
-    # Predefined error message is displayed.
-    try:
-        database.Favourite.query.filter_by(
-            supplier_name=request.form.get("Test")).first()
-    except sqlalchemy.exc.OperationalError as database_error:
-        if database_error.orig.args[0] == 1045:
-            # 1045 is an access denied error
-            return render_template("database_error.html",
-                                   message="1045: Error connecting to application, please contact IT support")
-
-
-        elif database_error.orig.args[0] == 2003:
-            # 2003 is a connection error with the database
-            return render_template("database_error.html",
-                                   message="2003: Error connecting to application, please contact IT support")
+    database.database_check()
 
     favourite_form = FavouriteForm()
     blacklist_form = BlacklistForm()

@@ -1,4 +1,7 @@
+import sqlalchemy
+from sqlalchemy import exc
 from flask_login import UserMixin
+from flask import request, render_template
 from app import db
 from werkzeug.security import generate_password_hash
 
@@ -47,8 +50,36 @@ class Favourite(db.Model):
         self.supplier_name = supplier_name
 
 
+class WatchList(db.Model):
+    __table_name__ = 'watchlist'
+
+    id = db.Column(db.Integer, primary_key=True)
+    part_number = db.Column(db.String(64), nullable=False, unique=True)
+
+    def __init__(self, part_number):
+        self.part_number = part_number
+
+
+def database_check():
+    # if the database is offline then to prevent the application crashing
+    # error is caught by doing a test query on the database.
+    # Predefined error message is displayed.
+    try:
+        Favourite.query.filter_by(
+            supplier_name=request.form.get("Test")).first()
+    except sqlalchemy.exc.OperationalError as database_error:
+        if database_error.orig.args[0] == 1045:
+            # 1045 is access denied error
+            return render_template("database_error.html",
+                                   message="Error 1045 connecting to application, please contact IT support")
+
+        elif database_error.orig.args[0] == 2003:
+            # 2003 is a connection error with the database
+            return render_template("database_error.html",
+                                   message="Error 2003 connecting to application, please contact IT support")
+
 # initialises database tables and adds sample data
-# Python Console --> from models import init_db
+# Python Console --> from database.models import init_db
 #                --> init_db()
 def init_db():
     db.drop_all()
