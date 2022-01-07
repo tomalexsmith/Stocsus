@@ -1,12 +1,13 @@
 # IMPORTS
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
 import app
 import database.models as database
-import admin.forms as admin_form
-import users.forms as user_form
+from users.forms import FavouriteForm, BlacklistForm
 
 # CONFIG
+
+
 admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 
 
@@ -15,60 +16,83 @@ admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 # @login_required
 # @requires_roles('admin')
 def admin():
-    ban_form = admin_form.BanForm()
-    unban_form = admin_form.UnbanForm()
-    remove_favourite_form = user_form.FavouriteForm()
-    remove_blacklist_form = user_form.BlacklistForm()
+    favourite_form = FavouriteForm()
+    blacklist_form = BlacklistForm()
 
     with open("Stocsus.log", "r") as f:
         # returns recent 10 activities
         content = f.read().splitlines()[-10:]
         content.reverse()
 
-    if remove_favourite_form.validate_on_submit():
+    if request.form.get("remove_favourite"):
         favourite_supplier = database.Favourite.query.filter_by(
-            supplier_name=remove_favourite_form.favourite_supplier.data).first()
+            supplier_name=request.form.get("remove_favourite")).first()
         if not favourite_supplier:
             flash('Supplier is not a favourite')
             return redirect(url_for('admin.admin'))
 
         remove_favourite_supplier = database.Favourite.query.filter_by(
-            supplier_name=remove_favourite_form.favourite_supplier.data).first()
+            supplier_name=request.form.get("remove_favourite")).first()
         app.db.session.delete(remove_favourite_supplier)
         app.db.session.commit()
 
-    if remove_blacklist_form.validate_on_submit():
+    if request.form.get("remove_blacklist"):
         blacklist_supplier = database.Blacklist.query.filter_by(
-            supplier_name=remove_blacklist_form.blacklist_supplier.data).first()
+            supplier_name=request.form.get("remove_blacklist")).first()
 
         if not blacklist_supplier:
             flash('Supplier is NOT on the blacklist')
             return redirect(url_for('admin.admin'))
 
         remove_blacklist_supplier = database.Blacklist.query.filter_by(
-            supplier_name=remove_blacklist_form.blacklist_supplier.data).first()
+            supplier_name=request.form.get("remove_blacklist")).first()
         app.db.session.delete(remove_blacklist_supplier)
         app.db.session.commit()
 
-    if unban_form.validate_on_submit():
-        user_email = database.Users.query.filter_by(email=unban_form.email_to_unban.data, banned=False).first()
+    if request.form.get("unban"):
+        user_email = database.Users.query.filter_by(email=request.form.get("unban"), banned=False).first()
         if user_email:
             flash("User is not banned")
             return redirect(url_for('admin.admin'))
-        banned_user = database.Users.query.filter_by(email=unban_form.email_to_unban.data).first()
+        banned_user = database.Users.query.filter_by(email=request.form.get("unban")).first()
         banned_user.banned = False
         app.db.session.commit()
         return redirect(url_for('admin.admin'))
-    if ban_form.validate_on_submit():
-        user_email = database.Users.query.filter_by(email=ban_form.email_to_ban.data, banned=True).first()
+
+    if request.form.get("ban"):
+        user_email = database.Users.query.filter_by(email=request.form.get("ban"), banned=True).first()
         if user_email:
             flash("User is already banned")
             return redirect(url_for('admin.admin'))
-        unbanned_user = database.Users.query.filter_by(email=ban_form.email_to_ban.data).first()
+        unbanned_user = database.Users.query.filter_by(email=request.form.get("ban")).first()
 
         unbanned_user.banned = True
         app.db.session.commit()
         return redirect(url_for('admin.admin'))
+
+
+
+    if favourite_form.validate_on_submit():
+        favourite_supplier = database.Favourite.query.filter_by(
+            supplier_name=favourite_form.favourite_supplier.data).first()
+        if favourite_supplier:
+            flash('Supplier already a favourite')
+            return redirect(url_for('users.dashboard'))
+
+        new_favourite_supplier = database.Favourite(supplier_name=favourite_form.favourite_supplier.data)
+        app.db.session.add(new_favourite_supplier)
+        app.db.session.commit()
+
+    if blacklist_form.validate_on_submit():
+        blacklist_supplier = database.Blacklist.query.filter_by(
+            supplier_name=blacklist_form.blacklist_supplier.data).first()
+        if blacklist_supplier:
+            flash('Supplier already blacklisted')
+            return redirect(url_for('users.dashboard'))
+
+        new_blacklist_supplier = database.Blacklist(supplier_name=blacklist_form.blacklist_supplier.data)
+        app.db.session.add(new_blacklist_supplier)
+        app.db.session.commit()
 
     return render_template('admin.html',
                            current_users=database.Users.query.filter_by(role='user', banned=False).all(),
@@ -76,10 +100,8 @@ def admin():
                            current_favourites=database.Favourite.query.all(),
                            current_blacklist=database.Blacklist.query.all(),
                            logs=content,
-                           ban_form=ban_form,
-                           unban_form=unban_form,
-                           remove_favourite_form=remove_favourite_form,
-                           remove_blacklist_form=remove_blacklist_form
+                           fav_form=favourite_form,
+                           blacklist_form=blacklist_form
                            )
     # To add after testing: email=current_username.email
 
