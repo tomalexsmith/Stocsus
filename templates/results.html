@@ -7,31 +7,16 @@
     <body>
 
     <h1>Results</h1>
-{##}
-{#        {% with messages = get_flashed_messages() %}#}
-{#                {% if messages %}#}
-{#                    <div class="notification is-danger">#}
-{#                        {{ messages[0] }}#}
-{#                    </div>#}
-{#                {% endif %}#}
-{#            {% endwith %}#}
+    {% if no_tables_available == True %}
+    {{ no_tables }}
 
-
-
-{##}
-{#    {% if test == True %}#}
-{#    {{ no_tables }}#}
-{##}
-{#    {% endif %}#}
+    {% endif %}
     {% for i in tables %}
-            <h3>{{ "Part number: " + part_number[i] + " " + "Manufacturer: " + manufacturer[i] }}</h3>
-               {% with errors = get_flashed_messages(category_filter=["no_stock"]) %}
-          {% if errors %}
-        <div class="alert-message block-message error">
-            {{ errors[0] }}
-        </div>
-        {% endif %}
-        {% endwith %}
+
+        <h3>{{ "Part number: " + part_number[i] + " " + "Manufacturer: " + manufacturer[i] }}</h3>
+
+
+
         <table class="table">
             <tr class="table__header">
                 {% for header in headings %}
@@ -47,5 +32,34 @@
             {% endfor %}
         </table>
     {% endfor %}
+    <br>
+    <br>
+    <form method="POST">
+
+            {% with errors = get_flashed_messages(category_filter=["watchlist_duplicate"]) %}
+            {% if errors %}
+        <div class="alert-message block-message error">
+            {{ errors[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+    {% for i in no_stock_numbers %}
+      <p>Stock availability for part {{ i }}  does not match the search criteria</p>
+        {% if i not in watchlist_check %}
+        <button type="submit" name="part_no" value="{{ i }}"
+                            formmethod="POST">Add to Watchlist</button>
+        {% else %}
+            <p>
+            This part number is already on the watchlist, to remove please visit <a href="{{ url_for('users.dashboard') }}">dashboard</a>
+        </p>
+        {% endif %}
+        <br>
+        <br>
+    {% endfor %}
+      </form>
+
+
+
     </body>
 {% endblock %}
