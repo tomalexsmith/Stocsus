@@ -1,6 +1,6 @@
 import requests
 import json
-from flask import render_template, Blueprint, request, redirect, url_for
+from flask import render_template, Blueprint, request, redirect, url_for, flash
 from search.forms import SearchForm
 import pandas as pd
 import ast
@@ -100,13 +100,16 @@ def results(part_number, quantity, models):
         part_number = part_numbers[search_no]
         table_part_numbers.append(part_number)
         quantity = int(quantitys[search_no]) * int(models_final[search_no])
-        print(part_number)
-        print(quantity)
-        print(models)
 
         r = requests.post(endpoint, json={"query": query % part_number})
+        if r.status_code == 400:
+            flash("Invalid Part Number")
+            break
         if r.status_code == 200:
             data = json.loads(json.dumps(r.json(), indent=2))  # this data is the api_response
+            if str(data['data']['search']['results']) == "None":
+                flash("Invalid Part Number")
+                break
 
             manufacturer = data['data']['search']['results'][0]['part']['manufacturer']['name']
             table_manufacturers.append(manufacturer)
@@ -218,8 +221,9 @@ def results(part_number, quantity, models):
                 final_data = tuple(final_sellers)
                 tables[search_no] = final_data
                 print(final_data)
+        if len(tables) == 0:
+            flash("No Stock Available")
+
     headings = ("Seller Name", "Inventory", "Calculated Cost")
-    print(tables)
-    return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers, manufacturer=table_manufacturers)
-
-
+    return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,
+                           manufacturer=table_manufacturers)
