@@ -1,5 +1,8 @@
 # IMPORTS
 import logging
+
+import sqlalchemy
+from sqlalchemy import exc
 from flask import Blueprint, render_template, flash, redirect, url_for, \
     request, session
 from flask_login import current_user, login_user, logout_user, login_required
@@ -19,7 +22,7 @@ def register():
     # create signup form object
     form = RegisterForm()
 
-    if request.method == 'POST':
+    if form.validate_on_submit():
         user = database.Users.query.filter_by(email=form.email.data).first()
         # if this returns a user, then the user already exists in the
         # database. Hence the user will be redirected to the signup page
@@ -57,7 +60,7 @@ def login():
         flash('Number of incorrect logins exceeded')
 
     form = LoginForm()
-    if request.method == 'POST':
+    if form.validate_on_submit():
 
         # increase login attempts by 1
         session['logins'] += 1
@@ -104,6 +107,24 @@ def login():
 
 @users_blueprint.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
+    # if the database is offline then to prevent the application crashing
+    # error is caught by doing a test query on the database.
+    # Predefined error message is displayed.
+    try:
+        database.Favourite.query.filter_by(
+            supplier_name=request.form.get("Test")).first()
+    except sqlalchemy.exc.OperationalError as database_error:
+        if database_error.orig.args[0] == 1045:
+            # 1045 is an access denied error
+            return render_template("database_error.html",
+                                   message="1045: Error connecting to application, please contact IT support")
+
+
+        elif database_error.orig.args[0] == 2003:
+            # 2003 is a connection error with the database
+            return render_template("database_error.html",
+                                   message="2003: Error connecting to application, please contact IT support")
+
     favourite_form = FavouriteForm()
     blacklist_form = BlacklistForm()
 
@@ -111,7 +132,7 @@ def dashboard():
         favourite_supplier = database.Favourite.query.filter_by(
             supplier_name=favourite_form.favourite_supplier.data).first()
         if favourite_supplier:
-            flash('Supplier already a favourite')
+            flash('Supplier already a favourite', "favourite_alert")
             return redirect(url_for('users.dashboard'))
 
         new_favourite_supplier = database.Favourite(supplier_name=favourite_form.favourite_supplier.data)
@@ -121,7 +142,7 @@ def dashboard():
     if blacklist_form.validate_on_submit():
         blacklist_supplier = database.Blacklist.query.filter_by(supplier_name=blacklist_form.blacklist_supplier.data).first()
         if blacklist_supplier:
-            flash('Supplier already blacklisted')
+            flash('Supplier already blacklisted', "blacklist_alert")
             return redirect(url_for('users.dashboard'))
 
         new_blacklist_supplier = database.Blacklist(supplier_name=blacklist_form.blacklist_supplier.data)
