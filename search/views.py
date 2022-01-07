@@ -1,5 +1,8 @@
 import requests
 import json
+
+import sqlalchemy
+from sqlalchemy import exc
 from flask import render_template, Blueprint, request, redirect, url_for, flash
 from search.forms import SearchForm
 import pandas as pd
@@ -48,6 +51,9 @@ query = """query {
 
 @search_blueprint.route("/search", methods=['GET', 'POST'])
 def search():
+    # if the database is offline then to prevent the application crashing
+    # error is caught by doing a test query on the database.
+    # Predefined error message is displayed.
     form = SearchForm()
     if form.validate_on_submit() and request.method == 'POST':
         part_number_input = form.part_number.data
@@ -80,6 +86,15 @@ def search():
 
 @search_blueprint.route('/results/<part_number>/<quantity>/<models>/', methods=['GET', 'POST'])
 def results(part_number, quantity, models):
+    database.database_check()
+    watchlist_check = []
+    all_watchlist = database.WatchList.query.all()
+    for i in all_watchlist:
+        watchlist_check.append(i.part_number)
+
+
+    no_stock_numbers = []
+    no_stock = False
     tables = {}
     table_part_numbers = []
     table_manufacturers = []
@@ -133,9 +148,10 @@ def results(part_number, quantity, models):
                 if greatest_seller_inventory > largest_quantity_available:
                     largest_quantity_available = greatest_seller_inventory
 
-            # inputs 1000,     500, 500 => 1000
+                # inputs 1000,     500, 500 => 1000
 
-                if sellers[i + 1]['offers'][0]['inventory_level'] >= quantity and largest_quantity_available >= quantity:  # check if inventory matches quantity
+                if sellers[i + 1]['offers'][0][
+                    'inventory_level'] >= quantity and largest_quantity_available >= quantity:  # check if inventory matches quantity
                     j += 1
                     sellers_with_stock[j] = sellers[i + 1]
                     to_continue = False
@@ -150,8 +166,8 @@ def results(part_number, quantity, models):
                 j = 0
                 total = 0
                 for i in range(len(sellers)):
-                    if sellers[i + 1]['offers'][0]['inventory_level'] < quantity and largest_quantity_available < quantity:
-
+                    if sellers[i + 1]['offers'][0][
+                        'inventory_level'] < quantity and largest_quantity_available < quantity:
                         seller_inventory = sellers[i + 1]['offers'][0]['inventory_level']
                         total += seller_inventory
                     for p in range(len(sellers)):
@@ -159,20 +175,22 @@ def results(part_number, quantity, models):
                             j += 1
                             sellers_with_stock[j] = sellers[p + 1]
                         else:
-                            flash(
-                                f"Part Number: {part_number} Not enough stock / could not find valid combination of sellers",
-                                'no_stock')
+                            if part_number in no_stock_numbers:
+                                break
+                            else:
+                                no_stock_numbers.append(part_number)
+                                print(no_stock_numbers)
+
+
 
 
                 # if we cannot reach a total that is >= quantity:
                 # else:
-                    # user dialogue box, would you like to add item to watchlist?
-                    #{ jinja }
-                    # flash("No products in stock/ could not find valid combination", "wishlist") # add item to watchlist
-                    #Would you like to add to wishlist? button to add
-                    #{ end jinja }
-
-
+                # user dialogue box, would you like to add item to watchlist?
+                # { jinja }
+                # flash("No products in stock/ could not find valid combination", "wishlist") # add item to watchlist
+                # Would you like to add to wishlist? button to add
+                # { end jinja }
 
             # check each sellers' order multiple = none, if not then check if quantity is bigger than or equal to it
             # order multiple is the min order quantity set by seller
@@ -236,8 +254,8 @@ def results(part_number, quantity, models):
                     sellers_final_check.pop(i)
 
             final_cost_dictionary = {}
-            # calculate final cost for each seller depending on specified quantity
-            # loop all keys of keys of prices_quantity in descending order, if value<= quantity, that will be the final cost
+            # calculate final cost for each seller depending on specified quantity loop all keys of keys of
+            # prices_quantity in descending order, if value<= quantity, that will be the final cost
             for i in prices_quantity.keys():
                 for j in reversed(prices_quantity[i].keys()):
                     if j <= quantity:
@@ -264,9 +282,27 @@ def results(part_number, quantity, models):
                 final_data = tuple(final_sellers)
                 tables[search_no] = final_data
                 print(final_data)
+
+                # add part number to list
+            if request.form.get("part_no"):
+                watchlist_number = database.WatchList.query.filter_by(
+                    part_number=request.form.get("part_no")
+
+                ).first()
+                if watchlist_number:
+                    flash('This part number is already on the watchlist', 'watchlist_duplicate')
+                else:
+                    new_watchlist_number = database.WatchList(part_number=request.form.get("part_no"))
+                    app.db.session.add(new_watchlist_number)
+                    app.db.session.commit()
+
+
+
     if len(tables) == 0:
-        test = True
-        return render_template("results.html", no_tables="Could not find results for ALL part numbers", test=True)
+        no_tables_available = True
+        return render_template("results.html", no_tables="Could not find results for ALL part numbers",
+                               no_tables_available=no_tables_available)
+
     headings = ("Seller Name", "Inventory", "Calculated Cost")
     return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,
-                           manufacturer=table_manufacturers)
+                           manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers, watchlist_check=watchlist_check)
