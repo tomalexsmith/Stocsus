@@ -5,6 +5,9 @@
 {% block content %}
 {#    <link rel="stylesheet" href="/static/styles.css" />#}
     <body>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
 
     <h1>Results</h1>
     {% if no_tables_available == True %}
@@ -35,7 +38,7 @@
     {% endfor %}
     <br>
     <br>
-    <form method="POST">
+{#    <form method="POST">#}
 
             {% with errors = get_flashed_messages(category_filter=["watchlist_duplicate"]) %}
             {% if errors %}
@@ -45,8 +48,8 @@
         {% endif %}
         {% endwith %}
 
-    
-    <form method="POST">
+
+{#    <form method="POST">#}
     {% if no_stock_numbers %}
     <table>
     <p>Stock availability for the following parts does not match the search criteria</p>
@@ -58,13 +61,12 @@
           watchlist
         </th>
     </tr>
-        {% for i in no_stock_numbers %}
+         {% for i in no_stock_numbers %}
             <tr>
             <td>
                 {{ i }}</td>
             {% if i not in watchlist_check %}
-        <td><button type="submit" name="part_no" value="{{ i }}"
-                            formmethod="POST">Add to Watchlist</button></td>
+        <td> <button class="btn btn-primary updateButton" i="{{ i }}">Add to Watchlist</button></td>
         {% else %}
             <td>Already on watchlist</td>
                 </tr>
@@ -72,6 +74,6 @@
     {% endfor %}
     </table>
     {% endif %}
-    </form>
+{#    </form>#}
     </body>
 {% endblock %}

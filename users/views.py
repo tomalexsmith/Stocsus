@@ -1,6 +1,5 @@
 # IMPORTS
 import logging
-
 import sqlalchemy
 from sqlalchemy import exc
 from flask import Blueprint, render_template, flash, redirect, url_for, \

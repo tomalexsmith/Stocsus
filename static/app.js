@@ -10,15 +10,15 @@ $(document).ready(function() {
             data : { part_number : i }
         });
 
-        req.done(function(data) {
+        req.done(function() {
+            $(".updateButton").html("Already on Watchlist");
             $('.updateButton').fadeOut(1000).fadeIn(1000);
+
+
+
             // $('#memberNumber'+member_id).text(data.member_num);
-
     });
-
-
   });
-
 });
 
 
