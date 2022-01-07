@@ -1,9 +1,10 @@
+import flask
 import requests
 import json
 
 import sqlalchemy
 from sqlalchemy import exc
-from flask import render_template, Blueprint, request, redirect, url_for, flash
+from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify
 from search.forms import SearchForm
 import pandas as pd
 import ast
@@ -84,7 +85,7 @@ def search():
     return render_template("search.html", form=form)
 
 
-@search_blueprint.route('/results/<part_number>/<quantity>/<models>/', methods=['GET', 'POST'])
+@search_blueprint.route('/result/<part_number>/<quantity>/<models>/', methods=['GET', 'POST'])
 def results(part_number, quantity, models):
     database.database_check()
     watchlist_check = []
@@ -298,6 +299,8 @@ def results(part_number, quantity, models):
 
 
 
+
+
     if len(tables) == 0:
         no_tables_available = True
         return render_template("results.html", no_tables="Could not find results for ALL part numbers",
@@ -305,4 +308,18 @@ def results(part_number, quantity, models):
 
     headings = ("Seller Name", "Inventory", "Calculated Cost")
     return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,
-                           manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers, watchlist_check=watchlist_check)
+                           manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers,
+                           watchlist_check=watchlist_check)
+
+
+
+@search_blueprint.route('/update_watchlist', methods=['POST', 'GET'])
+def updatewatchlist():
+    part_number = request.form['part_number']
+    new_watchlist_number = database.WatchList(part_number=part_number)
+    app.db.session.add(new_watchlist_number)
+    app.db.session.commit()
+    return jsonify({'result': 'success', 'part_number': part_number})
+
+
+

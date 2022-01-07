@@ -11,7 +11,7 @@ $(document).ready(function() {
         });
 
         req.done(function() {
-            $(".updateButton").html("Already on Watchlist");
+            $(".updateButton").html("Successfully Added");
             $('.updateButton').fadeOut(1000).fadeIn(1000);
 
 
