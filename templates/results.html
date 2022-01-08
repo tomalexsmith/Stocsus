@@ -20,9 +20,6 @@
     {% for i in tables %}
 
         <h3>{{ "Part number: " + part_number[i] + " " + "Manufacturer: " + manufacturer[i] }}</h3>
-
-
-
         <table class="table">
             <tr class="table__header">
                 {% for header in headings %}
@@ -38,10 +35,11 @@
                 <td>{{ row[1] }}</td>
                 <td>{{ row[2] }}</td>
                 {% if row[0] not in favourite_check %}
-               <td class="fav_btn"><button class="fav_supplier" supplier_name="{{ row[0] }}">&#x2661;</button></td>
+{#                   {% set fav_supplier = row[0] %}#}
+               <td><button class="fav_btn_{{ row[0] }} fav_btn" supplier_name="{{ row[0] }}">&#x2661;</button></td>
                 {% endif %}
                  {% if row[0] not in favourite_check and row[0] not in blacklist_check %}
-                <td class="blacklist_btn"><button class="blacklist_supplier" supplier_name="{{ row[0] }}">&#129683;</button></td>
+                <td class="blacklist_supplier_{{ row[0] }} blacklist_supplier"><button class="blacklist_btn_{{ row[0] }} blacklist_btn" supplier_name="{{ row[0] }}">&#129683;</button></td>
                      {% else %}
                      <td>❤</td>
                 {% endif %}
@@ -53,8 +51,6 @@
     {% endfor %}
     <br>
     <br>
-{#    <form method="POST">#}
-
             {% with errors = get_flashed_messages(category_filter=["watchlist_duplicate"]) %}
             {% if errors %}
         <div class="alert-message block-message error">
@@ -64,7 +60,6 @@
         {% endwith %}
 
 
-{#    <form method="POST">#}
     {% if no_stock_numbers %}
     <table>
     <p>Stock availability for the following parts does not match the search criteria</p>
@@ -89,6 +84,5 @@
     {% endfor %}
     </table>
     {% endif %}
-{#    </form>#}
     </body>
 {% endblock %}

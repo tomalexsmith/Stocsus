@@ -283,6 +283,7 @@ def results(part_number, quantity, models):
             final_sellers = []
             for i in sellers_final_check:
                 name = sellers_final_check[i]['company']['name']
+                name = name.replace(" ", "_")
                 inventory = str(sellers_final_check[i]['offers'][0]['inventory_level'])
                 cost = '$' + str(final_cost_dictionary[i])
                 url = sellers_final_check[i]['offers'][0]['click_url']
