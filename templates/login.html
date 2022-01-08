@@ -6,6 +6,7 @@
 
 {% block content %}
 <div class="bg">
+    <h1>Login</h1>
     <div class="login_box">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -14,22 +15,31 @@
                     </div>
                 {% endif %}
             {% endwith %}
-        <h1>Login</h1>
+    {% if not session['logins'] or session['logins'] < 3 %}
         <form method="POST">
-            <div class="form_email">
-                <label>Email</label>
-                <span class="material-icons">person</span>
-                {{ form.email(class="email", placeholder="Type your email") }}
-            </div>
-            <div class="form_password">
-                <label>Password</label>
-                <span class="material-icons">lock</span>
-                {{ form.password(class="password", placeholder="Type your password") }}
+             {{ form.csrf_token() }}
+            <form method="POST">
+                    <div class="field">
+                        <div class="control">
+                            {{ form.email(class="input", placeholder="Email") }}
+                            {% for error in form.email.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    </div>
+            <div class="field">
+                        <div class="control">
+                            {{ form.password(class="input", placeholder="Password") }}
+                            {% for error in form.password.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
             </div>
             <div class="form_submit">
                 {{ form.submit(class="submit") }}
             </div>
         </form>
+    {% endif %}
         <p>
             Need an account? <a href="{{ url_for('users.register') }}">Register here</a>
         </p>

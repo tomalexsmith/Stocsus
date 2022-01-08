@@ -78,6 +78,7 @@ def database_check():
             return render_template("database_error.html",
                                    message="Error 2003 connecting to application, please contact IT support")
 
+
 # initialises database tables and adds sample data
 # Python Console --> from database.models import init_db
 #                --> init_db()

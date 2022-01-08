@@ -8,13 +8,15 @@ from flask import render_template, Blueprint, request, redirect, url_for, flash,
 from search.forms import SearchForm
 import pandas as pd
 import ast
-import openpyxl # required dependency
+import database.models as database
+import app
+import openpyxl  # required dependency
+
 """
 This file will not work without the API TOKEN, you need to edit the endpoint variable and add it there
 query is the GraphQL query that will be used to extract data using the Octopart API
 example part number = CFR50J2K2
 """
-
 
 search_blueprint = Blueprint('search_blueprint', __name__, template_folder='templates')
 
@@ -48,8 +50,6 @@ query = """query {
 }"""
 
 
-
-
 @search_blueprint.route("/search", methods=['GET', 'POST'])
 def search():
     # if the database is offline then to prevent the application crashing
@@ -65,7 +65,8 @@ def search():
 
         quantity = [quantity_input]
         models = [models_input]
-        return redirect(url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
+        return redirect(
+            url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
     elif request.method == 'POST':
         f = request.files['file']
         data = pd.read_excel(f, 'Sheet1', index_col=None)
@@ -79,8 +80,8 @@ def search():
             quantity.append(str(data['quantity'][i]))
         for i in range(len(data['models'])):
             models.append(str(data['models'][i]))
-        return redirect(url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
-
+        return redirect(
+            url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
 
     return render_template("search.html", form=form)
 
@@ -107,10 +108,8 @@ def results(part_number, quantity, models):
     quantity = ast.literal_eval(quantity)
     quantitys = [n.strip() for n in quantity]
 
-
     models = ast.literal_eval(models)
     models_final = [n.strip() for n in models]
-
 
     for search_no in range(len(part_numbers)):
         part_number = part_numbers[search_no]
@@ -211,7 +210,8 @@ def results(part_number, quantity, models):
             prices_quantity = {}  # dictionary to store final zipped lists using same key value as sellers_final_check
             for i in range(len(sellers_final_check)):  # iterate all sellers
                 for j in range(len(sellers_final_check[i + 1]['offers'])):  # check how many offers seller has
-                    for z in range(len(sellers_final_check[i + 1]['offers'][j]['prices'])):  # loop over the prices of offer
+                    for z in range(
+                            len(sellers_final_check[i + 1]['offers'][j]['prices'])):  # loop over the prices of offer
                         # for y in range(len(sellers_final_check[i + 1]['offers'][j]['prices'][z])):  # loop over prices of offer
                         x1 = sellers_final_check[i + 1]['offers'][j]['prices'][z]['quantity']
                         if x1 > quantity:
