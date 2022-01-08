@@ -147,6 +147,7 @@ def results(part_number, quantity, models):
 
             # check inventory level of each key and make sure it is not equal to zero
             # if seller has 0 inventory level, remove them from result
+
             to_continue = True
             sellers_with_stock = {}  # dictionary to store sellers that have stock
             j = 0
@@ -187,11 +188,7 @@ def results(part_number, quantity, models):
                                 break
                             else:
                                 no_stock_numbers.append(part_number)
-                                print(no_stock_numbers)
-
-
-
-
+                print(no_stock_numbers)
                 # if we cannot reach a total that is >= quantity:
                 # else:
                 # user dialogue box, would you like to add item to watchlist?
@@ -209,6 +206,8 @@ def results(part_number, quantity, models):
                         sellers_with_stock[i + 1]['offers'][0]['order_multiple']) <= quantity:
                     z += 1
                     sellers_final_check[z] = sellers_with_stock[i + 1]
+
+
 
             # algorithm to calculate the cost depending on specified quantity on sellers that passed all checks
 
@@ -313,7 +312,7 @@ def results(part_number, quantity, models):
     if len(tables) == 0:
         no_tables_available = True
         return render_template("results.html", no_tables="Could not find results for ALL part numbers",
-                               no_tables_available=no_tables_available)
+                               no_tables_available=no_tables_available, no_stock_numbers_no_tables=no_stock_numbers)
 
     headings = ("Seller Name", "Inventory", "Calculated Cost")
     return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,

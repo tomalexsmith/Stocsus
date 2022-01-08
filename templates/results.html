@@ -15,8 +15,32 @@
 
 
     {% if no_tables_available == True %}
-    {{ no_tables }}
+     {{ no_tables }}
+    <table>
+    <p>Stock availability for the following parts does not match the search criteria</p>
+    <tr>
+        <th>
+          part_number
+        </th>
+        <th>
+          watchlist
+        </th>
+    </tr>
+         {% for i in no_stock_numbers_no_tables %}
+            <tr>
+            <td>
+                {{ i }}</td>
+                {% if i not in watchlist_check %}
+        <td class="add_watchlist_{{ i }} add_watchlist" part_number="{{ i }}"><button class="watchlist_button_{{ i }} watchlist_button" part_number="{{ i }}">Add to Watchlist</button></td>
+        {% else %}
+            <td>Already on watchlist</td>
+                </tr>
+        {% endif %}
+    {% endfor %}
+    </table>
     {% endif %}
+
+
     {% for i in tables %}
 
         <h3>{{ "Part number: " + part_number[i] + " " + "Manufacturer: " + manufacturer[i] }}</h3>
@@ -35,7 +59,6 @@
                 <td>{{ row[1] }}</td>
                 <td>{{ row[2] }}</td>
                 {% if row[0] not in favourite_check %}
-{#                   {% set fav_supplier = row[0] %}#}
                <td><button class="fav_btn_{{ row[0] }} fav_btn" supplier_name="{{ row[0] }}">&#x2661;</button></td>
                 {% endif %}
                  {% if row[0] not in favourite_check and row[0] not in blacklist_check %}
@@ -75,8 +98,8 @@
             <tr>
             <td>
                 {{ i }}</td>
-            {% if i not in watchlist_check %}
-        <td class="watchlist_btn"> <button class="add_watchlist" i="{{ i }}">Add to Watchlist</button></td>
+                {% if i not in watchlist_check %}
+        <td class="add_watchlist_{{ i }} add_watchlist" part_number="{{ i }}"><button class="watchlist_button_{{ i }} watchlist_button" part_number="{{ i }}">Add to Watchlist</button></td>
         {% else %}
             <td>Already on watchlist</td>
                 </tr>

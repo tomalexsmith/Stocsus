@@ -72,12 +72,16 @@
   <table class="table">
             <tr>
                 <th>ID</th>
-                <th>Supplier name</th>
+                <th>Part Number</th>
             </tr>
             {% for w in watchlist %}
                 <tr>
                     <td>{{ w.id }}</td>
-                    <td>{{ w.supplier_name }}</td>
+                    <td>{{ w.part_number }}</td>
+                    <form method="POST">
+                <td><button type="submit" name="remove_watchlist" value="{{ w.part_number }}"
+                            formmethod="POST">Remove</button></td>
+                   </form>
                 </tr>
             {% endfor %}
         </table>

@@ -1,18 +1,19 @@
 $(document).ready(function() {
 
-    $('.add_watchlist').on('click', function() {
-        var i = $(this).attr('i');
+    $('.watchlist_button').on('click', function() {
+        var part_number = $(this).attr('part_number');
 
 
         req = $.ajax({
             url : '/update_watchlist',
             type : 'POST',
-            data : { part_number : i }
+            data : { part_number : part_number }
         });
 
         req.done(function() {
-            $('.add_watchlist').fadeOut(1000).fadeIn(1000);
-            $(".watchlist_btn").html("Successfully Added");
+
+            $(".watchlist_button_"+part_number).fadeOut(1000).fadeIn(1000);
+            $(".add_watchlist_"+part_number).html("Successfully Added");
     });
   });
 

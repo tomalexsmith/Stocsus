@@ -132,9 +132,16 @@ def dashboard():
         app.db.session.add(new_blacklist_supplier)
         app.db.session.commit()
 
+    if request.form.get("remove_watchlist"):
+        remove_watchlist_supplier = database.WatchList.query.filter_by(
+            part_number=request.form.get("remove_watchlist")).first()
+        app.db.session.delete(remove_watchlist_supplier)
+        app.db.session.commit()
+        return redirect(url_for('users.dashboard'))
+
     return render_template('dashboard.html', current_favourites=database.Favourite.query.all(),
                            current_blacklist=database.Blacklist.query.all(), favourite_form=favourite_form,
-                           blacklist_form=blacklist_form, watchlist=database.WatchList)
+                           blacklist_form=blacklist_form, watchlist=database.WatchList.query.all())
 # to add after testing: email=current_user.email, role=current_user.role
 
 @users_blueprint.route('/logout')
