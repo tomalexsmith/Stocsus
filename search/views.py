@@ -90,9 +90,17 @@ def search():
 def results(part_number, quantity, models):
     database.database_check()
     watchlist_check = []
+    favourite_check = []
+    blacklist_check = []
     all_watchlist = database.WatchList.query.all()
+    all_favourite = database.Favourite.query.all()
+    all_blacklist = database.Blacklist.query.all()
     for i in all_watchlist:
         watchlist_check.append(i.part_number)
+    for i in all_favourite:
+        favourite_check.append(i.supplier_name)
+    for i in all_blacklist:
+        blacklist_check.append(i.supplier_name)
 
 
     no_stock_numbers = []
@@ -309,7 +317,8 @@ def results(part_number, quantity, models):
     headings = ("Seller Name", "Inventory", "Calculated Cost")
     return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,
                            manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers,
-                           watchlist_check=watchlist_check)
+                           watchlist_check=watchlist_check, favourite_check=favourite_check,
+                           blacklist_check=blacklist_check)
 
 
 

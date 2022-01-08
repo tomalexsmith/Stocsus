@@ -28,7 +28,8 @@ $(document).ready(function() {
 
         req.done(function() {
             $('.fav_supplier').fadeOut(1000).fadeIn(1000);
-            $(".fav_btn").html("Successfully Added");
+            $(".fav_btn").html("❤");
+            $(".table__row").fadeOut(1000).fadeIn(1000);
 
     });
   });
@@ -41,9 +42,29 @@ $(document).ready(function() {
         });
         req.done(function() {
               $('.blacklist_supplier').fadeOut(1000).fadeIn(1000);
-              $(".blacklist_btn").html("Successfully Added, Will not be displayed next time you search");
+              $(".blacklist_btn").html("Successfully blacklisted, will not be displayed on next search");
     });
   });
 });
+
+
+
+
+$(document).ready(function() {
+$('.flight_button').on('click', function() {
+        var i = $(this).attr('flight_number');
+        req = $.ajax({
+            url : '/add_flight_number',
+            type : 'POST',
+            data : { flight_number : flight_number }
+        });
+
+           req.done(function() {
+               $(".flight_button").html("Successfully Added");
+
+        });
+      });
+    });
+
 
 
