@@ -12,7 +12,7 @@ $(document).ready(function() {
 
         req.done(function() {
             $('.add_watchlist').fadeOut(1000).fadeIn(1000);
-            $(".add_watchlist").html("Successfully Added");
+            $(".watchlist_btn").html("Successfully Added");
     });
   });
 
@@ -40,8 +40,8 @@ $(document).ready(function() {
             data : { supplier_name : i }
         });
         req.done(function() {
-              $('.fav_supplier').fadeOut(1000).fadeIn(1000);
-              $(".blacklist_btn").html("Successfully Added");
+              $('.blacklist_supplier').fadeOut(1000).fadeIn(1000);
+              $(".blacklist_btn").html("Successfully Added, Will not be displayed next time you search");
     });
   });
 });

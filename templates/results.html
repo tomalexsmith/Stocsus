@@ -37,8 +37,8 @@
                 <td><a href="{{ row[3] }}">{{ row[0] }}</a></td>
                 <td>{{ row[1] }}</td>
                 <td>{{ row[2] }}</td>
-                <td class="fav_btn"><button class="btn btn-primary fav_supplier" i="{{ row[0] }}">Favourite Supplier</button></td>
-                <td class="blacklist_btn"><button class="btn btn-primary blacklist_supplier" i="{{ row[0] }}">Blacklist Supplier</button></td>
+               <td class="fav_btn"><button class="fav_supplier" i="{{ row[0] }}">Favourite Supplier</button></td>
+                <td class="blacklist_btn"><button class="blacklist_supplier" i="{{ row[0] }}">Blacklist Supplier</button></td>
             </tr>
             {% endfor %}
         </table>
@@ -74,7 +74,7 @@
             <td>
                 {{ i }}</td>
             {% if i not in watchlist_check %}
-        <td> <button class="btn btn-primary add_watchlist" i="{{ i }}">Add to Watchlist</button></td>
+        <td class="watchlist_btn"> <button class="add_watchlist" i="{{ i }}">Add to Watchlist</button></td>
         {% else %}
             <td>Already on watchlist</td>
                 </tr>
