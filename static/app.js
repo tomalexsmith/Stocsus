@@ -17,28 +17,31 @@ $(document).ready(function() {
   });
 
      $('.fav_supplier').on('click', function() {
-        var i = $(this).attr('i');
+        var supplier_name = $(this).attr('supplier_name');
+
 
 
         req = $.ajax({
             url : '/update_favourite',
             type : 'POST',
-            data : { supplier_name : i }
+            data : { supplier_name : supplier_name }
         });
 
         req.done(function() {
-            $('.fav_supplier').fadeOut(1000).fadeIn(1000);
+
+        // $(".fav_supplier.fav_supplier='\" + supplier_name+ "']").html("Testing button");
+
             $(".fav_btn").html("❤");
             $(".table__row").fadeOut(1000).fadeIn(1000);
 
     });
   });
       $('.blacklist_supplier').on('click', function() {
-        var i = $(this).attr('i');
+        var supplier_name = $(this).attr('supplier_name');
         req = $.ajax({
             url : '/update_blacklist',
             type : 'POST',
-            data : { supplier_name : i }
+            data : { supplier_name : supplier_name }
         });
         req.done(function() {
               $('.blacklist_supplier').fadeOut(1000).fadeIn(1000);
@@ -50,21 +53,6 @@ $(document).ready(function() {
 
 
 
-$(document).ready(function() {
-$('.flight_button').on('click', function() {
-        var i = $(this).attr('flight_number');
-        req = $.ajax({
-            url : '/add_flight_number',
-            type : 'POST',
-            data : { flight_number : flight_number }
-        });
-
-           req.done(function() {
-               $(".flight_button").html("Successfully Added");
-
-        });
-      });
-    });
 
 
 
