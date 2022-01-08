@@ -3,6 +3,7 @@ import requests
 import json
 
 import sqlalchemy
+from flask_login import login_required
 from sqlalchemy import exc
 from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify
 from search.forms import SearchForm
@@ -51,6 +52,7 @@ query = """query {
 
 
 @search_blueprint.route("/search", methods=['GET', 'POST'])
+# @login_required
 def search():
     # if the database is offline then to prevent the application crashing
     # error is caught by doing a test query on the database.
@@ -277,30 +279,31 @@ def results(part_number, quantity, models):
             #     print(key, ' : ', value)
             # formatting final result
             final_sellers = []
+            f_dict = {}
+            f = 0
+            for i in range(len(sellers_final_check)):
+                f += 1
+                sellers_final_check[f]['company']['name'] = sellers_final_check[f]['company']['name'].replace(
+                    " ", "_")
+
+                if sellers_final_check[f]['company']['name'] not in favourite_check:
+                    f_dict[f] = sellers_final_check[f]
+                    sellers_final_check.pop(f)
+                    sellers_final_check[f] = f_dict[f]
+
+
             for i in sellers_final_check:
                 name = sellers_final_check[i]['company']['name']
                 name = name.replace(" ", "_")
+
                 inventory = str(sellers_final_check[i]['offers'][0]['inventory_level'])
                 cost = '$' + str(final_cost_dictionary[i])
                 url = sellers_final_check[i]['offers'][0]['click_url']
+
                 temp_list = (name, inventory, cost, url)
                 final_sellers.append(temp_list)
                 final_data = tuple(final_sellers)
                 tables[search_no] = final_data
-                print(final_data)
-
-                # add part number to list
-            if request.form.get("part_no"):
-                watchlist_number = database.WatchList.query.filter_by(
-                    part_number=request.form.get("part_no")
-
-                ).first()
-                if watchlist_number:
-                    flash('This part number is already on the watchlist', 'watchlist_duplicate')
-                else:
-                    new_watchlist_number = database.WatchList(part_number=request.form.get("part_no"))
-                    app.db.session.add(new_watchlist_number)
-                    app.db.session.commit()
 
     if len(tables) == 0:
         no_tables_available = True
@@ -316,6 +319,7 @@ def results(part_number, quantity, models):
 
 @search_blueprint.route('/update_watchlist', methods=['POST'])
 def update_watchlist():
+    database.database_check()
     part_number = request.form['part_number']
     new_watchlist_number = database.WatchList(part_number=part_number)
     app.db.session.add(new_watchlist_number)
@@ -325,6 +329,7 @@ def update_watchlist():
 
 @search_blueprint.route('/update_favourite', methods=['POST'])
 def update_favourite():
+    database.database_check()
     supplier_name = request.form['supplier_name']
     new_favourite_supplier = database.Favourite(supplier_name=supplier_name)
     app.db.session.add(new_favourite_supplier)
@@ -334,6 +339,7 @@ def update_favourite():
 
 @search_blueprint.route('/update_blacklist', methods=['POST'])
 def update_blacklist():
+    database.database_check()
     supplier_name = request.form['supplier_name']
     new_blacklist_supplier = database.Blacklist(supplier_name=supplier_name)
     app.db.session.add(new_blacklist_supplier)
