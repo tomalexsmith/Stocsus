@@ -134,7 +134,7 @@ def dashboard():
 
     return render_template('dashboard.html', current_favourites=database.Favourite.query.all(),
                            current_blacklist=database.Blacklist.query.all(), favourite_form=favourite_form,
-                           blacklist_form=blacklist_form)
+                           blacklist_form=blacklist_form, watchlist=database.WatchList)
 # to add after testing: email=current_user.email, role=current_user.role
 
 @users_blueprint.route('/logout')
