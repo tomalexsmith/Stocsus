@@ -313,13 +313,32 @@ def results(part_number, quantity, models):
 
 
 
-@search_blueprint.route('/update_watchlist', methods=['POST', 'GET'])
-def updatewatchlist():
+@search_blueprint.route('/update_watchlist', methods=['POST'])
+def update_watchlist():
     part_number = request.form['part_number']
     new_watchlist_number = database.WatchList(part_number=part_number)
     app.db.session.add(new_watchlist_number)
     app.db.session.commit()
     return jsonify({'result': 'success', 'part_number': part_number})
+
+
+@search_blueprint.route('/update_favourite', methods=['POST'])
+def update_favourite():
+    supplier_name = request.form['supplier_name']
+    new_favourite_supplier = database.Favourite(supplier_name=supplier_name)
+    app.db.session.add(new_favourite_supplier)
+    app.db.session.commit()
+    return jsonify({'result': 'success', 'supplier_name': supplier_name})
+
+@search_blueprint.route('/update_blacklist', methods=['POST'])
+def update_blacklist():
+    supplier_name = request.form['supplier_name']
+    new_blacklist_supplier = database.Blacklist(supplier_name=supplier_name)
+    app.db.session.add(new_blacklist_supplier)
+    app.db.session.commit()
+    return jsonify({'result': 'success', 'supplier_name': supplier_name})
+
+
 
 
 
