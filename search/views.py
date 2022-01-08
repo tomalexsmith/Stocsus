@@ -102,7 +102,6 @@ def results(part_number, quantity, models):
     for i in all_blacklist:
         blacklist_check.append(i.supplier_name)
 
-
     no_stock_numbers = []
     no_stock = False
     tables = {}
@@ -157,8 +156,6 @@ def results(part_number, quantity, models):
                 if greatest_seller_inventory > largest_quantity_available:
                     largest_quantity_available = greatest_seller_inventory
 
-                # inputs 1000,     500, 500 => 1000
-
                 if sellers[i + 1]['offers'][0][
                     'inventory_level'] >= quantity and largest_quantity_available >= quantity:  # check if inventory matches quantity
                     j += 1
@@ -170,13 +167,13 @@ def results(part_number, quantity, models):
 
                 # then we will add all these sellers to th
 
-                # elseif  sellers[i + 1]['offers'][0]['inventory_level'] < quantity and largest_quantity_available < quantity:
+                # elseif  sellers[i + 1]['offers'][0]['inventory_level'] < quantity
+                # and largest_quantity_available < quantity:
             if to_continue:
                 j = 0
                 total = 0
                 for i in range(len(sellers)):
-                    if sellers[i + 1]['offers'][0][
-                        'inventory_level'] < quantity and largest_quantity_available < quantity:
+                    if sellers[i + 1]['offers'][0]['inventory_level'] < quantity and largest_quantity_available < quantity:
                         seller_inventory = sellers[i + 1]['offers'][0]['inventory_level']
                         total += seller_inventory
                     for p in range(len(sellers)):
@@ -305,10 +302,6 @@ def results(part_number, quantity, models):
                     app.db.session.add(new_watchlist_number)
                     app.db.session.commit()
 
-
-
-
-
     if len(tables) == 0:
         no_tables_available = True
         return render_template("results.html", no_tables="Could not find results for ALL part numbers",
@@ -319,7 +312,6 @@ def results(part_number, quantity, models):
                            manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers,
                            watchlist_check=watchlist_check, favourite_check=favourite_check,
                            blacklist_check=blacklist_check)
-
 
 
 @search_blueprint.route('/update_watchlist', methods=['POST'])
@@ -339,6 +331,7 @@ def update_favourite():
     app.db.session.commit()
     return jsonify({'result': 'success', 'supplier_name': supplier_name})
 
+
 @search_blueprint.route('/update_blacklist', methods=['POST'])
 def update_blacklist():
     supplier_name = request.form['supplier_name']
@@ -346,8 +339,3 @@ def update_blacklist():
     app.db.session.add(new_blacklist_supplier)
     app.db.session.commit()
     return jsonify({'result': 'success', 'supplier_name': supplier_name})
-
-
-
-
-
