@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    $('.updateButton').on('click', function() {
+    $('.add_watchlist').on('click', function() {
         var i = $(this).attr('i');
 
 
@@ -11,8 +11,9 @@ $(document).ready(function() {
         });
 
         req.done(function() {
-            $(".updateButton").html("Successfully Added");
-            $('.updateButton').fadeOut(1000).fadeIn(1000);
+            $('.add_watchlist').fadeOut(1000).fadeIn(1000);
+            $(".add_watchlist").html("Successfully Added");
+            // $('.updateButton').fadeOut(1000).fadeIn(1000);
 
 
 
