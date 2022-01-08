@@ -1,7 +1,7 @@
 import flask
 import requests
 import json
-
+import random
 import sqlalchemy
 from flask_login import login_required
 from sqlalchemy import exc
@@ -175,7 +175,8 @@ def results(part_number, quantity, models):
                 j = 0
                 total = 0
                 for i in range(len(sellers)):
-                    if sellers[i + 1]['offers'][0]['inventory_level'] < quantity and largest_quantity_available < quantity:
+                    if sellers[i + 1]['offers'][0][
+                        'inventory_level'] < quantity and largest_quantity_available < quantity:
                         seller_inventory = sellers[i + 1]['offers'][0]['inventory_level']
                         total += seller_inventory
                     for p in range(len(sellers)):
@@ -205,8 +206,6 @@ def results(part_number, quantity, models):
                         sellers_with_stock[i + 1]['offers'][0]['order_multiple']) <= quantity:
                     z += 1
                     sellers_final_check[z] = sellers_with_stock[i + 1]
-
-
 
             # algorithm to calculate the cost depending on specified quantity on sellers that passed all checks
 
