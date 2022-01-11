@@ -51,6 +51,7 @@ def register():
 # view user login
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    user_is_banned = False
     # if session attribute logins does not exist create attribute logins
     if not session.get('logins'):
         session['logins'] = 0
@@ -60,6 +61,11 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
+        if not database.Users.query.filter_by(email=form.email.data, banned=False).first():
+            flash("Access denied, please contact an administrator")
+            return render_template('login.html', form=form)
+
+
 
         # increase login attempts by 1
         session['logins'] += 1
@@ -80,6 +86,9 @@ def login():
                 logging.warning('SECURITY - Invalid login attempt [%s, %s]', form.email.data, request.remote_addr)
 
             return render_template('login.html', form=form)
+
+
+
 
         if user and check_password_hash(user.password, form.password.data):
 
