@@ -38,6 +38,7 @@
                 {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
                     <li><a href="{{ url_for('users.profile') }}">
+                      
                         <span class="material-icons">person</span>
                     </a></li>
                 {% else %}

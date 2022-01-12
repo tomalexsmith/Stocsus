@@ -7,6 +7,7 @@
 {% block content %}
     <div class="bg">
         <div class="login_content">
+        
             <div id="login_left">
                 <div class="login_left_content">
                     <h1>Don't have an<br/>account yet?</h1>
@@ -16,6 +17,13 @@
                 </div>
             </div>
             <div id="login_right">
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    <div class="notification is-danger">
+                      {{ messages[0] }}
+                    </div>
+                  {% endif %}
+                {% endwith %}
                 <img class="login_logo" src="{{ url_for('static', filename='icons/stocsus.svg') }}" alt="logo">
                 <h1>Login to Stocsus</h1>
                 <form method="POST">

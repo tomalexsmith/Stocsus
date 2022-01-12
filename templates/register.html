@@ -8,6 +8,13 @@
     <div class="bg">
         <div class="register_content">
             <div id="register_left">
+               {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="notification is-danger">
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
+                {% endwith %}
                 <img class="register_logo" src="{{ url_for('static', filename='icons/stocsus.svg') }}" alt="logo">
                 <h1>Create account</h1>
                 <form method="POST">

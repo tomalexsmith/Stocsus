@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!--<h1>Commented out so you can test without logging in</h1>-->
+<!--<h1> Email:{{ email }}</h1>-->
+<!--<h1> Role:{{ role }}</h1>-->
+
+
+<h1>Favourite Suppliers</h1>
+  <table class="table">
+                        <tr>
+                            <th>ID</th>
+                            <th>Supplier name</th>
+                        </tr>
+                        {% for i in current_favourites %}
+                            <tr>
+                                <td>{{ i.id }}</td>
+                                <td>{{ i.supplier_name }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+          <div class="favourite form">
+        <form method="POST">
+             {{ favourite_form.csrf_token() }}
+            {{ favourite_form.favourite_supplier(class="input", placeholder="Enter favourite supplier") }}
+            {{ favourite_form.submit(class="submit_button", value="Add") }}
+        </form>
+                <div class="alert-message block-message error">
+                {% with errors = get_flashed_messages(category_filter=["favourite_alert"]) %}
+                {% if errors %}
+                {% for message in errors %}
+                {{ message }}
+                {% endfor %}
+                    </div>
+                    </div>
+{% endif %}
+{% endwith %}
+
+    </div>
+
+<h1>Blacklisted Suppliers</h1>
+  <table class="table">
+                        <tr>
+                            <th>ID</th>
+                            <th>Supplier name</th>
+                        </tr>
+                        {% for i in current_blacklist %}
+                            <tr>
+                                <td>{{ i.id }}</td>
+                                <td>{{ i.supplier_name }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+        <form method="POST">
+             {{ blacklist_form.csrf_token() }}
+            {{ blacklist_form.blacklist_supplier(class="input", placeholder="Enter blacklist supplier") }}
+            {{ blacklist_form.submit(class="submit_button", value="Add") }}
+        </form>
+
+        {% with errors = get_flashed_messages(category_filter=["blacklist_alert"]) %}
+        {% if errors %}
+        <div class="alert-message block-message error">
+        {%- for message in errors %}
+        {{ message }}
+        {% endfor -%}
+        </div>
+        {% endif %}
+        {% endwith %}
+    <h1>Supplier Watchlist</h1>
+  <table class="table">
+            <tr>
+                <th>ID</th>
+                <th>Part Number</th>
+            </tr>
+            {% for w in watchlist %}
+                <tr>
+                    <td>{{ w.id }}</td>
+                    <td>{{ w.part_number }}</td>
+                    <form method="POST">
+                <td><button type="submit" name="remove_watchlist" value="{{ w.part_number }}"
+                            formmethod="POST">Remove</button></td>
+                   </form>
+                </tr>
+            {% endfor %}
+        </table>
+{% endblock %}

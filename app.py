@@ -3,8 +3,9 @@ import logging
 from functools import wraps
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, current_user, login_manager
+from flask_login import LoginManager, current_user
 import os
+
 
 app = Flask(__name__)
 
@@ -12,13 +13,26 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
 app.config['WTF_CSRF_SECRET_KEY'] = os.urandom(32)
 app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:admin123@stocsus' \
-                                 '.cs4jpvtwcnto.eu-west-2.rds.amazonaws.com' \
-                                 ':3306/stocsus'
+    'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:admin123@stocsus.cl2ccsjbwdx3.us-east-1.rds.amazonaws.com:3306/stocsus'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+from database.models import Users
+
+
+
+# BLUEPRINTS
+
+# importing blueprints
+from users.views import users_blueprint
+from admin.views import admin_blueprint
+from search.views import search_blueprint
+
+# registering blueprints
+app.register_blueprint(users_blueprint)
+app.register_blueprint(admin_blueprint)
+app.register_blueprint(search_blueprint)
 
 # LOGGING
 class SecurityFilter(logging.Filter):
@@ -59,17 +73,6 @@ def requires_roles(*roles):
     return wrapper
 
 
-# BLUEPRINTS
-# importing blueprints
-from users.views import users_blueprint
-from admin.views import admin_blueprint
-from search.views import search_blueprint
-
-# registering blueprints
-app.register_blueprint(users_blueprint)
-app.register_blueprint(admin_blueprint)
-app.register_blueprint(search_blueprint)
-
 
 # Home Page
 @app.route('/')
@@ -108,7 +111,7 @@ login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.init_app(app)
 
-from models import Users
+
 
 
 @login_manager.user_loader
@@ -117,7 +120,5 @@ def load_user(id):
 
 
 if __name__ == '__main__':
-
-
     app.run(debug=True)
 
