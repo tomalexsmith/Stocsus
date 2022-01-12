@@ -10,6 +10,14 @@
     <script src="{{ url_for('static', filename='app.js') }}"></script>
 
     <h1>Results</h1>
+
+      {% if no_tables_available != True %}
+    <form method="POST"><button type="submit" name="download_result"
+                            formmethod="POST">Download</button>
+                   </form>
+    {% endif %}
+
+
     <h3>Favourites/Blacklist will apply next time you search</h3>
     <h3>Visit Dashboard to look at them/update them</h3>
 

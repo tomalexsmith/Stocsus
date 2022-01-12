@@ -1,11 +1,10 @@
-import flask
+
 import requests
 import json
-import random
-import sqlalchemy
+
 from flask_login import login_required
-from sqlalchemy import exc
-from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify
+
+from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify, send_from_directory, send_file
 from search.forms import SearchForm
 import pandas as pd
 import ast
@@ -300,11 +299,6 @@ def results(part_number, quantity, models):
             if len(sellers_final_check) == 0:
                 no_stock_numbers.append(part_number)
 
-
-
-
-
-
             for i in sellers_final_check:
                 name = sellers_final_check[i]['company']['name']
                 name = name.replace(" ", "_")
@@ -318,6 +312,7 @@ def results(part_number, quantity, models):
                 final_data = tuple(final_sellers)
                 tables[search_no] = final_data
 
+
     if len(tables) == 0:
         no_tables_available = True
         # avoids any duplicates being returned on watchlist options
@@ -326,10 +321,54 @@ def results(part_number, quantity, models):
                                no_tables_available=no_tables_available, no_stock_numbers_no_tables=no_stock_numbers)
 
     headings = ("Seller Name", "Inventory", "Calculated Cost")
-    return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,
-                           manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers,
-                           watchlist_check=watchlist_check, favourite_check=favourite_check,
-                           blacklist_check=blacklist_check)
+
+    if request.method == 'POST':
+
+        supplier_names = []
+        inventory_levels = []
+        calculated_costs = []
+        urls = []
+        part_number_column = []
+
+        for i in range(len(tables)):
+            for j in range(len(tables[i])):
+                part_no = table_part_numbers[i]
+                seller_name = tables[i][j][0]
+                inventory = tables[i][j][1]
+                cost = tables[i][j][2]
+                url = tables[i][j][3]
+
+                part_number_column.append(part_no)
+                supplier_names.append(seller_name)
+                inventory_levels.append(inventory)
+                calculated_costs.append(cost)
+                urls.append(url)
+            # part_number_column.append(' ')
+            supplier_names.append(' ')
+            inventory_levels.append(' ')
+            calculated_costs.append(' ')
+            urls.append(' ')
+        # 'Part_no': part_number_column,
+        data = {
+            'Seller': supplier_names,
+            'Inventory': inventory_levels,
+            'Cost': calculated_costs,
+            'URL': urls
+        }
+        # 'Part_no'
+        df = pd.DataFrame(data, columns=['Seller', 'Inventory', 'Cost', 'URL'])
+
+        df.to_excel('results.xlsx', index=False, header=True)
+
+        return send_file('results.xlsx', as_attachment=True)
+
+    if len(tables) != 0:
+        no_stock_numbers = list(dict.fromkeys(no_stock_numbers))
+        return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,
+                               manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers,
+                               watchlist_check=watchlist_check, favourite_check=favourite_check,
+                               blacklist_check=blacklist_check)
+
 
 
 @search_blueprint.route('/update_watchlist', methods=['POST'])
