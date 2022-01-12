@@ -1,0 +1,162 @@
+.bg{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    animation: fade_in ease-in-out 1s forwards;
+    opacity: 0%;
+    animation-delay: .2s;
+}
+
+@keyframes fade_in {
+    0%{
+        opacity: 0%;
+    }
+    100%{
+        opacity: 100%;
+    }
+}
+
+.register_content{
+    width: 90vw;
+    height: calc(100vh - 10rem);
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+}
+#register_left, #register_right{
+    width: 50%;
+    height: 100%;
+}
+
+#register_left{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.register_logo{
+    width: 2vw;
+    margin-bottom: 2vh;
+}
+
+#register_left h1{
+    font-weight: 600;
+    font-size: 3.2vw;
+    margin-bottom: 8vh;
+}
+
+#register_left form{
+    width: 27.5vw;
+    border-bottom: 1px solid black;
+    padding-bottom: 3vh;
+    position: relative;
+    margin-bottom: 4vh;
+}
+#register_left form::after{
+    content: 'or';
+    position: absolute;
+    width: 1.5vw;
+    margin-left: -.75vw;
+    bottom: -2.5%;
+    left: 50%;
+    background: white;
+    text-align: center;
+}
+
+.form_email, .form_password, .form_confirm_password, .form_submit{
+    width: 100%;
+    position: relative;
+    margin-bottom: 3.5vh;
+}
+
+.form_submit{
+    margin-top: 8vh;
+}
+
+.form_email img, .form_password img, .form_confirm_password img{
+    position: absolute;
+    top: 50%;
+    margin-top: -8px;
+    left: 1vw;
+}
+
+.email, .password{
+    width: 100%;
+    font-size: 1rem;
+    border: 1px solid black;
+    padding: 1.1vh 1vw 1.1vh 2vw;
+    border-radius: 100px;
+}
+
+.submit{
+    width: 100%;
+    padding: 1.2vh 1vw 1.2vh 1vw;
+    border-radius: 100px;
+    border: none;
+    background: #0077FF;
+    color: white;
+    transition: background ease .5s, transform ease .5s;
+}
+.submit:hover{
+    background: #004DA6;
+}
+.submit:active{
+    transform: scale(.95);
+}
+
+#register_left p a{
+    color: #0077FF;
+}
+
+#register_right{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.register_right_content{
+    width: calc(100% - 4vw);
+    height: calc(100% - 9vh);
+    text-align: center;
+    /*margin: 2vh 2vw;*/
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+
+#register_right h1{
+    font-size: 3.5vw;
+    font-weight: 600;
+    margin-bottom: 3vh;
+}
+
+#register_right p{
+    margin-bottom: 3vh;
+    color: #333333;
+}
+
+#register_right a{
+    border-radius: 100px;
+    background: transparent;
+    color: #0077FF;
+    border: solid #0077FF 2px;
+    padding: 1vh 1.6vw;
+    font-size: 1rem;
+    transition: background ease .5s, color ease .5s;
+
+}
+
+#register_right a:hover{
+    background: #0077FF;
+    color: #EFEDE7;
+}

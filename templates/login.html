@@ -1,50 +1,57 @@
 {% extends "base.html" %}
 
 {% block header %}
-{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="bg">
-    <h1>Login</h1>
-    <div class="login_box">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
+    <div class="bg">
+        <div class="login_content">
+        
+            <div id="login_left">
+                <div class="login_left_content">
+                    <h1>Don't have an<br/>account yet?</h1>
+                    <p>No problem, sign up now and start searching thousands of parts<br/> and suppliers for free with
+                        Stocsus</p>
+                    <a href="{{ url_for('users.register') }}">Sign up</a>
+                </div>
+            </div>
+            <div id="login_right">
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
                     <div class="notification is-danger">
-                        {{ messages[0] }}
+                      {{ messages[0] }}
                     </div>
-                {% endif %}
-            {% endwith %}
-    {% if not session['logins'] or session['logins'] < 3 %}
-        <form method="POST">
-             {{ form.csrf_token() }}
-            <form method="POST">
-                    <div class="field">
-                        <div class="control">
-                            {{ form.email(class="input", placeholder="Email") }}
-                            {% for error in form.email.errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
+                  {% endif %}
+                {% endwith %}
+                <img class="login_logo" src="{{ url_for('static', filename='icons/stocsus.svg') }}" alt="logo">
+                <h1>Login to Stocsus</h1>
+                <form method="POST">
+                    {{ form.csrf_token() }}
+                    <div class="form_email">
+                        <img src="{{ url_for('static', filename='icons/person.svg') }}" alt="logo">
+                        {{ form.email(class="email", placeholder="Email") }}
+                        {% for error in form.email.errors %}
+                            {{ error }}
+                        {% endfor %}
                     </div>
-            <div class="field">
-                        <div class="control">
-                            {{ form.password(class="input", placeholder="Password") }}
-                            {% for error in form.password.errors %}
-                                {{ error }}
-                            {% endfor %}
-                        </div>
+                    <div class="form_password">
+                        <img src="{{ url_for('static', filename='icons/key.svg') }}" alt="logo">
+                        {{ form.password(class="password", placeholder="Password") }}
+                           {% for error in form.password.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                    <div class="form_submit">
+                        {{ form.submit(class="submit", value="Sign up") }}
+                    </div>
+                </form>
+                <p>
+                    Don't have an account? | <a href="{{ url_for('users.register') }}">Sign up</a>
+                </p>
             </div>
-            <div class="form_submit">
-                {{ form.submit(class="submit") }}
-            </div>
-        </form>
-    {% endif %}
-        <p>
-            Need an account? <a href="{{ url_for('users.register') }}">Register here</a>
-        </p>
-        </form>
+
+        </div>
     </div>
-</div>
 
 {% endblock %}

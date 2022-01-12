@@ -4,46 +4,50 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     {% block header %}{% endblock %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></head>
 
 <body>
 
     <header>
         <div class="navbar_container">
             <ul class="nav_left">
-                <li class="hover"><a href="{{ url_for('index') }}">home</a></li>
-                <li class="hover"><a href="#about">about us</a></li>
-                {#% if current_user.is_authenticated %#}
-                    <li class="hover"><a href="{{ url_for('search_blueprint.search') }}">search</a></li>
-                {#%  endif %#}
+                <li class="hover"><a href="{{ url_for('index') }}">Home</a></li>
+                <li class="hover"><a href="{{ url_for('index') }}#about">About</a></li>
+                {% if current_user.is_authenticated %}
+                    <li class="hover"><a href="{{ url_for('search_blueprint.search') }}">Search</a></li>
+                {%  endif %}
                 {#<li class="hover"><a href="{{ url_for('users.faq') }}">faq</a></li>#}
             </ul>
             <div class="logo">
-                {#% if current_user.is_authenticated %#}
-                    <a href="{{ url_for('search_blueprint.search') }}">STOCSUS</a>
-                {#% else %#}
-                    <a href="{{ url_for('index') }}">STOCSUS</a>
-                {#%  endif %#}
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('search_blueprint.search') }}">
+                        <img src="{{ url_for('static', filename='icons/stocsus.svg') }}" alt="logo">
+                    </a>
+                {% else %}
+                    <a class="navbar_logo" href="{{ url_for('index') }}">
+                        <img src="{{ url_for('static', filename='icons/stocsus.svg') }}" alt="logo">
+                    </a>
+                {%  endif %}
             </div>
             <ul class="nav_right">
-                {#% if current_user.is_authenticated %#}
-                    <li><a href="{{ url_for('users.logout') }}">logout</a></li>
-                    <li><a href="{{ url_for('users.dashboard') }}">
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
+                    <li><a href="{{ url_for('users.profile') }}">
+                      
                         <span class="material-icons">person</span>
                     </a></li>
-                {#% else %#}
-                    <li><a href="{{ url_for('users.login') }}">login</a></li>
-                    <li><a href="{{ url_for('users.register') }}">register</a></li>
+                {% else %}
+                    <li><a class="login_link" href="{{ url_for('users.login') }}">Login</a></li>
+                    <li><a class="register_button" href="{{ url_for('users.register') }}">Register</a></li>
                     <li><a href="{{ url_for('users.login') }}">
-                        <span class="material-icons">person</span>
+                        <img src="{{ url_for('static', filename='icons/person-fill.png') }}" alt="logo">
                     </a></li>
-                {#% endif %#}
+                {% endif %}
             </ul>
         </div>
 
@@ -52,7 +56,24 @@
 {% block content %}{% endblock %}
 
 <footer>
-
+    <div class="foot_container">
+        <div class="foot_content">
+            <img src="{{ url_for('static', filename='icons/stocsus.svg') }}" alt="logo">
+            <div class="website">
+                <h1>Website</h1>
+                <p>Home</p>
+                <p>About us</p>
+                <p>Search</p>
+            </div>
+            <div class="access">
+                <h1>Access</h1>
+                <p>Login</p>
+                <p>Sign up</p>
+                <p>Profile</p>
+                <p>Logout</p>
+            </div>
+        </div>
+    </div>
 </footer>
 </body>
 
