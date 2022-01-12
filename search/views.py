@@ -362,13 +362,12 @@ def results(part_number, quantity, models):
 
         return send_file('results.xlsx', as_attachment=True)
 
-
-
-
-    return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,
-                           manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers,
-                           watchlist_check=watchlist_check, favourite_check=favourite_check,
-                           blacklist_check=blacklist_check)
+    if len(tables) != 0:
+        no_stock_numbers = list(dict.fromkeys(no_stock_numbers))
+        return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,
+                               manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers,
+                               watchlist_check=watchlist_check, favourite_check=favourite_check,
+                               blacklist_check=blacklist_check)
 
 
 
