@@ -18,9 +18,9 @@
             <ul class="nav_left">
                 <li class="hover"><a href="{{ url_for('index') }}">Home</a></li>
                 <li class="hover"><a href="{{ url_for('index') }}#about">About</a></li>
-                {% if current_user.is_authenticated %}
+<!--                 {% if current_user.is_authenticated %} -->
                     <li class="hover"><a href="{{ url_for('search_blueprint.search') }}">Search</a></li>
-                {%  endif %}
+<!--                 {%  endif %} -->
                 {#<li class="hover"><a href="{{ url_for('users.faq') }}">faq</a></li>#}
             </ul>
             <div class="logo">
@@ -37,10 +37,15 @@
             <ul class="nav_right">
                 {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
-                    <li><a href="{{ url_for('users.profile') }}">
-                      
-                        <span class="material-icons">person</span>
-                    </a></li>
+                    {% if current_user.role == admin %}
+                        <li><a href="{{ url_for('users.admin') }}">
+                            <img src="{{ url_for('static', filename='icons/person-fill.png') }}" alt="logo">
+                        </a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('users.dashboard') }}">
+                            <img src="{{ url_for('static', filename='icons/person-fill.png') }}" alt="logo">
+                        </a></li>
+                    {% endif %}
                 {% else %}
                     <li><a class="login_link" href="{{ url_for('users.login') }}">Login</a></li>
                     <li><a class="register_button" href="{{ url_for('users.register') }}">Register</a></li>
