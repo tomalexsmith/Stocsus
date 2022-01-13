@@ -2,29 +2,60 @@
 
 
 {% block header %}
-    {# <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}"> #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
 {% endblock %}
 
 
 
 {% block content %}
-    <h1>Search</h1>
-    <div class="search forms">
-        <form method="POST">
-             {{ form.csrf_token() }}
-            {{ form.part_number(class="input", placeholder="Part") }}
-            <div class="quantity_search">
-                {{ form.quantity(type="number", class="quantity_input", placeholder="Quantity") }}
-                {{ form.models(type="number", class="quantity_input", placeholder="No. of models") }}
+    <div class="search_bg">
+        <div class="search_content">
+            <h1 class="search_title">Search singular parts.</h1>
+            <div class="search_forms">
+                <form method="POST">
+                    {{ form.csrf_token() }}
+                    <div class="form_part">
+                        <img src="{{ url_for('static', filename='icons/search.svg') }}" alt="logo">
+                        {{ form.part_number(class="part_number", placeholder="Part no.") }}
+                    </div>
+                    <div class="quantity_search">
+                        <div class="form_quantity">
+                            {{ form.quantity(type="number", class="quantity", placeholder="Quantity") }}
+                        </div>
+                        <div class="form_models">
+                            {{ form.models(type="number", class="models", placeholder="No. of models") }}
+                        </div>
+                    </div>
+                    {{ form.submit(class="submit", value="Search") }}
+                </form>
             </div>
-            {{ form.submit(class="submit_button") }}
-        </form>
+            <div class="file_upload">
+                <p>Upload an excel file here (.xls, .xlsx, .csv) to search for multiple<br/> parts at a time.</p>
+                <form class="upload_form" method=post enctype=multipart/form-data>
+                    <label for="file_choose" class="file_choose">Upload File</label>
+                    <input id="file_choose" type=file name=file accept=".csv, .xls,.xlsx">
+                    <div class="file_submit_container">
+                        <img src="{{ url_for('static', filename='icons/check.svg') }}" alt="check">
+                        <input id="file_submit" class="file_submit" type=submit value="">
+                    </div>
+                </form>
+                <p>Download file template | <a download href="{{ url_for('static',
+                filename='Stocsus template.xlsx') }}">here</a></p>
+            </div>
+        </div>
     </div>
-    <div class="file_upload">
-        <span class="or">or</span>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#file_choose').change(function (){
+                if($('#file_choose').val()==''){
+                    $('#file_submit').removeClass('enabled')
+                    $('#file_submit').attr('disabled',true)
+                }else{
+                    $('#file_submit').addClass('enabled')
+                    $('#file_submit').attr('disabled',false)
+                }
+            });
+        });
+    </script>
 {% endblock %}
