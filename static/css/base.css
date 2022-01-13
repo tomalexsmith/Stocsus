@@ -128,7 +128,7 @@ header *{
     border: 2px solid #0077FF;
     padding: .4rem 1.5rem;
     border-radius: 100px;
-    transition: ease .5s;
+    transition: color ease .5s, background ease .5s;
     color: #0077FF;
 }
 

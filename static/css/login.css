@@ -64,7 +64,8 @@
     position: absolute;
     width: 1.5vw;
     margin-left: -.75vw;
-    bottom: -2.5%;
+    bottom: 0;
+    transform: translateY(50%);
     left: 50%;
     background: white;
     text-align: center;
@@ -85,14 +86,16 @@
     top: 50%;
     margin-top: -8px;
     left: 1vw;
+    pointer-events: none;
 }
 
 .email, .password{
     width: 100%;
     font-size: 1rem;
     border: 1px solid black;
-    padding: 1.1vh 1vw 1.1vh 2vw;
+    padding: 1.1vh 1vw 1.1vh 2.5vw;
     border-radius: 100px;
+    font-family: Poppins,sans-serif;
 }
 
 .submit{
@@ -103,6 +106,7 @@
     background: #0077FF;
     color: white;
     transition: background ease .5s, transform ease .5s;
+    cursor: pointer;
 }
 .submit:hover{
     background: #004DA6;
