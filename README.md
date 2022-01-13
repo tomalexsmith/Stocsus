@@ -2,6 +2,8 @@
 
 This is stocsus
 
+Github Repository: https://github.com/newcastleuniversity-computing/stocsus
+
 ## Setting up & Installation
 Please install python using the link below if you don't already have it on your system
 
@@ -26,7 +28,12 @@ set FlASK_APP=app.py
 set FLASK_ENV=development
 ```
 
-Run the flask application
+
+
+## Running the flask application
 ```bash
 python -m flask run
 ```
+
+
+## Usage
