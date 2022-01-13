@@ -40,5 +40,11 @@ set FLASK_ENV=development
 ```bash
 python -m flask run
 ```
+## Usage
+To utilise the user features use the register function and from there you will be directed to the login page where you 
+will
+re-enter the details used to register, in order to validate, and after you will arrive at the search page. 
+From here you can walk through the application by navigating via the tabs. 
 
+Although, to use the admin functions go to the login tab and use the credentials from models.py in order to gain appropriate access.
 
