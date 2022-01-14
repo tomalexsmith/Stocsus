@@ -61,7 +61,8 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        if not database.Users.query.filter_by(email=form.email.data, banned=False).first():
+        user = database.Users.query.filter_by(email=form.email.data).first()
+        if user and not database.Users.query.filter_by(email=form.email.data, banned=False).first():
             flash("Access denied, please contact an administrator")
             return render_template('login.html', form=form)
 
