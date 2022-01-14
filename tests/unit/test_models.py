@@ -42,6 +42,6 @@ def test_watchlist(new_watchlist):
     """
     GIVEN a watchlist model
     WHEN a watchlist model is created
-    THEN check the supplier_name field is defined correctly
+    THEN check the part_number field is defined correctly
     """
-    assert new_watchlist.part_number == 'Test Supplier'
+    assert new_watchlist.part_number == 'AT0603FRE0747KL'
