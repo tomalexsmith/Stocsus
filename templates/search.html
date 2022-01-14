@@ -3,7 +3,7 @@
 
 {% block header %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">#}
 {% endblock %}
 
 {% block content %}
@@ -29,21 +29,20 @@
                 </form>
             </div>
             <div class="file_upload">
-                   {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-   File does not match template layout, please check file template and try again
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-                    </div>
-                {% endif %}
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                            {{ messages[0]}}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endif %}
                 {% endwith %}
-                <p>Upload an excel file here (.xls, .xlsx, .csv) to search for multiple<br/> parts at a time.</p>
+                <p class="upload_tutorial">Upload an excel file here (.xls, .xlsx) to search for multiple<br/> parts at a time.</p>
                 <form class="upload_form" method=post enctype=multipart/form-data>
                     <label for="file_choose" class="file_choose">Upload File</label>
-                    <input id="file_choose" type=file name=file accept=".csv, .xls,.xlsx">
+                    <input id="file_choose" type=file name=file accept=".xls,.xlsx">
                     <div class="file_submit_container">
                         <img src="{{ url_for('static', filename='icons/check.svg') }}" alt="check">
                         <input id="file_submit" class="file_submit" type=submit value="">
