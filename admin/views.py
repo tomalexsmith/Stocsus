@@ -1,23 +1,40 @@
 # IMPORTS
-import sqlalchemy
+import logging
+from functools import wraps
 from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required
-from sqlalchemy import exc
-
-import app
 import database.models as database
 from users.forms import FavouriteForm, BlacklistForm
-
+from app import db
 # CONFIG
 
+# ROLES
+def requires_roles(*roles):
+    def wrapper(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            if current_user.role not in roles:
+                logging.warning(
+                    'SECURITY - Unauthorised access attempt [%s, %s, %s, %s]',
+                    current_user.id,
+                    current_user.email,
+                    current_user.role,
+                    request.remote_addr)
+                # Redirect the user to an unauthorised notice!
+                return render_template('403.html')
+            return f(*args, **kwargs)
+
+        return wrapped
+
+    return wrapper
 
 admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 
 
 # view admin homepage
 @admin_blueprint.route('/admin', methods=['GET', 'POST'])
-# @login_required
-# @requires_roles('admin')
+@requires_roles('admin')
+@login_required
 def admin():
     database.database_check()
 
@@ -38,8 +55,8 @@ def admin():
 
         remove_favourite_supplier = database.Favourite.query.filter_by(
             supplier_name=request.form.get("remove_favourite")).first()
-        app.db.session.delete(remove_favourite_supplier)
-        app.db.session.commit()
+        db.session.delete(remove_favourite_supplier)
+        db.session.commit()
 
     if request.form.get("remove_blacklist"):
         blacklist_supplier = database.Blacklist.query.filter_by(
@@ -51,8 +68,8 @@ def admin():
 
         remove_blacklist_supplier = database.Blacklist.query.filter_by(
             supplier_name=request.form.get("remove_blacklist")).first()
-        app.db.session.delete(remove_blacklist_supplier)
-        app.db.session.commit()
+        db.session.delete(remove_blacklist_supplier)
+        db.session.commit()
 
     if request.form.get("unban"):
         user_email = database.Users.query.filter_by(email=request.form.get("unban"), banned=False).first()
@@ -61,7 +78,7 @@ def admin():
             return redirect(url_for('admin.admin'))
         banned_user = database.Users.query.filter_by(email=request.form.get("unban")).first()
         banned_user.banned = False
-        app.db.session.commit()
+        db.session.commit()
         return redirect(url_for('admin.admin'))
 
     if request.form.get("ban"):
@@ -72,7 +89,7 @@ def admin():
         unbanned_user = database.Users.query.filter_by(email=request.form.get("ban")).first()
 
         unbanned_user.banned = True
-        app.db.session.commit()
+        db.session.commit()
         return redirect(url_for('admin.admin'))
 
     if favourite_form.validate_on_submit():
@@ -83,8 +100,8 @@ def admin():
             return redirect(url_for('admin.admin'))
 
         new_favourite_supplier = database.Favourite(supplier_name=favourite_form.favourite_supplier.data)
-        app.db.session.add(new_favourite_supplier)
-        app.db.session.commit()
+        db.session.add(new_favourite_supplier)
+        db.session.commit()
 
     if blacklist_form.validate_on_submit():
         blacklist_supplier = database.Blacklist.query.filter_by(
@@ -94,8 +111,8 @@ def admin():
             return redirect(url_for('admin.admin'))
 
         new_blacklist_supplier = database.Blacklist(supplier_name=blacklist_form.blacklist_supplier.data)
-        app.db.session.add(new_blacklist_supplier)
-        app.db.session.commit()
+        db.session.add(new_blacklist_supplier)
+        db.session.commit()
 
     return render_template('admin.html',
                            current_users=database.Users.query.filter_by(role='user', banned=False).all(),

@@ -51,7 +51,7 @@ query = """query {
 
 
 @search_blueprint.route("/search", methods=['GET', 'POST'])
-# @login_required
+@login_required
 def search():
     # if the database is offline then to prevent the application crashing
     # error is caught by doing a test query on the database.
@@ -102,6 +102,7 @@ def search():
 
 
 @search_blueprint.route('/result/<part_number>/<quantity>/<models>/', methods=['GET', 'POST'])
+@login_required
 def results(part_number, quantity, models):
     database.database_check()
     watchlist_check = []
@@ -386,6 +387,7 @@ def results(part_number, quantity, models):
 
 
 @search_blueprint.route('/update_watchlist', methods=['POST'])
+@login_required
 def update_watchlist():
     database.database_check()
     part_number = request.form['part_number']
@@ -396,6 +398,7 @@ def update_watchlist():
 
 
 @search_blueprint.route('/update_favourite', methods=['POST'])
+@login_required
 def update_favourite():
     database.database_check()
     supplier_name = request.form['supplier_name']
@@ -406,6 +409,7 @@ def update_favourite():
 
 
 @search_blueprint.route('/update_blacklist', methods=['POST'])
+@login_required
 def update_blacklist():
     database.database_check()
     supplier_name = request.form['supplier_name']

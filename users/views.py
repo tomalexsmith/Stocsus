@@ -9,7 +9,7 @@ from werkzeug.security import check_password_hash
 import app
 from users.forms import RegisterForm, LoginForm, FavouriteForm, BlacklistForm
 import database.models as database
-import admin.views
+
 
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
@@ -41,9 +41,11 @@ def register():
 
         logging.warning('SECURITY - User registration [%s, %s]',
                         form.email.data, request.remote_addr)
-
-        # sends the user to the login page
-        return redirect(url_for('users.login'))
+        # login the registered user
+        new_user = database.Users.query.filter_by(email=form.email.data).first()
+        login_user(new_user)
+        # sends the user to the search page
+        return redirect(url_for('search_blueprint.search'))
     # if request method is GET or form not valid re-render signup page
     return render_template('register.html', form=form)
 
@@ -115,6 +117,7 @@ def login():
 
 
 @users_blueprint.route('/dashboard', methods=['GET', 'POST'])
+@login_required
 def dashboard():
     database.database_check()
 
