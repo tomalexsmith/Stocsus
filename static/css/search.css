@@ -140,7 +140,7 @@ input::-webkit-inner-spin-button {
     margin-right: 10vw;
 }
 
-.file_upload p:first-child{
+.upload_tutorial{
     font-size: 16px;
     color: black;
     text-align: center;
@@ -224,4 +224,8 @@ input[type="file"]{
 }
 .enabled:active{
     transform: scale(.95);
+}
+
+label{
+    margin-bottom: 0 !important;
 }
