@@ -40,6 +40,12 @@ set FLASK_ENV=development
 ```bash
 python -m flask run
 ```
+
+## Testing the application in the terminal
+```bash
+pytest
+```
+
 ## Usage
 To utilise the user features use the register function and from there you will be directed to the login page where you 
 will
