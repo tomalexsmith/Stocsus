@@ -33,8 +33,8 @@ admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 
 # view admin homepage
 @admin_blueprint.route('/admin', methods=['GET', 'POST'])
-@requires_roles('admin')
 @login_required
+@requires_roles('admin')
 def admin():
     database.database_check()
 
