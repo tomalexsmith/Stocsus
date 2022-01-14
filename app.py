@@ -69,15 +69,41 @@ def create_app():
     login_manager.login_view = 'users.login'
     login_manager.init_app(app)
 
+    @login_manager.user_loader
+    def load_user(id):
+        from database.models import Users
+        return Users.query.get(int(id))
 
+    return app
 
-
+"""
 @login_manager.user_loader
 def load_user(id):
     return Users.query.get(int(id))
+"""
+
+
+# ROLES
+def requires_roles(*roles):
+    def wrapper(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            if current_user.role not in roles:
+                logging.warning(
+                    'SECURITY - Unauthorised access attempt [%s, %s, %s, %s]',
+                    current_user.id,
+                    current_user.email,
+                    current_user.role,
+                    request.remote_addr)
+                # Redirect the user to an unauthorised notice!
+                return render_template('403.html')
+            return f(*args, **kwargs)
+
+        return wrapped
+
+    return wrapper
 
 
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
-
