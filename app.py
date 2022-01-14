@@ -1,11 +1,9 @@
 # IMPORTS
 import logging
-from functools import wraps
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager
 import os
-
 
 db = SQLAlchemy()
 
@@ -23,7 +21,7 @@ def create_app():
 
     db.init_app(app)
 
-    #from database.models import Users
+    from database.models import Users
 
     # BLUEPRINTS
 
@@ -44,7 +42,6 @@ def create_app():
         return render_template('index.html')
 
     # ERROR PAGE VIEWS
-    # TODO - Create templates for the error pages
     @app.errorhandler(400)
     def bad_request(error):
         return render_template('400.html'), 400
@@ -76,32 +73,7 @@ def create_app():
 
     return app
 
-"""
-@login_manager.user_loader
-def load_user(id):
-    return Users.query.get(int(id))
-"""
 
-
-# ROLES
-def requires_roles(*roles):
-    def wrapper(f):
-        @wraps(f)
-        def wrapped(*args, **kwargs):
-            if current_user.role not in roles:
-                logging.warning(
-                    'SECURITY - Unauthorised access attempt [%s, %s, %s, %s]',
-                    current_user.id,
-                    current_user.email,
-                    current_user.role,
-                    request.remote_addr)
-                # Redirect the user to an unauthorised notice!
-                return render_template('403.html')
-            return f(*args, **kwargs)
-
-        return wrapped
-
-    return wrapper
 
 # LOGGING
 class SecurityFilter(logging.Filter):
