@@ -25,7 +25,7 @@
             </ul>
             <div class="logo">
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('search_blueprint.search') }}">
+                    <a class="navbar_logo" href="{{ url_for('search_blueprint.search') }}">
                         <img src="{{ url_for('static', filename='icons/stocsus.svg') }}" alt="logo">
                     </a>
                 {% else %}
