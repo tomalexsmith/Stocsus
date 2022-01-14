@@ -42,6 +42,7 @@ python -m flask run
 ```
 
 ## Testing the application in the terminal
+In order to test the application, enter the below command into the terminal
 ```bash
 pytest
 ```
