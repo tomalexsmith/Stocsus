@@ -20,7 +20,7 @@ example part number = CFR50J2K2
 
 search_blueprint = Blueprint('search_blueprint', __name__, template_folder='templates')
 
-endpoint = "https://octopart.com/api/v4/endpoint?token=b02769bc-29c7-413d-9eb0-baf60f016b02"
+endpoint = "https://octopart.com/api/v4/endpoint?token=3b6dda6b-8d73-4a4f-93ac-eb38c99c16b1"
 
 query = """query {
   search(q: "%s", limit: 1) {
@@ -69,20 +69,29 @@ def search():
         return redirect(
             url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
     elif request.method == 'POST':
+
+
+
+        ALLOWED_EXTENSIONS = {'xlsv', 'csv', 'xls'}
         f = request.files['file']
         data = pd.read_excel(f, 'Sheet1', index_col=None)
         data.to_csv('your_csv.csv', encoding='utf-8')
+
+
         part_number = []
         quantity = []
         models = []
-        for i in range(len(data['part_no'])):
-            part_number.append(str(data['part_no'][i]))
-        for i in range(len(data['quantity'])):
-            quantity.append(str(data['quantity'][i]))
-        for i in range(len(data['models'])):
-            models.append(str(data['models'][i]))
-        return redirect(
-            url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
+        try:
+            for i in range(len(data['part_no'])):
+                part_number.append(str(data['part_no'][i]))
+            for i in range(len(data['quantity'])):
+                quantity.append(str(data['quantity'][i]))
+            for i in range(len(data['models'])):
+                models.append(str(data['models'][i]))
+            return redirect(
+                url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
+        except KeyError:
+            flash("File does not match template layout, please check and try again")
 
     return render_template("search.html", form=form)
 
