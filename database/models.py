@@ -79,6 +79,10 @@ def database_check():
                                    message="Error 2003 connecting to application, please contact IT support")
 
 
+
+
+
+
 # initialises database tables and adds sample data
 # Python Console --> from database.models import init_db
 #                --> init_db()
