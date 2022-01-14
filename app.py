@@ -77,7 +77,6 @@ def requires_roles(*roles):
 # Home Page
 @app.route('/')
 def index():  # put application's code here
-    print(request.headers)
     return render_template('index.html')
 
 
