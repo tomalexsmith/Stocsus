@@ -92,7 +92,9 @@ def search():
         except KeyError:
             flash("File does not match template layout, please check file template and try again.")
         except ValueError:
-            flash("Sheet name does not match the template, please check and try again.")
+            flash("File does not match template layout, please check file template and try again.")
+        except TypeError:
+            flash("File does not match template layout, please check file template and try again.")
 
 
 
