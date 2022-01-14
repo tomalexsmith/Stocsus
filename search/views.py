@@ -70,18 +70,17 @@ def search():
             url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
     elif request.method == 'POST':
 
-
-
-        ALLOWED_EXTENSIONS = {'xlsv', 'csv', 'xls'}
-        f = request.files['file']
-        data = pd.read_excel(f, 'Sheet1', index_col=None)
-        data.to_csv('your_csv.csv', encoding='utf-8')
-
-
-        part_number = []
-        quantity = []
-        models = []
         try:
+            f = request.files['file']
+            data = pd.read_excel(f, 'Sheet1', index_col=None)
+            data.to_csv('your_csv.csv', encoding='utf-8')
+
+
+
+            part_number = []
+            quantity = []
+            models = []
+
             for i in range(len(data['part_no'])):
                 part_number.append(str(data['part_no'][i]))
             for i in range(len(data['quantity'])):
@@ -91,7 +90,11 @@ def search():
             return redirect(
                 url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
         except KeyError:
-            flash("File does not match template layout, please check and try again")
+            flash("File does not match template layout, please check file template and try again.")
+        except ValueError:
+            flash("Sheet name does not match the template, please check and try again.")
+
+
 
     return render_template("search.html", form=form)
 
