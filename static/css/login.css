@@ -74,11 +74,31 @@
 .form_email, .form_password, .form_submit{
     width: 100%;
     position: relative;
+    /*margin-bottom: .75vh;*/
+}
+
+.form_email_error, .form_password_error{
     margin-bottom: 3.5vh;
+    position: relative;
+}
+
+
+.form_email_error span, .form_password_error span{
+    left: 3.5%;
+    bottom: -60%;
+    /*bottom: 0;*/
+    color: #cc0000;
+    position: absolute;
+    font-size: .6vw;
 }
 
 .form_submit{
     margin-top: 8vh;
+}
+
+.submit_disabled{
+    pointer-events: none;
+    opacity: 40%;
 }
 
 .form_email img, .form_password img{
@@ -105,7 +125,7 @@
     border: none;
     background: #0077FF;
     color: white;
-    transition: background ease .5s, transform ease .5s;
+    transition: opacity ease .5s, background ease .5s, transform ease .5s;
     cursor: pointer;
 }
 .submit:hover{

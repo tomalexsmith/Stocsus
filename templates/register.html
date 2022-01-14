@@ -8,36 +8,40 @@
     <div class="bg">
         <div class="register_content">
             <div id="register_left">
-               {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="notification is-danger">
-                        {{ messages[0] }}
-                    </div>
-                {% endif %}
-                {% endwith %}
                 <img class="register_logo" src="{{ url_for('static', filename='icons/stocsus.svg') }}" alt="logo">
                 <h1>Create account</h1>
                 <form method="POST">
                     {{ form.csrf_token() }}
-                    <div class="form_email">
-                        <img src="{{ url_for('static', filename='icons/person.svg') }}" alt="logo">
-                        {{ form.email(class="email", placeholder="Email") }}
+                    <div class="form_email_error">
+                        <div class="form_email">
+                            <img src="{{ url_for('static', filename='icons/person.svg') }}" alt="logo">
+                            {{ form.email(class="email", placeholder="Email") }}
+                        </div>
                         {% for error in form.email.errors %}
-                            {{ error }}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <span>{{ messages[0]}}</span>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="form_password_error">
+                        <div class="form_password">
+                            <img src="{{ url_for('static', filename='icons/key.svg') }}" alt="logo">
+                            {{ form.password(class="password", placeholder="Password") }}
+                        </div>
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
                         {% endfor %}
                     </div>
-                    <div class="form_password">
-                        <img src="{{ url_for('static', filename='icons/key.svg') }}" alt="logo">
-                        {{ form.password(class="password", placeholder="Password") }}
-                           {% for error in form.password.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </div>
-                    <div class="form_confirm_password">
-                        <img src="{{ url_for('static', filename='icons/key.svg') }}" alt="logo">
-                        {{ form.confirm_password(class="password", placeholder="Confirm Password") }}
-                          {% for error in form.confirm_password.errors %}
-                            {{ error }}
+                    <div class="form_confirm_password_error">
+                        <div class="form_confirm_password">
+                            <img src="{{ url_for('static', filename='icons/key.svg') }}" alt="logo">
+                            {{ form.confirm_password(class="password", placeholder="Confirm Password") }}
+                        </div>
+                        {% for error in form.confirm_password.errors %}
+                            <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                     <div class="form_submit">

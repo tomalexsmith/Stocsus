@@ -74,8 +74,23 @@
 .form_email, .form_password, .form_confirm_password, .form_submit{
     width: 100%;
     position: relative;
-    margin-bottom: 3.5vh;
+    /*margin-bottom: .75vh;*/
 }
+
+.form_email_error, .form_confirm_password_error, .form_password_error{
+    margin-bottom: 3.5vh;
+    position: relative;
+}
+
+.form_email_error span, .form_password_error span, .form_confirm_password_error span{
+    left: 3.5%;
+    bottom: -60%;
+    /*bottom: 0;*/
+    color: #cc0000;
+    position: absolute;
+    font-size: .6vw;
+}
+
 
 .form_submit{
     margin-top: 8vh;
