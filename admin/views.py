@@ -10,6 +10,12 @@ from app import db
 
 # ROLES
 def requires_roles(*roles):
+    """
+    Contains all the functionality needed to implement roles on functions
+    If the logged-in user's role is not the same as the specified role.
+    Adds the unauthorized attempt to the logs on the admin page.
+    Redirects user to error page 403.
+    """
     def wrapper(f):
         @wraps(f)
         def wrapped(*args, **kwargs):
@@ -36,6 +42,21 @@ admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 @login_required
 @requires_roles('admin')
 def admin():
+    """
+    Only users with an admin role can access this function
+
+    Presents all registered users with ability to ban
+
+    Presents all banned users with ability to unban
+
+    Presents all favourite suppliers with ability to remove or add
+
+    Presents all blacklisted suppliers with ability to remove or add
+
+    Presents last 10 security logs
+    """
+
+    # check if the database is online
     database.database_check()
 
     favourite_form = FavouriteForm()
@@ -121,7 +142,8 @@ def admin():
                            current_blacklist=database.Blacklist.query.all(),
                            logs=content,
                            fav_form=favourite_form,
-                           blacklist_form=blacklist_form
+                           blacklist_form=blacklist_form,
+                           email=current_user.email
                            )
 
-    # To add after testing: email=current_username.email
+

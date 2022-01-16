@@ -1,6 +1,6 @@
 """
 This file contains a sample of the response we will get after communicating with the API using GraphQL
-The apiResponse is to be used in the test_search file to work on the search function
+The apiResponse can be used to work on the results function without using API points
 """
 api_response = {
     'data': {

@@ -9,14 +9,13 @@ db = SQLAlchemy()
 
 
 def create_app():
-
     app = Flask(__name__)
 
     # SECRET KEYS
     app.config['SECRET_KEY'] = os.urandom(32)
     app.config['WTF_CSRF_SECRET_KEY'] = os.urandom(32)
     app.config[
-            'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:admin123@stocsus.cl2ccsjbwdx3.us-east-1.rds.amazonaws.com:3306/stocsus'
+        'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:admin123@stocsus.cl2ccsjbwdx3.us-east-1.rds.amazonaws.com:3306/stocsus'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
@@ -74,11 +73,11 @@ def create_app():
     return app
 
 
-
 # LOGGING
 class SecurityFilter(logging.Filter):
     def filter(self, record):
         return "SECURITY" in record.getMessage()
+
 
 fh = logging.FileHandler('Stocsus.log', 'w')
 fh.setLevel(logging.WARNING)
@@ -90,7 +89,6 @@ fh.setFormatter(formatter)
 logger = logging.getLogger('')
 logger.propagate = False
 logger.addHandler(fh)
-
 
 if __name__ == '__main__':
     app = create_app()

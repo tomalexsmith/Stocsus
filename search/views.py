@@ -1,10 +1,7 @@
-
 import requests
 import json
-
 from flask_login import login_required
-
-from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify, send_from_directory, send_file
+from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify, send_file
 from search.forms import SearchForm
 import pandas as pd
 import ast
@@ -12,16 +9,12 @@ import database.models as database
 import app
 import openpyxl  # required dependency
 
-"""
-This file will not work without the API TOKEN, you need to edit the endpoint variable and add it there
-query is the GraphQL query that will be used to extract data using the Octopart API
-example part number = CFR50J2K2
-"""
-
 search_blueprint = Blueprint('search_blueprint', __name__, template_folder='templates')
 
+# This endpoint is used to communicate with the API, you can replace the token if you want
 endpoint = "https://octopart.com/api/v4/endpoint?token=3b6dda6b-8d73-4a4f-93ac-eb38c99c16b1"
 
+# This query is sent to the GraphQL API
 query = """query {
   search(q: "%s", limit: 1) {
     results {
@@ -53,9 +46,11 @@ query = """query {
 @search_blueprint.route("/search", methods=['GET', 'POST'])
 @login_required
 def search():
-    # if the database is offline then to prevent the application crashing
-    # error is caught by doing a test query on the database.
-    # Predefined error message is displayed.
+    """
+    Presents user with a form to enter part_number, quantity, models.
+    Gives user with ability to upload excel file with multiple parts where it transforms it into lists.
+    Sends this data to the results function.
+    """
     form = SearchForm()
     if form.validate_on_submit() and request.method == 'POST':
         part_number_input = form.part_number.data
@@ -74,8 +69,6 @@ def search():
             f = request.files['file']
             data = pd.read_excel(f, 'Sheet1', index_col=None)
             data.to_csv('your_csv.csv', encoding='utf-8')
-
-
 
             part_number = []
             quantity = []
@@ -96,21 +89,35 @@ def search():
         except TypeError:
             flash("File does not match template layout, please check file template and try again.")
 
-
-
     return render_template("search.html", form=form)
 
 
 @search_blueprint.route('/result/<part_number>/<quantity>/<models>/', methods=['GET', 'POST'])
 @login_required
 def results(part_number, quantity, models):
+    """
+    Takes all the input from the user.
+    Uses this input to query the GraphQL API for each part number.
+    Receives data from the API and transforms it to meet certain requirements.
+    Data is ready to be displayed on tables on frontend or exported into an Excel if the user prefers that.
+
+    :param part_number: list of all part numbers entered by user
+    :param quantity: list of quantitys entered by user
+    :param models: list of all models entered by user
+    """
+
+    # checks if database is online
     database.database_check()
     watchlist_check = []
     favourite_check = []
     blacklist_check = []
+
+    # query database to present correct details on frontend
     all_watchlist = database.WatchList.query.all()
     all_favourite = database.Favourite.query.all()
     all_blacklist = database.Blacklist.query.all()
+
+    # adds the most recent data to lists
     for i in all_watchlist:
         watchlist_check.append(i.part_number)
     for i in all_favourite:
@@ -118,22 +125,22 @@ def results(part_number, quantity, models):
     for i in all_blacklist:
         blacklist_check.append(i.supplier_name)
 
+    # global variables
     no_stock_numbers = []
     no_stock = False
     tables = {}
     table_part_numbers = []
     table_manufacturers = []
 
-    # convert string representation of list to an actual list
+    # convert string representations of list to an actual list
     part_number = ast.literal_eval(part_number)
     part_numbers = [n.strip() for n in part_number]
-
     quantity = ast.literal_eval(quantity)
     quantitys = [n.strip() for n in quantity]
-
     models = ast.literal_eval(models)
     models_final = [n.strip() for n in models]
 
+    # loops every single search, could be one or multiple if the user uploaded an Excel file
     for search_no in range(len(part_numbers)):
         part_number = part_numbers[search_no]
         table_part_numbers.append(part_number)
@@ -189,8 +196,8 @@ def results(part_number, quantity, models):
                 j = 0
                 total = 0
                 for i in range(len(sellers)):
-                    if sellers[i + 1]['offers'][0][
-                        'inventory_level'] < quantity and largest_quantity_available < quantity:
+                    if sellers[i + 1]['offers'][0]['inventory_level'] < quantity and \
+                            largest_quantity_available < quantity:
                         seller_inventory = sellers[i + 1]['offers'][0]['inventory_level']
                         total += seller_inventory
                     for p in range(len(sellers)):
@@ -228,10 +235,11 @@ def results(part_number, quantity, models):
             quantity_list = []
             prices_quantity = {}  # dictionary to store final zipped lists using same key value as sellers_final_check
             for i in range(len(sellers_final_check)):  # iterate all sellers
-                for j in range(len(sellers_final_check[i + 1]['offers'])):  # check how many offers seller has
+                for j in range(len(sellers_final_check[i + 1]['offers'])):  # check how many offers' seller has
                     for z in range(
                             len(sellers_final_check[i + 1]['offers'][j]['prices'])):  # loop over the prices of offer
-                        # for y in range(len(sellers_final_check[i + 1]['offers'][j]['prices'][z])):  # loop over prices of offer
+                        # for y in range(len(sellers_final_check[i + 1]['offers'][j]['prices'][z])):
+                        # loop over prices of offer
                         x1 = sellers_final_check[i + 1]['offers'][j]['prices'][z]['quantity']
                         if x1 > quantity:
                             pass
@@ -327,7 +335,6 @@ def results(part_number, quantity, models):
                 final_data = tuple(final_sellers)
                 tables[search_no] = final_data
 
-
     if len(tables) == 0:
         no_tables_available = True
         # avoids any duplicates being returned on watchlist options
@@ -383,7 +390,6 @@ def results(part_number, quantity, models):
                                manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers,
                                watchlist_check=watchlist_check, favourite_check=favourite_check,
                                blacklist_check=blacklist_check)
-
 
 
 @search_blueprint.route('/update_watchlist', methods=['POST'])

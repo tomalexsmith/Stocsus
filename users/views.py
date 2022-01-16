@@ -119,6 +119,11 @@ def login():
 @users_blueprint.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
+    """
+    Shows users all favourite and blacklisted suppliers with ability to add.
+    Shows users all part numbers that have been added to the watchlist with ability to add or remove
+    """
+    # checks if database is online
     database.database_check()
 
     favourite_form = FavouriteForm()
@@ -160,6 +165,11 @@ def dashboard():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
+    """
+    Should only be visible if user is logged in
+    Logs the details of the user that logged out
+    """
+
     logging.warning('SECURITY - Log out [%s, %s, %s]', current_user.id,
                     current_user.email, request.remote_addr)
 

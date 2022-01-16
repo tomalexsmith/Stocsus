@@ -49,7 +49,7 @@ class Favourite(db.Model):
     def __init__(self, supplier_name):
         self.supplier_name = supplier_name
 
-
+# Table containing all the part numbers that user want to watch
 class WatchList(db.Model):
     __table_name__ = 'watchlist'
 
@@ -61,9 +61,11 @@ class WatchList(db.Model):
 
 
 def database_check():
-    # if the database is offline then to prevent the application crashing
-    # error is caught by doing a test query on the database.
-    # Predefined error message is displayed.
+    """
+    if the database is offline then to prevent the application crashing
+    error is caught by doing a test query on the database.
+    Predefined error message is displayed.
+    """
     try:
         Favourite.query.filter_by(
             supplier_name=request.form.get("Test")).first()
@@ -83,10 +85,13 @@ def database_check():
 
 
 
-# initialises database tables and adds sample data
-# Python Console --> from database.models import init_db
-#                --> init_db()
+
 def init_db():
+    """
+    initialises database tables and adds sample data
+    Python Console --> from database.models import init_db
+                    --> init_db()
+    """
     db.drop_all()
     db.create_all()
     test = Users(email="test@email.com", password="@Test123", role="admin",
