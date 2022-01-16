@@ -40,6 +40,14 @@ set FLASK_ENV=development
 ```bash
 python -m flask run
 ```
+## Database
+This application is currently using a MySQL database hosted on AWS.
+If you would like to use a different database then please update the SQLALCHEMY link in app.py.
+Then in order to reinitialize the database, please run the following in the console.
+```bash
+from database.models import init_db
+init_db()
+```
 ## Using the search page(communicates with Octopart)
 Example part number = CFR50J2K2
 
