@@ -40,6 +40,8 @@ set FLASK_ENV=development
 ```bash
 python -m flask run
 ```
+## Using the search page(communicates with Octopart)
+Example part number = CFR50J2K2
 
 ## Testing the application in the terminal
 In order to test the application, enter the below command into the terminal
