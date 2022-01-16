@@ -10,9 +10,9 @@ import app
 from users.forms import RegisterForm, LoginForm, FavouriteForm, BlacklistForm
 import database.models as database
 
-
 # CONFIG
 users_blueprint = Blueprint('users', __name__, template_folder='templates')
+
 
 # VIEWS
 # view registration
@@ -32,8 +32,8 @@ def register():
 
         # create a new user with the form data
         new_user = database.Users(email=form.email.data,
-                         password=form.password.data,
-                         role='user', banned=False)
+                                  password=form.password.data,
+                                  role='user', banned=False)
 
         # add the new user to the database
         app.db.session.add(new_user)
@@ -141,7 +141,8 @@ def dashboard():
         app.db.session.commit()
 
     if blacklist_form.validate_on_submit():
-        blacklist_supplier = database.Blacklist.query.filter_by(supplier_name=blacklist_form.blacklist_supplier.data).first()
+        blacklist_supplier = database.Blacklist.query.filter_by(
+            supplier_name=blacklist_form.blacklist_supplier.data).first()
         if blacklist_supplier:
             flash('Supplier already blacklisted', "blacklist_alert")
             return redirect(url_for('users.dashboard'))
@@ -159,8 +160,9 @@ def dashboard():
 
     return render_template('dashboard.html', current_favourites=database.Favourite.query.all(),
                            current_blacklist=database.Blacklist.query.all(), favourite_form=favourite_form,
-                           blacklist_form=blacklist_form, watchlist=database.WatchList.query.all())
-# to add after testing: email=current_user.email, role=current_user.role
+                           blacklist_form=blacklist_form, watchlist=database.WatchList.query.all(),
+                           email=current_user.email, role=current_user.role)
+
 
 @users_blueprint.route('/logout')
 @login_required
