@@ -11,17 +11,6 @@
 
     <div class="admin_container">
 
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                    {{ messages[0] }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endif %}
-        {% endwith %}
-
         <div class="title">
             <h1>Admin Dashboard</h1>
             <h2><span>Welcome</span>, {{ email }}</h2>
@@ -113,28 +102,40 @@
         </div>
         <div class="favourite_suppliers_container">
             <h1>Favourite Suppliers</h1>
-            <table class="table">
-                <tr>
-                    <th>ID</th>
-                    <th>Supplier name</th>
-                </tr>
-                {% for i in current_favourites %}
+            {% if current_favourites %}
+                <table class="table">
                     <tr>
-                        <td>{{ i.id }}</td>
-                        <td>{{ i.supplier_name }}</td>
-                        <td class="favourite_button_row">
-                            <div class="button_container">
-                                <img src="{{ url_for('static', filename='icons/x.svg') }}" alt="check">
-                                <form method="POST">
-                                    <button type="submit" name="remove_favourite" value="{{ i.supplier_name }}"
-                                            formmethod="POST">Remove
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
+                        <th>ID</th>
+                        <th>Supplier name</th>
                     </tr>
-                {% endfor %}
-            </table>
+                    {% for i in current_favourites %}
+                        <tr>
+                            <td>{{ i.id }}</td>
+                            <td>{{ i.supplier_name }}</td>
+                            <td class="favourite_button_row">
+                                <div class="button_container">
+                                    <img src="{{ url_for('static', filename='icons/x.svg') }}" alt="check">
+                                    <form method="POST">
+                                        <button type="submit" name="remove_favourite" value="{{ i.supplier_name }}"
+                                                formmethod="POST">Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Supplier name</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">No favourite suppliers found</td>
+                    </tr>
+                </table>
+            {% endif %}
             <form class="favourite_form" method="POST">
                 {{ fav_form.csrf_token() }}
                 <div class="input_favourites">
@@ -158,7 +159,8 @@
 
         <div class="blacklist_suppliers_container">
             <h1>Blacklisted Suppliers</h1>
-            <table class="table">
+            {% if current_blacklist %}
+                <table class="table">
                 <tr>
                     <th>ID</th>
                     <th>Supplier name</th>
@@ -180,6 +182,17 @@
                     </tr>
                 {% endfor %}
             </table>
+            {% else %}
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Supplier name</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">No blacklisted suppliers found</td>
+                    </tr>
+                </table>
+            {% endif %}
             <form class="favourite_form" method="POST">
                 {{ blacklist_form.csrf_token() }}
                 <div class="input_favourites">
@@ -214,6 +227,15 @@
                             <td>{{ entry }}</td>
                         </tr>
                     {% endfor %}
+                </table>
+            {% else %}
+                <table class="table">
+                    <tr>
+                        <th>Last 10 Security Log Entries</th>
+                    </tr>
+                    <tr>
+                        <td colspan="1">No security log entries found</td>
+                    </tr>
                 </table>
             {% endif %}
         </div>
