@@ -18,6 +18,7 @@ users_blueprint = Blueprint('users', __name__, template_folder='templates')
 # view registration
 @users_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
+    database.database_check()
     # create signup form object
     form = RegisterForm()
 
@@ -53,6 +54,7 @@ def register():
 # view user login
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    database.database_check()
     user_is_banned = False
     # if session attribute logins does not exist create attribute logins
     if not session.get('logins'):
