@@ -23,7 +23,7 @@ def new_favourite():
 
 @pytest.fixture(scope='module')
 def new_watchlist():
-    watchlist = WatchList('Test Supplier')
+    watchlist = WatchList('AT0603FRE0747KL')
     return watchlist
 
 
