@@ -1,88 +1,131 @@
 {% extends "base.html" %}
 
+{% block header %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
 {% block content %}
-<!--<h1>Commented out so you can test without logging in</h1>-->
-<!--<h1> Email:{{ email }}</h1>-->
-<!--<h1> Role:{{ role }}</h1>-->
 
+    <!--<h1>Commented out so you can test without logging in</h1>-->
+    <!--<h1> Email:{{ email }}</h1>-->
 
-<h1>Favourite Suppliers</h1>
-  <table class="table">
-                        <tr>
-                            <th>ID</th>
-                            <th>Supplier name</th>
-                        </tr>
-                        {% for i in current_favourites %}
-                            <tr>
-                                <td>{{ i.id }}</td>
-                                <td>{{ i.supplier_name }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+    <div class="dashboard_container">
 
-          <div class="favourite form">
-        <form method="POST">
-             {{ favourite_form.csrf_token() }}
-            {{ favourite_form.favourite_supplier(class="input", placeholder="Enter favourite supplier") }}
-            {{ favourite_form.submit(class="submit_button", value="Add") }}
-        </form>
-                <div class="alert-message block-message error">
-                {% with errors = get_flashed_messages(category_filter=["favourite_alert"]) %}
-                {% if errors %}
-                {% for message in errors %}
-                {{ message }}
-                {% endfor %}
-                    </div>
-                    </div>
-{% endif %}
-{% endwith %}
-
-    </div>
-
-<h1>Blacklisted Suppliers</h1>
-  <table class="table">
-                        <tr>
-                            <th>ID</th>
-                            <th>Supplier name</th>
-                        </tr>
-                        {% for i in current_blacklist %}
-                            <tr>
-                                <td>{{ i.id }}</td>
-                                <td>{{ i.supplier_name }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-
-        <form method="POST">
-             {{ blacklist_form.csrf_token() }}
-            {{ blacklist_form.blacklist_supplier(class="input", placeholder="Enter blacklist supplier") }}
-            {{ blacklist_form.submit(class="submit_button", value="Add") }}
-        </form>
-
-        {% with errors = get_flashed_messages(category_filter=["blacklist_alert"]) %}
-        {% if errors %}
-        <div class="alert-message block-message error">
-        {%- for message in errors %}
-        {{ message }}
-        {% endfor -%}
+        <div class="title">
+            <h1>User Dashboard</h1>
+            <h2><span>Welcome</span>, {{ email }}</h2>
         </div>
-        {% endif %}
-        {% endwith %}
-    <h1>Supplier Watchlist</h1>
-  <table class="table">
-            <tr>
-                <th>ID</th>
-                <th>Part Number</th>
-            </tr>
-            {% for w in watchlist %}
+        <div class="favourite_suppliers_container">
+            <h1>Favourite Suppliers</h1>
+            {% if current_favourites %}
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Supplier name</th>
+                    </tr>
+                    {% for i in current_favourites %}
+                        <tr>
+                            <td>{{ i.id }}</td>
+                            <td>{{ i.supplier_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Supplier name</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">No favourite suppliers found</td>
+                    </tr>
+                </table>
+            {% endif %}
+            <form class="favourite_form" method="POST">
+                {{ favourite_form.csrf_token() }}
+                <div class="input_favourites">
+                    {{ favourite_form.favourite_supplier(class="supplier_input", placeholder="Add favourite supplier") }}
+                    <div class="field_submit_container">
+                        <img src="{{ url_for('static', filename='icons/plus.svg') }}" alt="check">
+                        {{ favourite_form.submit(onclick="form_reset()", class="favourite_supplier_submit", value=" ") }}
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="blacklist_suppliers_container">
+            <h1>Blacklisted Suppliers</h1>
+            {% if current_blacklist %}
+                <table class="table">
                 <tr>
-                    <td>{{ w.id }}</td>
-                    <td>{{ w.part_number }}</td>
-                    <form method="POST">
-                <td><button type="submit" name="remove_watchlist" value="{{ w.part_number }}"
-                            formmethod="POST">Remove</button></td>
-                   </form>
+                    <th>ID</th>
+                    <th>Supplier name</th>
                 </tr>
-            {% endfor %}
-        </table>
+                {% for i in current_blacklist %}
+                    <tr>
+                        <td>{{ i.id }}</td>
+                        <td>{{ i.supplier_name }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Supplier name</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">No blacklisted suppliers found</td>
+                    </tr>
+                </table>
+            {% endif %}
+            <form class="favourite_form" method="POST">
+                {{ blacklist_form.csrf_token() }}
+                <div class="input_favourites">
+                    {{ blacklist_form.blacklist_supplier(class="supplier_input",
+                    placeholder="Add supplier to blacklist") }}
+                    <div class="field_submit_container">
+                        <img src="{{ url_for('static', filename='icons/plus.svg') }}" alt="check">
+                        {{ blacklist_form.submit(class="favourite_supplier_submit", value=" ") }}
+                    </div>
+                </div>
+            </form>
+
+            {% with errors = get_flashed_messages(category_filter=["blacklist_alert_admin"]) %}
+                {% if errors %}
+                    <div class="alert-message block-message error">
+                        {%- for message in errors %}
+                            {{ message }}
+                        {% endfor -%}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="watchlist_container">
+            <h1>Part Watchlist</h1>
+            {% if watchlist %}
+                <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Part Number</th>
+                </tr>
+                {% for w in watchlist  %}
+                    <tr>
+                        <td>{{ w.id }}</td>
+                        <td>{{ w.part_number }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Part Number</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">No parts added to watchlist</td>
+                    </tr>
+                </table>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
