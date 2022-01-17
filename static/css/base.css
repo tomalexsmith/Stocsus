@@ -69,11 +69,11 @@ header *{
     position: relative;
 }
 
-.login_link{
+.login_link, .logout_link, .logout_link_li, .login_link_li{
     position: relative;
 }
 
-.nav_left a:after, .login_link:after{
+.nav_left a:after, .login_link:after, .logout_link:after{
     content: '';
     position: absolute;
     height: 2px;
@@ -83,7 +83,7 @@ header *{
     left: 50%;
     transition: ease .5s;
 }
-.nav_left a:hover:after, .login_link:hover:after{
+.nav_left a:hover:after, .login_link:hover:after, .logout_link:hover:after{
     width: 100%;
     left: 0;
 }
@@ -114,12 +114,15 @@ header *{
 }
 
 .nav_right li:last-child img{
-    filter: invert(0%) sepia(93%) saturate(0%) hue-rotate(284deg) brightness(96%) contrast(107%);
-    width: 20px;
-    height: 20px;
-    align-items: center;
+    width: 1vw;
+    height: 1vw;
     /*transform: scale(1.4);*/
+}
 
+.nav_right li a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
