@@ -1,140 +1,209 @@
 {% extends "base.html" %}
 
+{% block header %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
 {% block content %}
 
-<!--<h1>Commented out so you can test without logging in</h1>-->
-<!--<h1> Email:{{ email }}</h1>-->
+    <!--<h1>Commented out so you can test without logging in</h1>-->
+    <!--<h1> Email:{{ email }}</h1>-->
 
+    <div class="admin_container">
 
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <div class="notification is-danger">
+                <div class="alert alert-primary alert-dismissible fade show" role="alert">
                     {{ messages[0] }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
             {% endif %}
         {% endwith %}
 
-        <h1 class="title is-4">Current Users</h1>
+        <div class="title">
+            <h1>Admin Dashboard</h1>
+            <h2><span>Welcome</span>, {{ email }}</h2>
+        </div>
+        <div class="current_users_container">
+            <h1>Current Users</h1>
             {% if current_users %}
-                    <table class="table">
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Banned</th>
+                        <th></th>
+                    </tr>
+                    {% for user in current_users %}
                         <tr>
-                            <th>ID</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Banned</th>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>{{ user.banned }}</td>
+                            <td class="current_users_button_row">
+                                <div class="button_container">
+                                    <img src="{{ url_for('static', filename='icons/x.svg') }}" alt="check">
+                                    <form method="POST">
+                                        <button type="submit" name="ban" value="{{ user.email }}" formmethod="POST">
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
-                        {% for user in current_users %}
-                            <tr>
-                                <td>{{ user.id }}</td>
-                                <td>{{ user.email }}</td>
-                                <td>{{ user.role }}</td>
-                                <td>{{ user.banned }}</td>
-                                                  <form method="POST">
-                <td><button type="submit" name="ban" value="{{ user.email }}"
-                            formmethod="POST">Ban</button></td>
-                   </form>
-                            </tr>
-                        {% endfor %}
-                    </table>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Banned</th>
+                    </tr>
+                    <tr>
+                        <td>No current users found</td>
+                    </tr>
+                </table>
             {% endif %}
-
-
-    <h1 class="title is-4">Banned Users</h1>
+        </div>
+        <div class="banned_users_container">
+            <h1>Banned Users</h1>
             {% if current_banned_users %}
-                    <table class="table">
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Banned</th>
+                    </tr>
+                    {% for user in current_banned_users %}
                         <tr>
-                            <th>ID</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Banned</th>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>{{ user.banned }}</td>
+                            <td class="banned_users_button_row">
+                                <div class="button_container">
+                                    <img src="{{ url_for('static', filename='icons/x.svg') }}" alt="check">
+                                    <form method="POST">
+                                        <button type="submit" name="unban" value="{{ user.email }}" formmethod="POST">
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
-                        {% for user in current_banned_users %}
-                            <tr>
-                                <td>{{ user.id }}</td>
-                                <td>{{ user.email }}</td>
-                                <td>{{ user.role }}</td>
-                                <td>{{ user.banned }}</td>
-                                                  <form method="POST">
-                <td><button type="submit" name="unban" value="{{ user.email }}"
-                            formmethod="POST">Unban</button></td>
-                   </form>
-                            </tr>
-                        {% endfor %}
-                    </table>
-
+                    {% endfor %}
+                </table>
+            {% else %}
+                <table class="table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Banned</th>
+                    </tr>
+                    <tr>
+                        <td colspan="4">No banned users found</td>
+                    </tr>
+                </table>
             {% endif %}
-
-
-
-        <h1>Favourite Suppliers</h1>
-  <table class="table">
-                        <tr>
-                            <th>ID</th>
-                            <th>Supplier name</th>
-                        </tr>
-                        {% for i in current_favourites %}
-                            <tr>
-                                <td>{{ i.id }}</td>
-                                <td>{{ i.supplier_name }}</td>
-
-                   <form method="POST">
-                <td><button type="submit" name="remove_favourite" value="{{ i.supplier_name }}"
-                            formmethod="POST">Remove</button></td>
-                   </form>
-                            </tr>
-
-                        {% endfor %}
-                    </table>
-    <form method="POST">
-             {{ fav_form.csrf_token() }}
-            {{ fav_form.favourite_supplier(class="input", placeholder="Enter supplier name") }}
-            {{ fav_form.submit(class="submit_button", value="Add") }}
-        </form>
-           {% with errors = get_flashed_messages(category_filter=["favourite_alert_admin"]) %}
-        {% if errors %}
-        <div class="alert-message block-message error">
-        {%- for message in errors %}
-        {{ message }}
-        {% endfor -%}
         </div>
-        {% endif %}
-        {% endwith %}
-
-
-<h1>Blacklisted Suppliers</h1>
-  <table class="table">
-                        <tr>
-                            <th>ID</th>
-                            <th>Supplier name</th>
-                        </tr>
-                        {% for i in current_blacklist %}
-                            <tr>
-                                <td>{{ i.id }}</td>
-                                <td>{{ i.supplier_name }}</td>
+        <div class="favourite_suppliers_container">
+            <h1>Favourite Suppliers</h1>
+            <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Supplier name</th>
+                </tr>
+                {% for i in current_favourites %}
+                    <tr>
+                        <td>{{ i.id }}</td>
+                        <td>{{ i.supplier_name }}</td>
+                        <td class="favourite_button_row">
+                            <div class="button_container">
+                                <img src="{{ url_for('static', filename='icons/x.svg') }}" alt="check">
                                 <form method="POST">
-                <td><button type="submit" name="remove_blacklist" value="{{ i.supplier_name }}"
-                            formmethod="POST">Remove</button></td>
-                   </form>
-                            </tr>
+                                    <button type="submit" name="remove_favourite" value="{{ i.supplier_name }}"
+                                            formmethod="POST">Remove
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <form class="favourite_form" method="POST">
+                {{ fav_form.csrf_token() }}
+                <div class="input_favourites">
+                    {{ fav_form.favourite_supplier(class="favourite_supplier_input", placeholder="Add favourite supplier") }}
+                    <div class="file_submit_container">
+                        <img src="{{ url_for('static', filename='icons/plus.svg') }}" alt="check">
+                        {{ fav_form.submit(onclick="form_reset()", class="favourite_supplier_submit", value=" ") }}
+                    </div>
+                </div>
+            </form>
+            {% with messages = get_flashed_messages(category_filter=["favourite_alert_admin"]) %}
+                {% if messages %}
+                    <div class="alert-message block-message error">
+                        {% for message in errors %}
+                            {{ message }}
                         {% endfor %}
-                    </table>
-        <form method="POST">
-             {{ blacklist_form.csrf_token() }}
-            {{ blacklist_form.blacklist_supplier(class="input", placeholder="Enter supplier name") }}
-            {{ blacklist_form.submit(class="submit_button", value="Add") }}
-        </form>
-        {% with errors = get_flashed_messages(category_filter=["blacklist_alert_admin"]) %}
-        {% if errors %}
-        <div class="alert-message block-message error">
-        {%- for message in errors %}
-        {{ message }}
-        {% endfor -%}
+                    </div>
+                {% endif %}
+            {% endwith %}
         </div>
-        {% endif %}
-        {% endwith %}
 
+        <div class="blacklist_suppliers_container">
+            <h1>Blacklisted Suppliers</h1>
+            <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Supplier name</th>
+                </tr>
+                {% for i in current_blacklist %}
+                    <tr>
+                        <td>{{ i.id }}</td>
+                        <td>{{ i.supplier_name }}</td>
+                        <td class="blacklist_suppliers_row">
+                            <div class="button_container">
+                                <img src="{{ url_for('static', filename='icons/x.svg') }}" alt="check">
+                                <form method="POST">
+                                    <button type="submit" name="remove_blacklist" value="{{ i.supplier_name }}"
+                                            formmethod="POST">
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <form class="favourite_form" method="POST">
+                {{ blacklist_form.csrf_token() }}
+                <div class="input_favourites">
+                    {{ blacklist_form.blacklist_supplier(class="favourite_supplier_input",
+                    placeholder="Add supplier to blacklist") }}
+                    <div class="file_submit_container">
+                        <img src="{{ url_for('static', filename='icons/plus.svg') }}" alt="check">
+                        {{ blacklist_form.submit(class="favourite_supplier_submit", value=" ") }}
+                    </div>
+                </div>
+            </form>
 
-        <h4 class="title is-4">Security Logs</h4>
+            {% with errors = get_flashed_messages(category_filter=["blacklist_alert_admin"]) %}
+                {% if errors %}
+                    <div class="alert-message block-message error">
+                        {%- for message in errors %}
+                            {{ message }}
+                        {% endfor -%}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="logs_container">
+            <h1>Security Logs</h1>
             {% if logs %}
                 <table class="table">
                     <tr>
@@ -147,4 +216,6 @@
                     {% endfor %}
                 </table>
             {% endif %}
+        </div>
+    </div>
 {% endblock %}
