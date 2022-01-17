@@ -38,15 +38,15 @@
             </div>
             <ul class="nav_right">
                 {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
+                    <li class="logout_link_li"><a class="logout_link" href="{{ url_for('users.logout') }}">Logout</a></li>
                     <li><a href="{{ url_for('users.dashboard') }}">
-                        <img src="{{ url_for('static', filename='icons/person-fill.png') }}" alt="logo">
+                        <img src="{{ url_for('static', filename='icons/person-fill.svg') }}" alt="logo">
                     </a></li>
                 {% else %}
-                    <li><a class="login_link" href="{{ url_for('users.login') }}">Login</a></li>
+                    <li class="login_link_li"><a class="login_link" href="{{ url_for('users.login') }}">Login</a></li>
                     <li><a class="register_button" href="{{ url_for('users.register') }}">Register</a></li>
                     <li><a href="{{ url_for('users.login') }}">
-                        <img src="{{ url_for('static', filename='icons/person-fill.png') }}" alt="logo">
+                        <img src="{{ url_for('static', filename='icons/person-fill.svg') }}" alt="logo">
                     </a></li>
                 {% endif %}
             </ul>
