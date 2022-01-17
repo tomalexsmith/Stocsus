@@ -51,7 +51,7 @@ def test_dashboard_page(test_client):
     """
 
     response = test_client.get('/dashboard')
-    assert response.status_code == 200
+    assert response.status_code == 302
 
 
 def test_admin_page(test_client):
@@ -62,7 +62,7 @@ def test_admin_page(test_client):
     """
 
     response = test_client.get('/admin')
-    assert response.status_code == 200
+    assert response.status_code == 302
 
 
 def test_search_page(test_client):
@@ -73,4 +73,4 @@ def test_search_page(test_client):
     """
 
     response = test_client.get('/search')
-    assert response.status_code == 200
+    assert response.status_code == 302
