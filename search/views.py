@@ -341,7 +341,7 @@ def results(part_number, quantity, models):
         # avoids any duplicates being returned on watchlist options
         no_stock_numbers = list(dict.fromkeys(no_stock_numbers))
         return render_template("results.html", no_tables="Could not find any results",
-                               no_tables_available=no_tables_available, no_stock_numbers_no_tables=no_stock_numbers)
+                               no_tables_available=no_tables_available, no_stock_numbers_no_tables=no_stock_numbers, watchlist_check=watchlist_check)
 
     headings = ("Seller Name", "Inventory", "Calculated Cost")
 
