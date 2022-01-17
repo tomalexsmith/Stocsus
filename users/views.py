@@ -23,6 +23,7 @@ def register():
     form = RegisterForm()
 
     if form.validate_on_submit():
+        database.database_check()
         user = database.Users.query.filter_by(email=form.email.data).first()
         # if this returns a user, then the user already exists in the
         # database. Hence the user will be redirected to the signup page
@@ -65,6 +66,7 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
+        database.database_check()
         user = database.Users.query.filter_by(email=form.email.data).first()
         if user and not database.Users.query.filter_by(email=form.email.data, banned=False).first():
             flash("Access denied, please contact an administrator")
