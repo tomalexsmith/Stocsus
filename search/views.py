@@ -302,22 +302,23 @@ def results(part_number, quantity, models):
             final_sellers = []
             f_dict = {}
             f = 0
-            for i in range(len(sellers_final_check)):
-                f += 1
-                sellers_final_check[f]['company']['name'] = sellers_final_check[f]['company']['name'].replace(
+
+
+            for key in list(sellers_final_check):
+
+                sellers_final_check[key]['company']['name'] = sellers_final_check[key]['company']['name'].replace(
                     " ", "_")
 
-                seller = sellers_final_check[f]['company']['name']
+                seller = sellers_final_check[key]['company']['name']
                 if seller not in favourite_check:
-                    f_dict[f] = sellers_final_check[f]
-                    sellers_final_check.pop(f)
-                    sellers_final_check[f] = f_dict[f]
-            f = 0
-            for i in range(len(sellers_final_check)):
-                f += 1
-                seller = sellers_final_check[f]['company']['name']
+                    f_dict[key] = sellers_final_check[key]
+                    sellers_final_check.pop(key)
+                    sellers_final_check[key] = f_dict[key]
+
+            for key in list(sellers_final_check):
+                seller = sellers_final_check[key]['company']['name']
                 if seller in blacklist_check:
-                    sellers_final_check.pop(f)
+                    sellers_final_check.pop(key)
 
             if len(sellers_final_check) == 0:
                 no_stock_numbers.append(part_number)
