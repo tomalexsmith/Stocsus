@@ -162,3 +162,38 @@
     align-items: center;
     justify-content: right;
 }
+
+
+.watchlist_button_row{
+    position: relative;
+    /*width: 1vw;*/
+}
+.button_container{
+    width: 1vw;
+    height: 1vw;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    right: .8vw;
+
+}
+
+.button_container img{
+    width: 1vw;
+    position: absolute;
+    pointer-events: none;
+}
+
+.button_container form button{
+    height: 100%;
+    width: 100%;
+    background: none;
+    color: transparent;
+    border: none;
+    cursor: pointer;
+}
+.button_container form{
+    height: 100%;
+    width: 100%;
+}
