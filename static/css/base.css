@@ -146,17 +146,41 @@ header *{
 /*FOOTER SECTION*/
 
 .foot_container{
-    height: 50vh;
-    background-color: #191B1F;
+    height: 30vh;
+    background-color: black;
+    /*opacity: 5%;*/
     overflow: hidden;
     padding-right: 10vw;
     padding-left: 10vw;
-    padding-top: 10vh;
+    padding-top: 8vh;
 }
+
+.website, .access, .footer_logo{
+    display: flex;
+    flex-direction: column;
+    margin-right: 3vw;
+}
+
+
+.website a, .access a{
+    font-size: 1rem;
+    margin-bottom: 1vh;
+}
+.website a, .access a, .website h1, .access h1{
+    color: white;
+    font-family: Poppins, sans-serif;
+}
+.website h1, .access h1{
+    font-weight: 600;
+    font-size: 1.2rem;
+    font-family: Poppins, sans-serif;
+    margin-bottom: 1vh;
+}
+
 .foot_content{
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: left;
     color: white;
 }
 
