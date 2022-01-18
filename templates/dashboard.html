@@ -56,17 +56,17 @@
             <h1>Blacklisted Suppliers</h1>
             {% if current_blacklist %}
                 <table class="table">
-                <tr>
-                    <th>ID</th>
-                    <th>Supplier name</th>
-                </tr>
-                {% for i in current_blacklist %}
                     <tr>
-                        <td>{{ i.id }}</td>
-                        <td>{{ i.supplier_name }}</td>
+                        <th>ID</th>
+                        <th>Supplier name</th>
                     </tr>
-                {% endfor %}
-            </table>
+                    {% for i in current_blacklist %}
+                        <tr>
+                            <td>{{ i.id }}</td>
+                            <td>{{ i.supplier_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
             {% else %}
                 <table class="table">
                     <tr>
@@ -104,17 +104,27 @@
             <h1>Part Watchlist</h1>
             {% if watchlist %}
                 <table class="table">
-                <tr>
-                    <th>ID</th>
-                    <th>Part Number</th>
-                </tr>
-                {% for w in watchlist  %}
                     <tr>
-                        <td>{{ w.id }}</td>
-                        <td>{{ w.part_number }}</td>
+                        <th>ID</th>
+                        <th>Part Number</th>
                     </tr>
-                {% endfor %}
-            </table>
+                    {% for w in watchlist %}
+                        <tr>
+                            <td>{{ w.id }}</td>
+                            <td>{{ w.part_number }}</td>
+                            <td class="watchlist_button_row">
+                                <div class="button_container">
+                                    <img src="{{ url_for('static', filename='icons/x.svg') }}" alt="check">
+                                    <form method="POST">
+                                        <button type="submit" name="remove_watchlist" value="{{ w.part_number }}"
+                                                formmethod="POST">
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
             {% else %}
                 <table class="table">
                     <tr>
