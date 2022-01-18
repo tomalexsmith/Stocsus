@@ -21,7 +21,6 @@ input::-webkit-inner-spin-button {
     display: flex;
     animation: fade_in ease-in-out 1s forwards;
     opacity: 0%;
-    animation-delay: .2s;
 }
 
 @keyframes fade_in {

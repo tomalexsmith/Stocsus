@@ -7,7 +7,19 @@
     justify-content: flex-start;
     align-items: center;
     min-height: calc(100vh - 0rem);
+    animation: fade_in ease-in-out 1s forwards;
+    opacity: 0%;
 }
+
+@keyframes fade_in {
+    0%{
+        opacity: 0%;
+    }
+    100%{
+        opacity: 100%;
+    }
+}
+
 .results_heading{
     text-align: center;
     margin-top: 8vh;
