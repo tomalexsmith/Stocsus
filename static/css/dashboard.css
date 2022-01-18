@@ -8,6 +8,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    animation: fade_in ease-in-out 1s forwards;
+    opacity: 0%;
+}
+
+@keyframes fade_in {
+    0%{
+        opacity: 0%;
+    }
+    100%{
+        opacity: 100%;
+    }
 }
 
 .title{

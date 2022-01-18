@@ -139,8 +139,9 @@
             <form class="favourite_form" method="POST">
                 {{ fav_form.csrf_token() }}
                 <div class="input_favourites">
-                    {{ fav_form.favourite_supplier(class="favourite_supplier_input", placeholder="Add favourite supplier") }}
-                    <div class="file_submit_container">
+                    {{ fav_form.favourite_supplier(class="supplier_input",
+                    placeholder="Add favourite supplier") }}
+                    <div class="field_submit_container">
                         <img src="{{ url_for('static', filename='icons/plus.svg') }}" alt="check">
                         {{ fav_form.submit(onclick="form_reset()", class="favourite_supplier_submit", value=" ") }}
                     </div>
@@ -196,9 +197,9 @@
             <form class="favourite_form" method="POST">
                 {{ blacklist_form.csrf_token() }}
                 <div class="input_favourites">
-                    {{ blacklist_form.blacklist_supplier(class="favourite_supplier_input",
+                    {{ blacklist_form.blacklist_supplier(class="supplier_input",
                     placeholder="Add supplier to blacklist") }}
-                    <div class="file_submit_container">
+                    <div class="field_submit_container">
                         <img src="{{ url_for('static', filename='icons/plus.svg') }}" alt="check">
                         {{ blacklist_form.submit(class="favourite_supplier_submit", value=" ") }}
                     </div>
