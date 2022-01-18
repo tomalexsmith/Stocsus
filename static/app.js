@@ -11,7 +11,6 @@ $(document).ready(function() {
         });
 
         req.done(function() {
-
             $(".watchlist_button_"+part_number).fadeOut(1000).fadeIn(1000);
             $(".add_watchlist_"+part_number).html("Successfully Added");
     });
@@ -31,10 +30,12 @@ $(document).ready(function() {
             // fav button changes on click
             // blacklist button is removed on fav button click
 
-            $(".fav_btn_"+supplier_name).fadeOut(1000).fadeIn(1000);
-            $(".blacklist_btn_"+supplier_name).fadeOut(1000).fadeIn(1000);
+            // $(".fav_btn_"+supplier_name).fadeOut(1000).fadeIn(1000);
+            // $(".blacklist_btn_"+supplier_name).fadeOut(1000).fadeIn(1000);
             $(".blacklist_btn_"+supplier_name).remove()
-            $(".fav_btn_"+supplier_name).html("❤");
+            $(".fav_btn_"+supplier_name).html("Already in favourites");
+            $(".fav_btn_"+supplier_name).removeClass("fav_btn_outline");
+
 
     });
   });
@@ -51,7 +52,7 @@ $(document).ready(function() {
               $(".blacklist_btn_"+supplier_name).fadeOut(1000).fadeIn(1000);
               $(".fav_btn_"+supplier_name).fadeOut(1000).fadeIn(1000);
               $(".fav_btn_"+supplier_name).remove()
-              $(".blacklist_supplier_"+supplier_name).html("Successfully blacklisted, will not be displayed on next search");
+              $(".blacklist_supplier_"+supplier_name).html("Added to blacklist");
     });
   });
 });
