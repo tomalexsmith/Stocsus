@@ -38,8 +38,8 @@
                             <th class="add_to_watchlist_th">Add to watchlist</th>
                         </tr>
                         {% for i in no_stock_numbers_no_tables %}
-{#                            <h1 class="not_enough_quantity">* The following parts do not meet the quantity#}
-{#                                specified</h1>#}
+                            {#                            <h1 class="not_enough_quantity">* The following parts do not meet the quantity#}
+                            {#                                specified</h1>#}
                             <tr>
                                 <td>{{ i }}</td>
                                 {% if i not in watchlist_check %}
@@ -140,7 +140,8 @@
                     {% endfor %}
 
                 </table>
-                <p class="watchlist_extra_info">* Add parts to watchlist and view them at a later date on the user dashboard by clicking the add
+                <p class="watchlist_extra_info">* Add parts to watchlist and view them at a later date on the user
+                    dashboard by clicking the add
                     button on the corresponding row</p>
             {% endif %}
         </div>

@@ -1,15 +1,17 @@
-import requests
-import json
-from flask_login import login_required
-from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify, send_file
-from search.forms import SearchForm
-import pandas as pd
 import ast
-import database.models as database
-import app
-import openpyxl  # required dependency
+import json
 
-search_blueprint = Blueprint('search_blueprint', __name__, template_folder='templates')
+import pandas as pd
+import requests
+from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify, send_file
+from flask_login import login_required
+
+import app
+import database.models as database
+from search.forms import SearchForm
+
+
+search_blueprint = Blueprint('search_blueprint', __name__, template_folder = 'templates')
 
 # This endpoint is used to communicate with the API, you can replace the token if you want
 endpoint = "https://octopart.com/api/v4/endpoint?token=3b6dda6b-8d73-4a4f-93ac-eb38c99c16b1"
@@ -43,7 +45,7 @@ query = """query {
 }"""
 
 
-@search_blueprint.route("/search", methods=['GET', 'POST'])
+@search_blueprint.route("/search", methods = ['GET', 'POST'])
 @login_required
 def search():
     """
@@ -62,13 +64,14 @@ def search():
         quantity = [quantity_input]
         models = [models_input]
         return redirect(
-            url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
+            url_for('search_blueprint.results', part_number = [part_number], quantity = [quantity], models = [models])
+        )
     elif request.method == 'POST':
 
         try:
             f = request.files['file']
-            data = pd.read_excel(f, 'Sheet1', index_col=None)
-            data.to_csv('your_csv.csv', encoding='utf-8')
+            data = pd.read_excel(f, 'Sheet1', index_col = None)
+            data.to_csv('your_csv.csv', encoding = 'utf-8')
 
             part_number = []
             quantity = []
@@ -81,7 +84,10 @@ def search():
             for i in range(len(data['models'])):
                 models.append(str(data['models'][i]))
             return redirect(
-                url_for('search_blueprint.results', part_number=[part_number], quantity=[quantity], models=[models]))
+                url_for('search_blueprint.results', part_number = [part_number], quantity = [quantity],
+                        models = [models]
+                        )
+            )
         except KeyError:
             flash("File does not match template layout, please check file template and try again.")
         except ValueError:
@@ -89,10 +95,10 @@ def search():
         except TypeError:
             flash("File does not match template layout, please check file template and try again.")
 
-    return render_template("search.html", form=form)
+    return render_template("search.html", form = form)
 
 
-@search_blueprint.route('/result/<part_number>/<quantity>/<models>/', methods=['GET', 'POST'])
+@search_blueprint.route('/result/<part_number>/<quantity>/<models>/', methods = ['GET', 'POST'])
 @login_required
 def results(part_number, quantity, models):
     """
@@ -146,12 +152,12 @@ def results(part_number, quantity, models):
         table_part_numbers.append(part_number)
         quantity = int(quantitys[search_no]) * int(models_final[search_no])
 
-        r = requests.post(endpoint, json={"query": query % part_number})
+        r = requests.post(endpoint, json = {"query": query % part_number})
         if r.status_code == 400:
             flash("Invalid Part Number")
             break
         if r.status_code == 200:
-            data = json.loads(json.dumps(r.json(), indent=2))  # this data is the api_response
+            data = json.loads(json.dumps(r.json(), indent = 2))  # this data is the api_response
             if str(data['data']['search']['results']) == "None":
                 flash("Invalid Part Number")
                 break
@@ -237,7 +243,8 @@ def results(part_number, quantity, models):
             for i in range(len(sellers_final_check)):  # iterate all sellers
                 for j in range(len(sellers_final_check[i + 1]['offers'])):  # check how many offers' seller has
                     for z in range(
-                            len(sellers_final_check[i + 1]['offers'][j]['prices'])):  # loop over the prices of offer
+                            len(sellers_final_check[i + 1]['offers'][j]['prices'])
+                    ):  # loop over the prices of offer
                         # for y in range(len(sellers_final_check[i + 1]['offers'][j]['prices'][z])):
                         # loop over prices of offer
                         x1 = sellers_final_check[i + 1]['offers'][j]['prices'][z]['quantity']
@@ -302,12 +309,11 @@ def results(part_number, quantity, models):
             final_sellers = []
             f_dict = {}
 
-
-
             for key in list(sellers_final_check):
 
                 sellers_final_check[key]['company']['name'] = sellers_final_check[key]['company']['name'].replace(
-                    " ", "_")
+                    " ", "_"
+                )
 
                 seller = sellers_final_check[key]['company']['name']
                 if seller not in favourite_check:
@@ -331,8 +337,6 @@ def results(part_number, quantity, models):
                 else:
                     temp_dict[name] = True
 
-
-
             for i in sellers_final_check:
                 name = sellers_final_check[i]['company']['name']
                 name = name.replace(" ", "_")
@@ -350,8 +354,10 @@ def results(part_number, quantity, models):
         no_tables_available = True
         # avoids any duplicates being returned on watchlist options
         no_stock_numbers = list(dict.fromkeys(no_stock_numbers))
-        return render_template("results.html", no_tables="Could not find any results",
-                               no_tables_available=no_tables_available, no_stock_numbers_no_tables=no_stock_numbers, watchlist_check=watchlist_check)
+        return render_template("results.html", no_tables = "Could not find any results",
+                               no_tables_available = no_tables_available, no_stock_numbers_no_tables = no_stock_numbers,
+                               watchlist_check = watchlist_check
+                               )
 
     headings = ("Seller Name", "Inventory", "Calculated Cost")
 
@@ -389,50 +395,49 @@ def results(part_number, quantity, models):
             'URL': urls
         }
         # 'Part_no'
-        df = pd.DataFrame(data, columns=['Seller', 'Inventory', 'Cost', 'URL'])
+        df = pd.DataFrame(data, columns = ['Seller', 'Inventory', 'Cost', 'URL'])
 
-        df.to_excel('results.xlsx', index=False, header=True)
+        df.to_excel('results.xlsx', index = False, header = True)
 
-        return send_file('results.xlsx', as_attachment=True)
-
-
+        return send_file('results.xlsx', as_attachment = True)
 
     if len(tables) != 0:
         no_stock_numbers = list(dict.fromkeys(no_stock_numbers))
-        return render_template("results.html", tables=tables, headings=headings, part_number=table_part_numbers,
-                               manufacturer=table_manufacturers, no_stock_numbers=no_stock_numbers,
-                               watchlist_check=watchlist_check, favourite_check=favourite_check,
-                               blacklist_check=blacklist_check)
+        return render_template("results.html", tables = tables, headings = headings, part_number = table_part_numbers,
+                               manufacturer = table_manufacturers, no_stock_numbers = no_stock_numbers,
+                               watchlist_check = watchlist_check, favourite_check = favourite_check,
+                               blacklist_check = blacklist_check
+                               )
 
 
-@search_blueprint.route('/update_watchlist', methods=['POST'])
+@search_blueprint.route('/update_watchlist', methods = ['POST'])
 @login_required
 def update_watchlist():
     database.database_check()
     part_number = request.form['part_number']
-    new_watchlist_number = database.WatchList(part_number=part_number)
+    new_watchlist_number = database.WatchList(part_number = part_number)
     app.db.session.add(new_watchlist_number)
     app.db.session.commit()
     return jsonify({'result': 'success', 'part_number': part_number})
 
 
-@search_blueprint.route('/update_favourite', methods=['POST'])
+@search_blueprint.route('/update_favourite', methods = ['POST'])
 @login_required
 def update_favourite():
     database.database_check()
     supplier_name = request.form['supplier_name']
-    new_favourite_supplier = database.Favourite(supplier_name=supplier_name)
+    new_favourite_supplier = database.Favourite(supplier_name = supplier_name)
     app.db.session.add(new_favourite_supplier)
     app.db.session.commit()
     return jsonify({'result': 'success', 'supplier_name': supplier_name})
 
 
-@search_blueprint.route('/update_blacklist', methods=['POST'])
+@search_blueprint.route('/update_blacklist', methods = ['POST'])
 @login_required
 def update_blacklist():
     database.database_check()
     supplier_name = request.form['supplier_name']
-    new_blacklist_supplier = database.Blacklist(supplier_name=supplier_name)
+    new_blacklist_supplier = database.Blacklist(supplier_name = supplier_name)
     app.db.session.add(new_blacklist_supplier)
     app.db.session.commit()
     return jsonify({'result': 'success', 'supplier_name': supplier_name})

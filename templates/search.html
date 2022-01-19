@@ -3,7 +3,6 @@
 
 {% block header %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
-{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">#}
 {% endblock %}
 
 {% block content %}
@@ -32,14 +31,15 @@
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                            {{ messages[0]}}
+                            {{ messages[0] }}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                     {% endif %}
                 {% endwith %}
-                <p class="upload_tutorial">Upload an excel file here (.xls, .xlsx) to search for multiple<br/> parts at a time.</p>
+                <p class="upload_tutorial">Upload an excel file here (.xls, .xlsx) to search for multiple<br/> parts at
+                    a time.</p>
                 <form class="upload_form" method=post enctype=multipart/form-data>
                     <label for="file_choose" class="file_choose">Upload File</label>
                     <input id="file_choose" type=file name=file accept=".xls,.xlsx">
@@ -55,14 +55,14 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function(){
-            $('#file_choose').change(function (){
-                if($('#file_choose').val()==''){
+        $(document).ready(function () {
+            $('#file_choose').change(function () {
+                if ($('#file_choose').val() == '') {
                     $('#file_submit').removeClass('enabled')
-                    $('#file_submit').attr('disabled',true)
-                }else{
+                    $('#file_submit').attr('disabled', true)
+                } else {
                     $('#file_submit').addClass('enabled')
-                    $('#file_submit').attr('disabled',false)
+                    $('#file_submit').attr('disabled', false)
                 }
             });
         });

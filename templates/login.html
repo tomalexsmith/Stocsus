@@ -33,7 +33,7 @@
                         </div>
                         {% with messages = get_flashed_messages() %}
                             {% if messages %}
-                                <span id="error_message_span">* {{ messages[0]}}</span>
+                                <span id="error_message_span">* {{ messages[0] }}</span>
                             {% endif %}
                         {% endwith %}
                     </div>
@@ -50,9 +50,9 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function(){
-            $('#error_message_span').text(function (){
-                if($('#error_message_span').text()=='* Number of incorrect logins exceeded'){
+        $(document).ready(function () {
+            $('#error_message_span').text(function () {
+                if ($('#error_message_span').text() == '* Number of incorrect logins exceeded') {
                     $('.submit').addClass('submit_disabled')
                 }
             });

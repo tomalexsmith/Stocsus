@@ -7,8 +7,6 @@
     width: 100%;
     margin: 0;
     overflow: hidden;
-    /*border-bottom: #C8C8C8 solid 1px;*/
-
 }
 
 .hero_bg{
@@ -17,12 +15,9 @@
     position: relative;
     overflow: hidden;
     display: flex;
-    /*flex-direction: column;*/
-    /*background: #EFEDE7;*/
     background: white;
     justify-content: center;
     align-items: center;
-    /*box-shadow: inset 0px 0px 50px -15px rgba(0,0,0,0.3);*/
 }
 
 .scroll_down_container{

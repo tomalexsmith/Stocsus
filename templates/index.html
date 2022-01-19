@@ -7,114 +7,118 @@
 {% endblock %}
 
 {% block content %}
-<div class="hero" id="hero">
-    <div class="hero_bg">
-        <div class="hero_content">
-            <span id="border1"></span>
-            <span id="border2"></span>
-            <span id="border3"></span>
-            <span id="border4"></span>
-            <span id="corner_bl"></span>
-            <span id="corner_tr"></span>
-            <div id="hero_title_container">
-                <div class="hero_title_text">
-                    <h1>Hello,</h1>
-                    <h1>we're</h1>
-                    <h1>Stocsus</h1>
+    <div class="hero" id="hero">
+        <div class="hero_bg">
+            <div class="hero_content">
+                <span id="border1"></span>
+                <span id="border2"></span>
+                <span id="border3"></span>
+                <span id="border4"></span>
+                <span id="corner_bl"></span>
+                <span id="corner_tr"></span>
+                <div id="hero_title_container">
+                    <div class="hero_title_text">
+                        <h1>Hello,</h1>
+                        <h1>we're</h1>
+                        <h1>Stocsus</h1>
+                    </div>
+                </div>
+                <div class="cta">
+                    <div class="get_started">
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('search_blueprint.search') }}">Get started</a>
+                        {% else %}
+                            <a href="{{ url_for('users.register') }}">Get started</a>
+                        {% endif %}
+                        <a class="about_button" href="#about">About us ></a>
+                    </div>
                 </div>
             </div>
-            <div class="cta">
-                <div class="get_started">
-                    {% if current_user.is_authenticated %}
-                        <a href="{{ url_for('search_blueprint.search') }}">Get started</a>
-                    {% else %}
-                        <a href="{{ url_for('users.register') }}">Get started</a>
-                    {%  endif %}
-                    <a class="about_button" href="#about">About us ></a>
-                </div>
-            </div>
-        </div>
-        <div class="scroll_down_container">
-            <span>Scroll down</span>
-            <img src="{{ url_for('static', filename='icons/arrow-down-short.svg') }}" alt="logo">
-        </div>
-    </div>
-</div>
-<div id="off-screen">
-    <div class="about_content" id="about">
-        <div data-aos="fade-right"
-            data-aos-once="true"
-            data-aos-offset="800"
-            data-aos-duration="700"
-            data-aos-easing="ease-in-out" class="about_heading">
-            <h1>Search through<br/>thousands of parts</br>with Stocsus</h1>
-        </div>
-        <div class="about_text">
-            <div data-aos="fade-up"
-            data-aos-once="true"
-            data-aos-offset="600"
-            data-aos-delay="1000"
-            data-aos-duration="700"
-            data-aos-easing="ease-in-out" class="problem_container">
-                <h2><a href="#tutorial">The problem ></a></h2>
-                <p class="tutorial_p">The global parts shortage is creating significant challenges for Tharsus as a manufacturer.
-                Frequently having to manually search websites to check for stock and pricing on components has
-                become an issue.</p>
-            </div>
-            <div data-aos="fade-up"
-            data-aos-once="true"
-            data-aos-offset="300"
-            data-aos-duration="700"
-            data-aos-delay="2000"
-            data-aos-easing="ease-in-out" class="solution_container">
-                <h2><a href="#tutorial">Our solution ></a></h2>
-                    <p class="solution_p">Our aim was to develop a stock and price checker application that allows workers at Tharsus to
-                    automatically and rapidly search a range of websites for a list of parts, eliminating the current long
-                    and tedious process.</p>
+            <div class="scroll_down_container">
+                <span>Scroll down</span>
+                <img src="{{ url_for('static', filename='icons/arrow-down-short.svg') }}" alt="logo">
             </div>
         </div>
     </div>
-    <div class="tutorial_content" id="tutorial">
-        <div
-            data-aos="fade"
-            data-aos-once="true"
-            data-aos-offset="300"
-            class="tutorial_heading"
-            data-aos-duration="700"
-            data-aos-easing="ease-in-out"
-        >
-            <h1>How to get started</h1>
-            <h2>All the steps you need to get started using <span>Stocsus</span> - fast searches for<br/> thousands of
-                parts.</h2>
-        </div>
-        <div class="steps">
-            <div data-aos="fade" data-aos-delay="1000" data-aos-once="true" data-aos-duration="700"
-                 data-aos-easing="ease-in-out" class="step_one">
-                <div class="step_one_text">
-                    <h1>Step 1</h1>
-                    <p>Sign up with and email and password.</p>
-                    <p>Or alternatively login to an existing account.</p>
+    <div id="off-screen">
+        <div class="about_content" id="about">
+            <div data-aos="fade-right"
+                 data-aos-once="true"
+                 data-aos-offset="800"
+                 data-aos-duration="700"
+                 data-aos-easing="ease-in-out" class="about_heading">
+                <h1>Search through<br/>thousands of parts</br>with Stocsus</h1>
+            </div>
+            <div class="about_text">
+                <div data-aos="fade-up"
+                     data-aos-once="true"
+                     data-aos-offset="600"
+                     data-aos-delay="1000"
+                     data-aos-duration="700"
+                     data-aos-easing="ease-in-out" class="problem_container">
+                    <h2><a href="#tutorial">The problem ></a></h2>
+                    <p class="tutorial_p">The global parts shortage is creating significant challenges for Tharsus as a
+                        manufacturer.
+                        Frequently having to manually search websites to check for stock and pricing on components has
+                        become an issue.</p>
+                </div>
+                <div data-aos="fade-up"
+                     data-aos-once="true"
+                     data-aos-offset="300"
+                     data-aos-duration="700"
+                     data-aos-delay="2000"
+                     data-aos-easing="ease-in-out" class="solution_container">
+                    <h2><a href="#tutorial">Our solution ></a></h2>
+                    <p class="solution_p">Our aim was to develop a stock and price checker application that allows
+                        workers at Tharsus to
+                        automatically and rapidly search a range of websites for a list of parts, eliminating the
+                        current long
+                        and tedious process.</p>
                 </div>
             </div>
-            <div data-aos="fade" data-aos-delay="2000" data-aos-once="true" data-aos-duration="700"
-                 data-aos-easing="ease-in-out" class="step_two">
-                <h1>Step 2</h1>
-                <p>Search individual parts by part no., quantity and no. of models.</p>
-                <p>Or search multiple parts at a time by uploading an excel spreadsheet.</p>
+        </div>
+        <div class="tutorial_content" id="tutorial">
+            <div
+                    data-aos="fade"
+                    data-aos-once="true"
+                    data-aos-offset="300"
+                    class="tutorial_heading"
+                    data-aos-duration="700"
+                    data-aos-easing="ease-in-out"
+            >
+                <h1>How to get started</h1>
+                <h2>All the steps you need to get started using <span>Stocsus</span> - fast searches for<br/> thousands
+                    of
+                    parts.</h2>
             </div>
-            <div data-aos="fade" data-aos-delay="3000" data-aos-once="true" data-aos-duration="700"
-                 data-aos-easing="ease-in-out" class="step_three">
-                <h1>Step 3</h1>
-                <p>View of suppliers which have the required quantity for each searched part.</p>
-                <p>Or save results for later by downloading them as a .cvs file.</p>
+            <div class="steps">
+                <div data-aos="fade" data-aos-delay="1000" data-aos-once="true" data-aos-duration="700"
+                     data-aos-easing="ease-in-out" class="step_one">
+                    <div class="step_one_text">
+                        <h1>Step 1</h1>
+                        <p>Sign up with and email and password.</p>
+                        <p>Or alternatively login to an existing account.</p>
+                    </div>
+                </div>
+                <div data-aos="fade" data-aos-delay="2000" data-aos-once="true" data-aos-duration="700"
+                     data-aos-easing="ease-in-out" class="step_two">
+                    <h1>Step 2</h1>
+                    <p>Search individual parts by part no., quantity and no. of models.</p>
+                    <p>Or search multiple parts at a time by uploading an excel spreadsheet.</p>
+                </div>
+                <div data-aos="fade" data-aos-delay="3000" data-aos-once="true" data-aos-duration="700"
+                     data-aos-easing="ease-in-out" class="step_three">
+                    <h1>Step 3</h1>
+                    <p>View of suppliers which have the required quantity for each searched part.</p>
+                    <p>Or save results for later by downloading them as a .cvs file.</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-    AOS.init();
-</script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 
 {% endblock %}

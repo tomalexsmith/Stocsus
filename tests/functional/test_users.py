@@ -1,6 +1,3 @@
-from app import create_app
-
-
 def test_home_page(test_client):
     """
     GIVEN a Flask application configured for testing
@@ -31,6 +28,7 @@ def test_register_page(test_client):
 
     response = test_client.get('/register')
     assert response.status_code == 200
+
 
 def test_login_page(test_client):
     """
