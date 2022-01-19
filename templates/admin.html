@@ -10,11 +10,11 @@
     <!--<h1> Email:{{ email }}</h1>-->
 
     <div class="admin_container">
-
         <div class="title">
             <h1>Admin Dashboard</h1>
             <h2><span>Welcome</span>, {{ email }}</h2>
         </div>
+
         <div class="current_users_container">
             <h1>Current Users</h1>
             {% if current_users %}
@@ -58,6 +58,7 @@
                 </table>
             {% endif %}
         </div>
+
         <div class="banned_users_container">
             <h1>Banned Users</h1>
             {% if current_banned_users %}
@@ -100,6 +101,7 @@
                 </table>
             {% endif %}
         </div>
+
         <div class="favourite_suppliers_container">
             <h1>Favourite Suppliers</h1>
             {% if current_favourites %}
@@ -205,7 +207,6 @@
                     </div>
                 </div>
             </form>
-
             {% with errors = get_flashed_messages(category_filter=["blacklist_alert_admin"]) %}
                 {% if errors %}
                     <div class="alert-message block-message error">
@@ -216,6 +217,7 @@
                 {% endif %}
             {% endwith %}
         </div>
+
         <div class="logs_container">
             <h1>Security Logs</h1>
             {% if logs %}

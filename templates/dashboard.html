@@ -5,16 +5,13 @@
 {% endblock %}
 
 {% block content %}
-
-    <!--<h1>Commented out so you can test without logging in</h1>-->
-    <!--<h1> Email:{{ email }}</h1>-->
-
     <div class="dashboard_container">
 
         <div class="title">
             <h1>User Dashboard</h1>
             <h2><span>Welcome</span>, {{ email }}</h2>
         </div>
+
         <div class="favourite_suppliers_container">
             <h1>Favourite Suppliers</h1>
             {% if current_favourites %}
@@ -52,6 +49,7 @@
                 </div>
             </form>
         </div>
+
         <div class="blacklist_suppliers_container">
             <h1>Blacklisted Suppliers</h1>
             {% if current_blacklist %}
@@ -100,6 +98,7 @@
                 {% endif %}
             {% endwith %}
         </div>
+
         <div class="watchlist_container">
             <h1>Part Watchlist</h1>
             {% if watchlist %}
@@ -137,5 +136,6 @@
                 </table>
             {% endif %}
         </div>
+
     </div>
 {% endblock %}
