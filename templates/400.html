@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+{% block header %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
+{% endblock %}
+
 {% block content %}
-    <span>400</span>
+
+    <div class="error_container">
+        <h1>400 Bad Request :(</h1>
+    </div>
 {% endblock %}
