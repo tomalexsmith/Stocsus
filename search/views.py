@@ -301,7 +301,7 @@ def results(part_number, quantity, models):
             # formatting final result
             final_sellers = []
             f_dict = {}
-            f = 0
+
 
 
             for key in list(sellers_final_check):
@@ -322,6 +322,16 @@ def results(part_number, quantity, models):
 
             if len(sellers_final_check) == 0:
                 no_stock_numbers.append(part_number)
+
+            temp_dict = {}
+            for i in list(sellers_final_check.keys()):
+                name = sellers_final_check[i]['company']['name']
+                if name in temp_dict:
+                    sellers_final_check.pop(i)
+                else:
+                    temp_dict[name] = True
+
+
 
             for i in sellers_final_check:
                 name = sellers_final_check[i]['company']['name']
@@ -384,6 +394,8 @@ def results(part_number, quantity, models):
         df.to_excel('results.xlsx', index=False, header=True)
 
         return send_file('results.xlsx', as_attachment=True)
+
+
 
     if len(tables) != 0:
         no_stock_numbers = list(dict.fromkeys(no_stock_numbers))
