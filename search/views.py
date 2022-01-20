@@ -369,7 +369,7 @@ def results(part_number, quantity, models):
         urls = []
         part_number_column = []
 
-        for i in range(len(tables)):
+        for i in list(tables.keys()):
             for j in range(len(tables[i])):
                 part_no = table_part_numbers[i]
                 seller_name = tables[i][j][0]
