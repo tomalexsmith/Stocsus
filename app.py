@@ -2,9 +2,11 @@
 import logging
 import os
 
-from flask import Flask, render_template, request
+import sqlalchemy
+from flask import Flask, render_template, request, url_for
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+
 
 db = SQLAlchemy()
 
@@ -27,6 +29,7 @@ def create_app():
     from users.views import users_blueprint
     from admin.views import admin_blueprint
     from search.views import search_blueprint
+
 
     # registering blueprints
     app.register_blueprint(users_blueprint)
@@ -66,9 +69,25 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(id):
-        from database.models import Users
-        return Users.query.get(int(id))
-
+        try:
+            from database.models import Users
+            return Users.query.get(int(id))
+        except sqlalchemy.exc.OperationalError:
+            match request.path:
+                case url_for('index'):
+                    return render_template('index.html')
+                case url_for('users.login'):
+                    return render_template('login.html')
+                case url_for('users.register'):
+                    return render_template('register.html')
+                case url_for('search_blueprint.results'):
+                    return render_template('results.html')
+                case url_for('admin.admin'):
+                    return render_template('admin.html')
+                case url_for('users.dashboard'):
+                    return render_template('dashboard.html')
+                case url_for('search_blueprint.search'):
+                    return render_template('search.html')
     return app
 
 
@@ -82,7 +101,8 @@ fh = logging.FileHandler('Stocsus.log', 'w')
 fh.setLevel(logging.WARNING)
 fh.addFilter(SecurityFilter())
 formatter = logging.Formatter('%(asctime)s : %(message)s',
-                              '%m/%d/%Y %I:%M:%S %p')
+                              '%m/%d/%Y %I:%M:%S %p'
+                              )
 fh.setFormatter(formatter)
 
 logger = logging.getLogger('')
@@ -91,4 +111,4 @@ logger.addHandler(fh)
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True)
+    app.run(debug = True)
